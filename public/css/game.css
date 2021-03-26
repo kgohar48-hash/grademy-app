@@ -1,0 +1,174 @@
+body {
+  font-family: sans-serif;
+  display: grid;
+  height: 50vh;
+  place-items: center;
+}
+.question-index{
+  background-color: aqua ;
+  width:  30% ;
+  padding-bottom : 30% ;
+  margin: 1.66% ;
+  float: left;
+  border-radius: 40% ;
+  transition: all 0.6s;
+  text-align: center;
+}
+.index-box {
+  max-width: 80px;
+  margin: 2px auto;
+}
+#leaderboard{
+  font-size: 180%;
+}
+.choice-container {
+    display: flex;
+    margin-bottom: 0.5rem;
+    width: 100%;
+    font-size: 1.8rem;
+    border: 0.1rem solid rgb(86, 165, 235, 0.25);
+    background-color: white;
+  }
+
+.choice-container:hover {
+    cursor: pointer;
+    box-shadow: 0 0.4rem 1.4rem 0 rgba(86, 185, 235, 0.5);
+    transform: translateY(-0.1rem);
+    transition: transform 150ms;
+}
+  
+.choice-prefix {
+  padding: 1.5rem 2.5rem;
+  background-color: #56a5eb;
+  color: white;
+}
+  
+.choice-text {
+  padding: 1.5rem;
+  width: 100%;
+}
+  
+.correct {
+  background-color: #28a745;
+}
+.incorrect {
+  background-color: #28a745;
+}
+.incorrectt {
+  background-color: #dc3545;
+}
+  
+  /* HUD */
+  
+  #hud {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .hud-prefix {
+    text-align: center;
+    font-size: 2rem;
+  }
+  
+  .hud-main-text {
+    text-align: center;
+  }
+  
+  #progressBar {
+    width: 25rem;
+    height: 4rem;
+    border: 0.3rem solid #56a5eb;
+    background: rgb(232, 234, 236);
+    margin-top: 1.5rem;
+    border-radius: 1.5em;
+  }
+  
+  #progressBarFull {
+    height: 3.4rem;
+    background-color: #56a5eb;
+    width: 0%;
+    border-radius: 1.2em;    
+  }
+
+  /* timer ====================================================== */
+
+
+
+.base-timer {
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+
+.base-timer__svg {
+  transform: scaleX(-1);
+}
+
+.base-timer__circle {
+  fill: none;
+  stroke: none;
+}
+
+.base-timer__path-elapsed {
+  stroke-width: 6px;
+  stroke: grey;
+}
+
+.base-timer__path-remaining {
+  stroke-width: 6px;
+  stroke-linecap: round;
+  transform: rotate(90deg);
+  transform-origin: center;
+  transition: 1s linear all;
+  fill-rule: nonzero;
+  stroke: currentColor;
+}
+
+.base-timer__path-remaining.green {
+  color: rgb(65, 184, 131);
+}
+
+.base-timer__path-remaining.orange {
+  color: orange;
+}
+
+.base-timer__path-remaining.red {
+  color: red;
+}
+
+.base-timer__label {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+/* side panel */
+
+
+.sidepanel  {
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  height:fit-content ;
+  top: 0;
+  right: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidepanel .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+}
+
+
+

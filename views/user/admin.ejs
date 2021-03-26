@@ -1,0 +1,17 @@
+<%- include("../partials/header")  %>
+<div class="container">
+    <div class="card" style="background: gray;">
+        <div class="card-body">
+            <h1>Admin : <%=currentUser.username%></h1>
+            <h1>Total SignUps : <%=totalUsers%></h1>
+            <h1>Total Paid : <%=paidUsers%></h1>
+            <a class="btn btn-lg btn-success" href="/signup/<%=currentUser._id%>">Signup Link</a>
+            <form action="/user/info" method="POST">
+                <input type="text" name="username" placeholder="Username">
+                <button class="btn btn-success">Fetch info</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+

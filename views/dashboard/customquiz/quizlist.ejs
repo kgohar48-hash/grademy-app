@@ -1,0 +1,31 @@
+<%- include("../../partials/header") %>
+<link rel="stylesheet" href="/css/customquiz.css">
+<input type="hidden" id="username" value="<%=currentUser.username%>">
+<div class="loader" id="loader">
+	<div class="dot"></div>
+	<div class="dot"></div>
+	<div class="dot"></div>
+</div>
+<div class="container " id="myDiv">
+	<header class=" jumbotron mr-3">
+		<div class="container">
+			<%- include("../../partials/flash") %>
+			<h1>
+				Custom Quiz!
+			</h1>
+			<p>
+				Make your own quiz to challenge yourself!
+			</p>
+			<p>
+				<a class="btn btn-primary  mt-3" href="/customquiz/newquiz"  >Create a Quiz</a>
+			</p>
+		</div>
+	</header>
+
+	<div class="row " id="customquizContainer" >
+		
+	</div>
+</div>
+
+<%- include("../../partials/footer") %>
+<script src="/static/customquizlist.js"></script>

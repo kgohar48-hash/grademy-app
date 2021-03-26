@@ -1,0 +1,83 @@
+
+.gradient-button {
+    /* margin: 10px; */
+    margin-left: auto;
+    margin-right: auto;
+    font-family: "Arial Black", Gadget, sans-serif;
+    font-size: 15px;
+    padding: 12px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: #FFF;
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    width: 80%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    cursor: pointer;
+    display: inline-block;
+    border-radius: 25px;
+    border: none;
+}
+.gradient-button:hover{
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    /* margin: 8px 10px 12px; */
+}
+.gradient-button-4 {background-image: linear-gradient(to right, #00d2ff 0%, #3a7bd5 51%, #00d2ff 100%)}
+.gradient-button-4:hover { background-position: right center;      }
+.gradient-button-5 {background: #56ab2f;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #a8e063, #56ab2f);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #a8e063, #56ab2f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    }
+.gradient-button-5:hover { background-position: right center;      }
+
+.card {
+  background: #414345 ;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 1);
+  color: #eee;
+  height: 25em;
+  width: 15em;
+  /* margin-right: 3em;
+  margin-right: 3em; */
+  padding: 0;
+  margin: auto;
+    
+}
+.card:hover {
+  cursor: pointer;
+  /* box-shadow: 0 0.4rem 1.4rem 0 #616161; */
+  
+  transform: translateY(-0.2rem);
+  transition: transform 150ms;
+}
+.card-footer {
+  background: transparent;
+  border-top: 0px;
+}
+#feedback{
+  border-bottom: 0.5mm solid rgba(255, 255, 255, 0.6);
+}
+#edit-btn{
+  color : black;
+  display : none;
+}
+.card:hover  #edit-btn {
+  display: block;
+  color : black;
+}
+
+.video-container{
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  height: 0;
+}
+.video-container iframe{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}

@@ -1,0 +1,1248 @@
+<%- include("../partials/header")  %>
+<link rel="stylesheet" href="/css/dashboard.css">
+<link rel="stylesheet" href="/css/leaderboard.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+<div class="loader" id="loader">
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+</div>
+<a id="backToTop" href="#" class="btn btn-primary"><img height="20" width="20" src="https://res.cloudinary.com/grademy/image/upload/v1594719077/chevron-up-outline_fjmz5r.svg">
+</a>
+<div class="container ">
+  <%- include("../partials/flash")  %>
+  <div class="" style="display:none;" id="myDiv" class="animate-bottom">
+      <div class="row mt-3">
+        <%if(currentUser.category=="MDCAT"){%>
+          <div class="col-12 col-lg-6 col-xl-3 mt-3">
+            <a href="#biologySection" >
+              <div class="card gradient-deepblue click">
+                <div class="card-body">
+                  <h5 class="text-white mb-0" >Biology score : <span id="biologyScore">340</span> <span class="float-right"><img src="https://res.cloudinary.com/grademy/image/upload/v1592390601/nxkhflm7w6t5tjahyesm.svg"></span></h5>
+                    <div class="progress my-3" style="height:3px;">
+                        <div class="progress-bar" id="biologyScoreProgress"></div>
+                    </div>
+                  <p class="mb-0 text-white small-font">Position : <span id="biologyPosition">13 </span><span  class="float-right"> Mcqs solved : <span id="biologyattempts">78</span></span></p>
+                </div>
+              </div>
+            </a> 
+          </div>
+          <%}else{%>
+            <div class="col-12 col-lg-6 col-xl-3 mt-3">
+              <a href="#mathSection" >
+                <div class="card gradient-deepblue click">
+                  <div class="card-body">
+                    <h5 class="text-white mb-0" >Math score : <span id="mathScore">340</span> <span class="float-right"><img src="https://res.cloudinary.com/grademy/image/upload/v1592390637/vpckdmkqcp5lgmundbac.svg"></span></h5>
+                      <div class="progress my-3" style="height:3px;">
+                          <div class="progress-bar" id="mathScoreProgress"></div>
+                      </div>
+                    <p class="mb-0 text-white small-font">Position : <span id="mathPosition" >13 </span><span class="float-right" > Mcqs solved : <span id="mathattempts">78</span></span></p>
+                  </div>
+                </div>
+              </a> 
+            </div>
+          <%}%>
+          <div class="col-12 col-lg-6 col-xl-3 mt-3">
+            <a href="#physicsSection">
+              <div class="card gradient-orange click">
+                <div class="card-body">
+                  <h5 class="text-white mb-0">Physics score : <span id="physicsScore">340</span> <span class="float-right"><img src="https://res.cloudinary.com/grademy/image/upload/v1592390664/igsvcbgpech9o7ru9ddc.svg"></span></h5>
+                    <div class="progress my-3" style="height:3px;">
+                        <div class="progress-bar" id="physicsScoreProgress"></div>
+                    </div>
+                  <p class="mb-0 text-white small-font">Position : <span id="physicsPosition" >23 </span><span class="float-right" > Mcqs solved : <span id="physicsattempts">78</span></span></p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-12 col-lg-6 col-xl-3 mt-3">
+            <a href="#chemistrySection">
+              <div class="card gradient-ohhappiness click">
+                <div class="card-body">
+                  <h5 class="text-white mb-0">Chemistry score : <span id="chemistryScore">340</span> <span class="float-right"><img src="https://res.cloudinary.com/grademy/image/upload/v1592391022/q7oqyp0ntf2fl613bcif.svg"></span></h5>
+                    <div class="progress my-3" style="height:3px;">
+                      <div class="progress-bar" id="chemistryScoreProgress"></div>
+                    </div>
+                  <p class="mb-0 text-white small-font">Position : <span id="chemistryPosition" > 55 </span><span class="float-right" > Mcqs solved : <span  id="chemistryattempts">78</span></span></p>
+                </div>
+            </div>
+            </a>
+          </div>
+          <div class="col-12 col-lg-6 col-xl-3 mt-3">
+            <a href="#englishSection">
+              <div class="card gradient-ibiza click">
+                <div class="card-body">
+                  <h5 class="text-white mb-0">English score : <span id="englishScore">340</span> <span class="float-right"><img src="https://res.cloudinary.com/grademy/image/upload/v1592391003/fae49whltyielhhyncqi.svg"></span></h5>
+                    <div class="progress my-3" style="height:3px;">
+                      <div class="progress-bar" id="englishScoreProgress"></div>
+                    </div>
+                  <p class="mb-0 text-white small-font">Position : <span id="englishPosition" >110 </span><span class="float-right" > Mcqs solved : <span id="englishattempts">78</span></span></p>
+                </div>
+            </div>
+            </a>
+          </div>
+        </div><!--End Row-->
+        <!-- stats -->
+        <div class="row mt-3">
+          <div class="col-md-6 mt-3">
+            <div class="row">
+              <div class="col-md-12 ">
+                <a href="/dashboard/newcustomquiz/<%=currentUser._id%>" >
+                  <div class="card customquiz click">
+                    <div class="card-body">
+                      <h1>My custom quizzes</h1>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div class="col-md-12 mt-3">
+                <div class="card">
+                  <div class="card-body mystats">
+                    <h1>My stats</h1>
+                    <h4>Grademy position : <span id="position" class="float-right" ></span></h4>
+                    <h4>Mcqs solved : <span id="attempts" class="float-right" ></span></h4>
+                    <h4>My score : <span id="myscore" class="float-right" ></span></h4>
+                    <h4><a class="btn btn-success" href="/dashboard/mcqs/correct/<%=currentUser._id%>">Correct </a> <span id="mycorrect" class="float-right" ><%=currentUser.correct.length%></span></h4>
+                    <h4><a class="btn btn-success" href="/dashboard/mcqs/incorrect/<%=currentUser._id%>">Incorrect </a> <span id="myincorrect" class="float-right" ><%=currentUser.incorrect.length%></span></h4>
+                    <h4><a class="btn btn-success" href="/dashboard/mcqs/skipped/<%=currentUser._id%>">Skipped </a> <span id="myskipped" class="float-right" ><%=currentUser.skipped.length%></span></h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mt-3">
+            <canvas id="scoreDistribution" class="chart" width="400" height="300"></canvas>
+            <h6>Maintain it at : Bio 40%,Che 30%, Phy 20%, Eng 10%</h6>
+          </div>
+        </div>  
+        <!-- chart section -->
+        <div class="row mt-3">
+          <div class="col-md-7 mt-3">
+            <div class="row ">
+              <div class="col-md-12">
+                <canvas id="totalScore" class="chart" width="400" height="300"></canvas>
+              </div>
+              <div class="col-md-12 mt-3">
+                <canvas id="allUserScore" class="chart" width="685" height="445"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-5 mt-3">
+            <div class="card leaderboard">
+              <div class="card-body">
+                <div class="lboard_wrap">
+                  <div class="lboard_item month" style="display: block;">
+                    <h3>Grademy Leaderboard</h3>
+                    <div class="lboard_mem">
+                      <!-- <div class="img">
+                        <img src="pic_2.png" alt="picture_2">
+                      </div> -->
+                      <div class="name_bar">
+                        <p>1.<span id="1positionname">Alex Mike</span> </p>
+                        <div class="bar_wrap">
+                          <div class="inner_bar" id="1positionprogressbar" style="width: 95%"></div>
+                        </div>
+                      </div>
+                      <div class="points" >
+                        <span id="1positionscore">1195</span> points
+                      </div>
+                    </div>
+                    <div class="lboard_mem">
+                      <!-- <div class="img">
+                        <img src="pic_3.png" alt="picture_3">
+                      </div> -->
+                      <div class="name_bar">
+                        <p>2.<span id="2positionname">Alex Mike</span> </p>
+                        <div class="bar_wrap">
+                          <div class="inner_bar" id="2positionprogressbar" style="width: 80%"></div>
+                        </div>
+                      </div>
+                      <div class="points">
+                        <span id="2positionscore">1195</span> points
+                      </div>
+                    </div>
+                    <div class="lboard_mem">
+                      <!-- <div class="img">
+                        <img src="pic_1.png" alt="picture_1">
+                      </div> -->
+                      <div class="name_bar">
+                        <p>3.<span id="3positionname">Alex Mike</span> </p>
+                        <div class="bar_wrap">
+                          <div class="inner_bar" id="3positionprogressbar" style="width: 70%;"></div>
+                        </div>
+                      </div>
+                      <div class="points">
+                        <span id="3positionscore">1195</span> points
+                      </div>
+                    </div>
+                    <div class="lboard_mem">
+                      <!-- <div class="img">
+                        <img src="pic_5.png" alt="picture_5">
+                      </div> -->
+                      <div class="name_bar">
+                        <p>4.<span id="4positionname">Alex Mike</span> </p>
+                        <div class="bar_wrap">
+                          <div class="inner_bar" id="4positionprogressbar" style="width: 50%"></div>
+                        </div>
+                      </div>
+                      <div class="points">
+                        <span id="4positionscore">1195</span> points
+                      </div>
+                    </div>
+                    <div class="lboard_mem">
+                      <!-- <div class="img">
+                        <img src="pic_4.png" alt="picture_4">
+                      </div> -->
+                      <div class="name_bar">
+                        <p>5.<span id="5positionname">Alex Mike</span> </p>
+                        <div class="bar_wrap">
+                          <div class="inner_bar" id="5positionprogressbar" style="width: 30%"></div>
+                        </div>
+                      </div>
+                      <div class="points">
+                        <span id="5positionscore">1195</span> points
+                      </div>
+                    </div>
+                    <div class="lboard_mem">
+                      <!-- <div class="img">
+                        <img src="pic_5.png" alt="picture_5">
+                      </div> -->
+                      <div class="name_bar">
+                        <p>6.<span id="6positionname">Alex Mike</span> </p>
+                        <div class="bar_wrap">
+                          <div class="inner_bar" id="6positionprogressbar" style="width: 50%"></div>
+                        </div>
+                      </div>
+                      <div class="points">
+                        <span id="6positionscore">1195</span> points
+                      </div>
+                    </div>
+                    <div class="lboard_mem">
+                      <!-- <div class="img">
+                        <img src="pic_5.png" alt="picture_5">
+                      </div> -->
+                      <div class="name_bar">
+                        <p>7.<span id="7positionname">Alex Mike</span> </p>
+                        <div class="bar_wrap">
+                          <div class="inner_bar" id="7positionprogressbar" style="width: 50%"></div>
+                        </div>
+                      </div>
+                      <div class="points">
+                        <span id="7positionscore">1195</span> points
+                      </div>
+                    </div>
+                    <div class="lboard_mem">
+                      <!-- <div class="img">
+                        <img src="pic_5.png" alt="picture_5">
+                      </div> -->
+                      <div class="name_bar">
+                        <p>8.<span id="8positionname">Alex Mike</span> </p>
+                        <div class="bar_wrap">
+                          <div class="inner_bar" id="8positionprogressbar" style="width: 50%"></div>
+                        </div>
+                      </div>
+                      <div class="points">
+                        <span id="8positionscore">1195</span> points
+                      </div>
+                    </div>
+                    <div class="lboard_mem">
+                      <!-- <div class="img">
+                        <img src="pic_5.png" alt="picture_5">
+                      </div> -->
+                      <div class="name_bar">
+                        <p>9.<span id="9positionname">Alex Mike</span> </p>
+                        <div class="bar_wrap">
+                          <div class="inner_bar" id="9positionprogressbar" style="width: 50%"></div>
+                        </div>
+                      </div>
+                      <div class="points">
+                        <span id="9positionscore">1195</span> points
+                      </div>
+                    </div>
+                    <div class="lboard_mem">
+                      <!-- <div class="img">
+                        <img src="pic_5.png" alt="picture_5">
+                      </div> -->
+                      <div class="name_bar">
+                        <p>10.<span id="10positionname">Alex Mike</span> </p>
+                        <div class="bar_wrap">
+                          <div class="inner_bar" id="10positionprogressbar" style="width: 50%"></div>
+                        </div>
+                      </div>
+                      <div class="points">
+                        <span id="10positionscore">1195</span> points
+                      </div>
+                    </div>
+                    <div class="lboard_mem">
+                      <!-- <div class="img">
+                        <img src="pic_5.png" alt="picture_5">
+                      </div> -->
+                      <div class="name_bar">
+                        <p><span id=""> </span> </p>
+                        
+                      </div>
+                      <div class="points">
+                        <span id=""></span> 
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>  
+          </div>
+        </div>
+        <!-- subject wise charts -->
+        <%if(currentUser.category == "MDCAT"){%>
+          <section id="biologySection">
+            <div class="row mt-3">
+              <div class="col-md-7 mt-3">
+                <div class="row">
+                  <div class="col-md-12">
+                    <canvas id="biologyChartOfChapters" class="chart" width="400" height="300"></canvas>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-md-12">
+                    <canvas id="biologyScoreChart" class="chart" width="400" height="245"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-5 mt-3">
+                <div class="card leaderboard">
+                  <div class="card-body">
+                    <div class="lboard_wrap">
+                      <div class="lboard_item month" style="display: block;">
+                        <h3>Biology Leaderboard</h3>
+                        <div class="lboard_mem">
+                          <!-- <div class="img">
+                            <img src="pic_2.png" alt="picture_2">
+                          </div> -->
+                          <div class="name_bar">
+                            <p>1.<span id="1biologypositionname">Alex Mike</span> </p>
+                            <div class="bar_wrap">
+                              <div class="inner_bar" id="1biologypositionprogressbar" style="width: 95%"></div>
+                            </div>
+                          </div>
+                          <div class="points" >
+                            <span id="1biologypositionscore">1195</span> points
+                          </div>
+                        </div>
+                        <div class="lboard_mem">
+                          <!-- <div class="img">
+                            <img src="pic_3.png" alt="picture_3">
+                          </div> -->
+                          <div class="name_bar">
+                            <p>2.<span id="2biologypositionname">Alex Mike</span> </p>
+                            <div class="bar_wrap">
+                              <div class="inner_bar" id="2biologypositionprogressbar" style="width: 80%"></div>
+                            </div>
+                          </div>
+                          <div class="points">
+                            <span id="2biologypositionscore">1195</span> points
+                          </div>
+                        </div>
+                        <div class="lboard_mem">
+                          <!-- <div class="img">
+                            <img src="pic_1.png" alt="picture_1">
+                          </div> -->
+                          <div class="name_bar">
+                            <p>3.<span id="3biologypositionname">Alex Mike</span> </p>
+                            <div class="bar_wrap">
+                              <div class="inner_bar" id="3biologypositionprogressbar" style="width: 70%;"></div>
+                            </div>
+                          </div>
+                          <div class="points">
+                            <span id="3biologypositionscore">1195</span> points
+                          </div>
+                        </div>
+                        <div class="lboard_mem">
+                          <!-- <div class="img">
+                            <img src="pic_5.png" alt="picture_5">
+                          </div> -->
+                          <div class="name_bar">
+                            <p>4.<span id="4biologypositionname">Alex Mike</span> </p>
+                            <div class="bar_wrap">
+                              <div class="inner_bar" id="4biologypositionprogressbar" style="width: 50%"></div>
+                            </div>
+                          </div>
+                          <div class="points">
+                            <span id="4biologypositionscore">1195</span> points
+                          </div>
+                        </div>
+                        <div class="lboard_mem">
+                          <!-- <div class="img">
+                            <img src="pic_4.png" alt="picture_4">
+                          </div> -->
+                          <div class="name_bar">
+                            <p>5.<span id="5biologypositionname">Alex Mike</span> </p>
+                            <div class="bar_wrap">
+                              <div class="inner_bar" id="5biologypositionprogressbar" style="width: 30%"></div>
+                            </div>
+                          </div>
+                          <div class="points">
+                            <span id="5biologypositionscore">1195</span> points
+                          </div>
+                        </div>
+                        <div class="lboard_mem">
+                          <!-- <div class="img">
+                            <img src="pic_5.png" alt="picture_5">
+                          </div> -->
+                          <div class="name_bar">
+                            <p>6.<span id="6biologypositionname">Alex Mike</span> </p>
+                            <div class="bar_wrap">
+                              <div class="inner_bar" id="6biologypositionprogressbar" style="width: 50%"></div>
+                            </div>
+                          </div>
+                          <div class="points">
+                            <span id="6biologypositionscore">1195</span> points
+                          </div>
+                        </div>
+                        <div class="lboard_mem">
+                          <!-- <div class="img">
+                            <img src="pic_5.png" alt="picture_5">
+                          </div> -->
+                          <div class="name_bar">
+                            <p>7.<span id="7biologypositionname">Alex Mike</span> </p>
+                            <div class="bar_wrap">
+                              <div class="inner_bar" id="7biologypositionprogressbar" style="width: 50%"></div>
+                            </div>
+                          </div>
+                          <div class="points">
+                            <span id="7biologypositionscore">1195</span> points
+                          </div>
+                        </div>
+                        <div class="lboard_mem">
+                          <!-- <div class="img">
+                            <img src="pic_5.png" alt="picture_5">
+                          </div> -->
+                          <div class="name_bar">
+                            <p>8.<span id="8biologypositionname">Alex Mike</span> </p>
+                            <div class="bar_wrap">
+                              <div class="inner_bar" id="8biologypositionprogressbar" style="width: 50%"></div>
+                            </div>
+                          </div>
+                          <div class="points">
+                            <span id="8biologypositionscore">1195</span> points
+                          </div>
+                        </div>
+                        <div class="lboard_mem">
+                          <!-- <div class="img">
+                            <img src="pic_5.png" alt="picture_5">
+                          </div> -->
+                          <div class="name_bar">
+                            <p>9.<span id="9biologypositionname">Alex Mike</span> </p>
+                            <div class="bar_wrap">
+                              <div class="inner_bar" id="9biologypositionprogressbar" style="width: 50%"></div>
+                            </div>
+                          </div>
+                          <div class="points">
+                            <span id="9biologypositionscore">1195</span> points
+                          </div>
+                        </div>
+                        <div class="lboard_mem">
+                          <!-- <div class="img">
+                            <img src="pic_5.png" alt="picture_5">
+                          </div> -->
+                          <div class="name_bar">
+                            <p>10.<span id="10biologypositionname">Alex Mike</span> </p>
+                            <div class="bar_wrap">
+                              <div class="inner_bar" id="10biologypositionprogressbar" style="width: 50%"></div>
+                            </div>
+                          </div>
+                          <div class="points">
+                            <span id="10biologypositionscore">1195</span> points
+                          </div>
+                        </div>
+                        <div class="lboard_mem">
+                          <!-- <div class="img">
+                            <img src="pic_5.png" alt="picture_5">
+                          </div> -->
+                          <div class="name_bar">
+                            <p><span id=""> </span> </p>
+                            
+                          </div>
+                          <div class="points">
+                            <span id=""></span> 
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        <%}else{%>
+          <section id="mathSection">
+            <div class="row mt-3">
+              <div class="col-md-7 mt-3">
+                <div class="row">
+                  <div class="col-md-12">
+                   <canvas id="mathChartOfChapters" class="chart"  width="400" height="300"></canvas>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-md-12">
+                   <canvas id="mathScoreChart" class="chart"  width="400" height="245"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-5 mt-3">
+                <div class="card leaderboard">
+                  <div class="card-body">
+                    <div class="lboard_wrap">
+                      <div class="lboard_item month" style="display: block;">
+                        <h3>Math Leaderboard</h3>
+                        <div class="lboard_mem">
+                          <!-- <div class="img">
+                            <img src="pic_2.png" alt="picture_2">
+                          </div> -->
+                          <div class="name_bar">
+                            <p>1.<span id="1mathpositionname">Alex Mike</span> </p>
+                            <div class="bar_wrap">
+                              <div class="inner_bar" id="1mathpositionprogressbar" style="width: 95%"></div>
+                            </div>
+                          </div>
+                          <div class="points" >
+                            <span id="1mathpositionscore">1195</span> points
+                          </div>
+                        </div>
+                        <div class="lboard_mem">
+                          <!-- <div class="img">
+                            <img src="pic_3.png" alt="picture_3">
+                          </div> -->
+                          <div class="name_bar">
+                            <p>2.<span id="2mathpositionname">Alex Mike</span> </p>
+                            <div class="bar_wrap">
+                              <div class="inner_bar" id="2mathpositionprogressbar" style="width: 80%"></div>
+                            </div>
+                          </div>
+                          <div class="points">
+                            <span id="2mathpositionscore">1195</span> points
+                          </div>
+                        </div>
+                        <div class="lboard_mem">
+                          <!-- <div class="img">
+                            <img src="pic_1.png" alt="picture_1">
+                          </div> -->
+                          <div class="name_bar">
+                            <p>3.<span id="3mathpositionname">Alex Mike</span> </p>
+                            <div class="bar_wrap">
+                              <div class="inner_bar" id="3mathpositionprogressbar" style="width: 70%;"></div>
+                            </div>
+                          </div>
+                          <div class="points">
+                            <span id="3mathpositionscore">1195</span> points
+                          </div>
+                        </div>
+                        <div class="lboard_mem">
+                          <!-- <div class="img">
+                            <img src="pic_5.png" alt="picture_5">
+                          </div> -->
+                          <div class="name_bar">
+                            <p>4.<span id="4mathpositionname">Alex Mike</span> </p>
+                            <div class="bar_wrap">
+                              <div class="inner_bar" id="4mathpositionprogressbar" style="width: 50%"></div>
+                            </div>
+                          </div>
+                          <div class="points">
+                            <span id="4mathpositionscore">1195</span> points
+                          </div>
+                        </div>
+                        <div class="lboard_mem">
+                          <!-- <div class="img">
+                            <img src="pic_4.png" alt="picture_4">
+                          </div> -->
+                          <div class="name_bar">
+                            <p>5.<span id="5mathpositionname">Alex Mike</span> </p>
+                            <div class="bar_wrap">
+                              <div class="inner_bar" id="5mathpositionprogressbar" style="width: 30%"></div>
+                            </div>
+                          </div>
+                          <div class="points">
+                            <span id="5mathpositionscore">1195</span> points
+                          </div>
+                        </div>
+                        <div class="lboard_mem">
+                          <!-- <div class="img">
+                            <img src="pic_5.png" alt="picture_5">
+                          </div> -->
+                          <div class="name_bar">
+                            <p>6.<span id="6mathpositionname">Alex Mike</span> </p>
+                            <div class="bar_wrap">
+                              <div class="inner_bar" id="6mathpositionprogressbar" style="width: 50%"></div>
+                            </div>
+                          </div>
+                          <div class="points">
+                            <span id="6mathpositionscore">1195</span> points
+                          </div>
+                        </div>
+                        <div class="lboard_mem">
+                          <!-- <div class="img">
+                            <img src="pic_5.png" alt="picture_5">
+                          </div> -->
+                          <div class="name_bar">
+                            <p>7.<span id="7mathpositionname">Alex Mike</span> </p>
+                            <div class="bar_wrap">
+                              <div class="inner_bar" id="7mathpositionprogressbar" style="width: 50%"></div>
+                            </div>
+                          </div>
+                          <div class="points">
+                            <span id="7mathpositionscore">1195</span> points
+                          </div>
+                        </div>
+                        <div class="lboard_mem">
+                          <!-- <div class="img">
+                            <img src="pic_5.png" alt="picture_5">
+                          </div> -->
+                          <div class="name_bar">
+                            <p>8.<span id="8mathpositionname">Alex Mike</span> </p>
+                            <div class="bar_wrap">
+                              <div class="inner_bar" id="8mathpositionprogressbar" style="width: 50%"></div>
+                            </div>
+                          </div>
+                          <div class="points">
+                            <span id="8mathpositionscore">1195</span> points
+                          </div>
+                        </div>
+                        <div class="lboard_mem">
+                          <!-- <div class="img">
+                            <img src="pic_5.png" alt="picture_5">
+                          </div> -->
+                          <div class="name_bar">
+                            <p>9.<span id="9mathpositionname">Alex Mike</span> </p>
+                            <div class="bar_wrap">
+                              <div class="inner_bar" id="9mathpositionprogressbar" style="width: 50%"></div>
+                            </div>
+                          </div>
+                          <div class="points">
+                            <span id="9mathpositionscore">1195</span> points
+                          </div>
+                        </div>
+                        <div class="lboard_mem">
+                          <!-- <div class="img">
+                            <img src="pic_5.png" alt="picture_5">
+                          </div> -->
+                          <div class="name_bar">
+                            <p>10.<span id="10mathpositionname">Alex Mike</span> </p>
+                            <div class="bar_wrap">
+                              <div class="inner_bar" id="10mathpositionprogressbar" style="width: 50%"></div>
+                            </div>
+                          </div>
+                          <div class="points">
+                            <span id="10mathpositionscore">1195</span> points
+                          </div>
+                        </div>
+                        <div class="lboard_mem">
+                          <!-- <div class="img">
+                            <img src="pic_5.png" alt="picture_5">
+                          </div> -->
+                          <div class="name_bar">
+                            <p><span id=""> </span> </p>
+                            
+                          </div>
+                          <div class="points">
+                            <span id=""></span> 
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        <%}%>
+        <!-- physics section  -->
+        <section id="physicsSection">
+          <div class="row mt-3">
+            <div class="col-md-7 mt-3">
+              <div class="row">
+                <div class="col-md-12">
+                  <canvas id="physicsChartOfChapters" class="chart"  width="400" height="300"></canvas>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-md-12">
+                  <canvas id="physicsScoreChart" class="chart"  width="400" height="245"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5 mt-3">
+              <div class="card leaderboard">
+                <div class="card-body">
+                  <div class="lboard_wrap">
+                    <div class="lboard_item month" style="display: block;">
+                      <h3>Physics Leaderboard</h3>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_2.png" alt="picture_2">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>1.<span id="1physicspositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="1physicspositionprogressbar" style="width: 95%"></div>
+                          </div>
+                        </div>
+                        <div class="points" >
+                          <span id="1physicspositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_3.png" alt="picture_3">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>2.<span id="2physicspositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="2physicspositionprogressbar" style="width: 80%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="2physicspositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_1.png" alt="picture_1">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>3.<span id="3physicspositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="3physicspositionprogressbar" style="width: 70%;"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="3physicspositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_5.png" alt="picture_5">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>4.<span id="4physicspositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="4physicspositionprogressbar" style="width: 50%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="4physicspositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_4.png" alt="picture_4">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>5.<span id="5physicspositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="5physicspositionprogressbar" style="width: 30%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="5physicspositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_5.png" alt="picture_5">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>6.<span id="6physicspositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="6physicspositionprogressbar" style="width: 50%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="6physicspositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_5.png" alt="picture_5">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>7.<span id="7physicspositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="7physicspositionprogressbar" style="width: 50%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="7physicspositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_5.png" alt="picture_5">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>8.<span id="8physicspositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="8physicspositionprogressbar" style="width: 50%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="8physicspositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_5.png" alt="picture_5">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>9.<span id="9physicspositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="9physicspositionprogressbar" style="width: 50%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="9physicspositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_5.png" alt="picture_5">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>10.<span id="10physicspositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="10physicspositionprogressbar" style="width: 50%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="10physicspositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_5.png" alt="picture_5">
+                        </div> -->
+                        <div class="name_bar">
+                          <p><span id=""> </span> </p>
+                          
+                        </div>
+                        <div class="points">
+                          <span id=""></span> 
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- chemistry section -->
+        <section id="chemistrySection">
+          <div class="row mt-3">
+            <div class="col-md-7 mt-3">
+              <div class="row">
+                <div class="col-md-12">                    
+                  <canvas id="chemistryChartOfChapters" class="chart"  width="400" height="300"></canvas>                   
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-md-12">                   
+                  <canvas id="chemistryScoreChart" class="chart"  width="400" height="245"></canvas>                    
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5 mt-3">
+              <div class="card leaderboard">
+                <div class="card-body">
+                  <div class="lboard_wrap">
+                    <div class="lboard_item month" style="display: block;">
+                      <h3>Chemistry Leaderboard</h3>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_2.png" alt="picture_2">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>1.<span id="1chemistrypositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="1chemistrypositionprogressbar" style="width: 95%"></div>
+                          </div>
+                        </div>
+                        <div class="points" >
+                          <span id="1chemistrypositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_3.png" alt="picture_3">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>2.<span id="2chemistrypositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="2chemistrypositionprogressbar" style="width: 80%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="2chemistrypositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_1.png" alt="picture_1">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>3.<span id="3chemistrypositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="3chemistrypositionprogressbar" style="width: 70%;"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="3chemistrypositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_5.png" alt="picture_5">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>4.<span id="4chemistrypositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="4chemistrypositionprogressbar" style="width: 50%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="4chemistrypositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_4.png" alt="picture_4">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>5.<span id="5chemistrypositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="5chemistrypositionprogressbar" style="width: 30%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="5chemistrypositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_5.png" alt="picture_5">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>6.<span id="6chemistrypositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="6chemistrypositionprogressbar" style="width: 50%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="6chemistrypositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_5.png" alt="picture_5">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>7.<span id="7chemistrypositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="7chemistrypositionprogressbar" style="width: 50%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="7chemistrypositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_5.png" alt="picture_5">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>8.<span id="8chemistrypositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="8chemistrypositionprogressbar" style="width: 50%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="8chemistrypositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_5.png" alt="picture_5">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>9.<span id="9chemistrypositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="9chemistrypositionprogressbar" style="width: 50%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="9chemistrypositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_5.png" alt="picture_5">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>10.<span id="10chemistrypositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="10chemistrypositionprogressbar" style="width: 50%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="10chemistrypositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_5.png" alt="picture_5">
+                        </div> -->
+                        <div class="name_bar">
+                          <p><span id=""> </span> </p>
+                          
+                        </div>
+                        <div class="points">
+                          <span id=""></span> 
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- english section -->
+        <section id="englishSection">
+          <div class="row mt-3">
+            <div class="col-md-7 mt-3">
+              <div class="row">
+                <div class="col-md-12">                  
+                  <canvas id="englishChartOfChapters" class="chart"  width="400" height="300"></canvas>                    
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-md-12">            
+                  <canvas id="englishScoreChart" class="chart"  width="400" height="245"></canvas>                 
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5 mt-3">
+              <div class="card leaderboard">
+                <div class="card-body">
+                  <div class="lboard_wrap">
+                    <div class="lboard_item month" style="display: block;">
+                      <h3>English Leaderboard</h3>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_2.png" alt="picture_2">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>1.<span id="1englishpositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="1englishpositionprogressbar" style="width: 95%"></div>
+                          </div>
+                        </div>
+                        <div class="points" >
+                          <span id="1englishpositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_3.png" alt="picture_3">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>2.<span id="2englishpositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="2englishpositionprogressbar" style="width: 80%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="2englishpositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_1.png" alt="picture_1">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>3.<span id="3englishpositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="3englishpositionprogressbar" style="width: 70%;"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="3englishpositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_5.png" alt="picture_5">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>4.<span id="4englishpositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="4englishpositionprogressbar" style="width: 50%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="4englishpositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_4.png" alt="picture_4">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>5.<span id="5englishpositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="5englishpositionprogressbar" style="width: 30%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="5englishpositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_5.png" alt="picture_5">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>6.<span id="6englishpositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="6englishpositionprogressbar" style="width: 50%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="6englishpositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_5.png" alt="picture_5">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>7.<span id="7englishpositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="7englishpositionprogressbar" style="width: 50%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="7englishpositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_5.png" alt="picture_5">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>8.<span id="8englishpositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="8englishpositionprogressbar" style="width: 50%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="8englishpositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_5.png" alt="picture_5">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>9.<span id="9englishpositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="9englishpositionprogressbar" style="width: 50%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="9englishpositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_5.png" alt="picture_5">
+                        </div> -->
+                        <div class="name_bar">
+                          <p>10.<span id="10englishpositionname">Alex Mike</span> </p>
+                          <div class="bar_wrap">
+                            <div class="inner_bar" id="10englishpositionprogressbar" style="width: 50%"></div>
+                          </div>
+                        </div>
+                        <div class="points">
+                          <span id="10englishpositionscore">1195</span> points
+                        </div>
+                      </div>
+                      <div class="lboard_mem">
+                        <!-- <div class="img">
+                          <img src="pic_5.png" alt="picture_5">
+                        </div> -->
+                        <div class="name_bar">
+                          <p><span id=""> </span> </p>
+                          
+                        </div>
+                        <div class="points">
+                          <span id=""></span> 
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <a  data-toggle="collapse" class="btn btn-lg btn-primary  mt-3  btn-block" href=".checkinvites" role="button" aria-expanded="false" aria-controls="checkinvites">
+          Give us your feedback
+        </a>
+       
+        <div class="collapse checkinvites" >
+          <div class="card mt-3" style="background: #414345  ;">
+            <div class="card-body">
+              <form action="/user/feedback" method="POST">
+                <div class="form-group">
+                  <textarea class="form-control" type="text" name="feedback" placeholder="What do you think about us ?"></textarea>
+                </div>
+                <button class="btn btn-success btn-block">Submit</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <a class="btn btn-primary btn-lg mt-3 mb-3 btn-block" data-toggle="collapse" href=".collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+					Request a counselling session
+				</a>
+        <div class="collapse collapseExample" >
+          <div class="card card-body" style="width: auto; height: auto; background: #414345  ;">
+            <form action="/counselling" method="POST"  class="mt-3 mr-3 ml-3 mb-3">
+              <h5 class="card-title">Request a personal counselling session with Grademy!</h5>
+              <h6 class="card-subtitle mb-2 ">Try to explain your query so we can connect you with the most relevant counselor </h6>
+              <div class="form-group">
+                <div class="wrapper">
+                  <textarea name="question" class="form-control" id="the-textarea" maxlength="250" placeholder="What's on your mind ?"autofocus></textarea>
+                  <div id="the-count" class="float-right" style="color: white;">
+                    <span id="current">0</span>
+                    <span id="maximum">/ 250</span>
+                  </div>
+                </div>
+              </div>
+              <p>Note : Your counselor will reach you via Whatsapp. If you don't have a Whatsapp account on the number you provided us while signing up then kindly mention a valid whatsapp number in the details above.</p>
+              <div class="form-group">
+                <button class="btn btn-lg btn-primary btn-block">
+                Request
+                </button>
+              </div>
+            </form>	
+          </div>
+          </div>
+  </div>
+</div>
+<script src="/static/smooth-scroll.js" ></script>
+<script>
+  var scroll = new SmoothScroll('a[href*="#"]');
+</script>
+<%- include("../partials/footer")  %>
+<script src="/static/chart.js"></script>
+
+

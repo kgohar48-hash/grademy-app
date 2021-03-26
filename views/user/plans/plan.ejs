@@ -1,0 +1,63 @@
+<%- include("../../partials/header")  %>
+<link rel="stylesheet" href="/css/plan.css">
+
+<!-- DIRTY Responsive pricing table HTML -->
+<div class="container">
+  <%- include("../../partials/flash")  %>
+    <article >
+        <table>
+          <thead>
+            <tr>
+              <th >Features</th>
+              <th class="bg-purple">Free trial</th>
+              <th class="bg-blue">Premium</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Access till Dec 2020</td>
+              <td  ><span class="txt-top">&#8360;</span><span style="color: chartreuse;" class="txt-l">0</span></td>
+              <td  ><span class="txt-top">&#8360;</span><span style="color: chartreuse;" class="txt-l">3000</span></td>
+            </tr>
+            <tr>
+              <td>Dashboard access</td>
+              <td><span class="tick">&#10004;</span></td>
+              <td><span class="tick">&#10004;</span></td>
+            </tr>
+            <tr>
+              <td>MCQs limit</td>
+              <td><span class="tick">upto 500</span></td>
+              <td><span class="tick">10,000+</span></td>
+            </tr>
+            <tr>
+                <td>Counselling session requests</td>
+                <td class="tick">upto 2</td>
+                <td class="tick">unlimited</td>
+            </tr>
+            <tr>
+              <td>View attempted quiz</td>
+              <td><span class="cross">&#10008;</span></td>
+              <td><span class="tick">&#10004;</span></td>
+            </tr>
+            <tr>
+              <td>Grademy quizzes video discussions</td>
+              <td><span class="cross">&#10008;</span></td>
+              <td><span class="tick">&#10004;</span></td>
+            </tr>
+            <tr>
+              <td>Join an academy</td>
+              <td><span class="cross">&#10008;</span></td>
+              <td><span class="tick">&#10004;</span></td>
+            </tr>
+            <tr>
+              <td>Grademy quiz SMS alert</td>
+              <td><span class="cross">&#10008;</span></td>
+              <td><span class="tick">&#10004;</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <a class="btn btn-success btn-lg btn-block mt-3" href="/payment">Upgrade now</a>
+    </article>
+</div>
+
+<%- include("../../partials/footer")  %>

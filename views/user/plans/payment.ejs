@@ -1,0 +1,116 @@
+<%- include("../../partials/header")  %>
+<link rel="stylesheet" href="/css/customquiz.css">
+<link rel="stylesheet" href="/css/payment.css">
+<div class="container">
+    <div class="card" style="width: auto; height: auto;  cursor:auto;">
+        <div class="card-header">
+            <h1>Upgrade now </h1>
+            <p>& get full access till December 2020</p>
+        </div>
+        <%- include("../../partials/flash")  %>
+        <div class="card-body">
+            <div class="invoice-card" style="color: black; ">
+                <div class="invoice-title">
+                  <div id="main-title">
+                    <h4 style="color: black; font-weight: 700;">INVOICE</h4>
+                    <span>#89 292</span>
+                  </div>
+                  <p>Name : <%=currentUser.name%></p>
+                    <p>Session : <%=currentUser.category%></p>
+                </div>
+                
+                <div class="invoice-details">
+                  <table class="invoice-table">
+                    <thead>
+                      <tr>
+                        <td>PRODUCT</td>
+                        <td>UNIT</td>
+                        <td>PRICE</td>
+                      </tr>
+                    </thead>
+                    
+                    <tbody>
+                      <tr class="row-data">
+                        <td>Student Account <span></span></td>
+                        <td id="unit">1</td>
+                        <td>3000</td>
+                      </tr>
+                      
+                      <tr class="row-data">
+                        <td>Discount<span></span></td>
+                        <%if(currentUser.invitations < 10){%>
+                            <td id="unit"><%=currentUser.invitations%></td>
+                            <td><%= - currentUser.invitations*100%></td>
+                        <%}else{%>
+                            <td id="unit">10</td>
+                            <td>-1000</td>
+                        <%}%>
+                        
+                      </tr>
+                      
+                      <tr class="calc-row">
+                        <td colspan="2">Total</td>
+                        <%if(currentUser.invitations < 10){%>
+                        <td style="color: chartreuse;"><%=3000 - currentUser.invitations*100%>.Rs</td>
+                        <%}else{%>
+                            <td style="color: chartreuse;"><%=3000 - 10*100%>.Rs</td>
+                        <%}%>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="collapse" id="promo">
+                    <div class="card mt-4" style="width: auto; height: auto;">
+                        <div class="card-body">
+                            <form action="/user/promouse" method="POST">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                      <span class="input-group-text" id="inputGroup-sizing-default">Promo</span>
+                                    </div>
+                                    <input type="text" name="promocode" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                  </div>
+                                <button class="btn btn-success ml-3">Apply</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="invoice-footer">
+                    <a  data-toggle="collapse" class="btn btn-success mr-2" href="#promo" role="button" aria-expanded="false" aria-controls="promo">
+                        Promo
+                    </a>
+                    <a  data-toggle="collapse" class="btn btn-primary mr-2" href="#payment" role="button" aria-expanded="false" aria-controls="payment">
+                        Pay Now
+                    </a>
+                </div>
+                <div class="collapse" id="payment">
+                    <div class="card mt-4" style="width: auto; height: auto;">
+                        <div class="card-body">
+                           <p>
+                               Make your transaction via Jazzcash or Easypaisa to the following account.
+                           </p>
+                           <ul class="ml-3">
+                               <li>Account number : 03084737543</li>
+                               <li>Account title : Gohar khan awan</li>
+                           </ul>
+                           <p>
+                            & send us a proof of your transaction via whatsapp to the number 03084737543. You will be given full access within 15 minutes.
+                           </p>
+                        </div>
+                    </div>
+                </div>
+              </div>
+        </div>
+        <div class="card-footer" style="color: whitesmoke;">
+            <br>
+            <h2>feedback from our students</h2>
+            <%feedbacks.forEach(feedback => { %>
+                <div id="feedback" class="mb-3 m-4 mr-4">
+                    <h4><%=feedback.username%></h4>
+                    <h6><%=feedback.feedback%></h6>
+                </div>
+            <%})%>
+        </div> 
+    </div>
+</div>
+
+<%- include("../../partials/footer")  %>

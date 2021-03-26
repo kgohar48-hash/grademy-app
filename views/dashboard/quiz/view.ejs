@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Grademy - Quiz</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="https://res.cloudinary.com/grademy/image/upload/v1592985715/favicon-32x32_gb7rei.png">
+    <link rel="stylesheet"  type="text/css" href="/css/app.css" />
+    <link rel="stylesheet"  type="text/css" href="/css/game.css" />
+    <link rel="stylesheet" href="/css/leaderboard.css">
+    <link rel="stylesheet"  href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" >
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" ></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>    
+  </head>
+  <body>
+    <input type="hidden" id="username" value=<%=currentUser.username%> >
+    <div id="mySidepanel" class="sidepanel">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+      <div id="sidebar-container"></div>
+    </div>
+    <span style="font-size: large;" class="badge badge-pill badge-success mt-3"><div id="subject">Subject</div><span style="font-size: large;" class="badge badge-pill badge-primary"><div id="chapter">Chapter</div></span></span>
+    <div class="container1">
+      <div id="game" class="justify-center flex-column">
+        <div id="hud">
+          <div id="hud-item">
+            <p id="progressText" class="hud-prefix">
+              Question
+            </p>
+            <div id="progressBar" >
+              <div id="progressBarFull" ></div>
+            </div>
+          </div>
+          <div id="hud-item">
+            <div id="app" class="timer mb-4"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <h2 id="questionText">What is the answer to this questions?</h2>
+            <canvas id="questionCorrectness" class="chart" width="400" height="250"></canvas>
+            <h4 id="avg-time" style="color: rgb(56, 58, 58); font-size: 2em; text-align: center;" >Time<sub>avg</sub> : <span id="avgTime" style="color: chartreuse;"></span> sec</h4>
+            <h4 id="my-time" style="color: rgb(56, 58, 58); font-size: 2em; text-align: center;" >My time : <span id="myTime" style="color: chartreuse;"></span> sec</h4>
+
+          </div>
+          <div class="col-md-6">
+            <button class="btn btn-success btn-lg" id="previousButton">previous</button>
+            <button class="btn btn-success btn-lg" id="nextButton">Next</button>
+            <a href="javascript:history.back()" class="btn btn-primary btn-lg" id="backButton" style="display: none;">Go Back</a>
+            <button class="btn btn-lg btn-success float-right" style="width: fit-content;" onclick="openNav()">☰ </button> 
+            <div id="choices-container">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- My stats -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card mb-3">
+          <div class="card-header">
+            <h2>My stats</h2>
+          </div>
+          <div class="card-body">
+            <h3>Score : <span id="myScore">99</span></h3>
+            <h3>Position : <span id="myPosition">9</span></h3>
+            <h3>Correct : <span id="myCorrect">9</span></h3>
+            <h3>Incorrect : <span id="myIncorrect">99</span></h3>
+            <h3>Skipped : <span id="mySkipped">99</span></h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- //leader board does work but its text color is causing problem -->
+    <div class="container " id="leaderboard">
+        <div class="row mt-3">
+            <div class="col-md-12 mt-3">
+                <div class="lboard_wrap">
+                  <div class="lboard_item month" style="display: block;">
+                    <h3>Quiz Leaderboard</h3>
+                    <div class="lboard_mem">
+                      <!-- <div class="img">
+                        <img src="pic_2.png" alt="picture_2">
+                      </div> -->
+                      <div class="name_bar">
+                        <p>1.<span id="1quizpositionname"> </span> </p>
+                        <div class="bar_wrap">
+                          <div class="inner_bar" id="1quizpositionprogressbar" ></div>
+                        </div>
+                      </div>
+                      <div class="points" >
+                        <span id="1quizpositionscore"></span> points
+                      </div>
+                    </div>
+                    <div class="lboard_mem">
+                      <!-- <div class="img">
+                        <img src="pic_3.png" alt="picture_3">
+                      </div> -->
+                      <div class="name_bar">
+                        <p>2.<span id="2quizpositionname"> </span> </p>
+                        <div class="bar_wrap">
+                          <div class="inner_bar" id="2quizpositionprogressbar" ></div>
+                        </div>
+                      </div>
+                      <div class="points">
+                        <span id="2quizpositionscore"></span> points
+                      </div>
+                    </div>
+                    <div class="lboard_mem">
+                      <!-- <div class="img">
+                        <img src="pic_1.png" alt="picture_1">
+                      </div> -->
+                      <div class="name_bar">
+                        <p>3.<span id="3quizpositionname"> </span> </p>
+                        <div class="bar_wrap">
+                          <div class="inner_bar" id="3quizpositionprogressbar" ></div>
+                        </div>
+                      </div>
+                      <div class="points">
+                        <span id="3quizpositionscore"></span> points
+                      </div>
+                    </div>
+                    <div class="lboard_mem">
+                      <!-- <div class="img">
+                        <img src="pic_5.png" alt="picture_5">
+                      </div> -->
+                      <div class="name_bar">
+                        <p>4.<span id="4quizpositionname"> </span> </p>
+                        <div class="bar_wrap">
+                          <div class="inner_bar" id="4quizpositionprogressbar" ></div>
+                        </div>
+                      </div>
+                      <div class="points">
+                        <span id="4quizpositionscore"></span> points
+                      </div>
+                    </div>
+                    <div class="lboard_mem">
+                      <!-- <div class="img">
+                        <img src="pic_4.png" alt="picture_4">
+                      </div> -->
+                      <div class="name_bar">
+                        <p>5.<span id="5quizpositionname"> </span> </p>
+                        <div class="bar_wrap">
+                          <div class="inner_bar" id="5quizpositionprogressbar" ></div>
+                        </div>
+                      </div>
+                      <div class="points">
+                        <span id="5quizpositionscore"></span> points
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+    </div>
+    <!-- quiz data -->
+    <!-- make this chart responsive -->
+    <div class="card">
+      <div class="card-body">
+        <canvas id="quizStats" class="chart" width="800" height="450"></canvas>
+      </div>
+    </div>
+    <script src="/static/quizview.js"></script>  
+  </body>
+</html>

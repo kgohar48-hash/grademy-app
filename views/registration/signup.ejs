@@ -1,0 +1,74 @@
+<%- include("../partials/header")  %>
+<link rel="stylesheet"  type="text/css" href="/css/floating-labels.css" />
+<link rel="stylesheet"  type="text/css" href="/css/login.css" />
+<input type="hidden" id="ref" value="<%=ref%>">
+<div class="container">
+  <form  action="/signup" class="signup-form" method="POST">
+    <div class="signup-div">
+      <div class="logo"><img class="logo" src="https://res.cloudinary.com/grademy/image/upload/v1592388510/fuehwqgkf3g4qg86tyeg.png"></div>
+      <div class="title">Signup</div>
+      <%- include("../partials/flash")  %>
+      <div class="fields">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-label-group">
+              <input type="text"  class="user-input" id="name" name="name" placeholder="Full Name" required >
+              <label for="inputEmail">Full Name</label>
+            </div>
+            <div class="form-label-group">
+              <input type="email"  class="user-input" id="email" name="email" placeholder="Email Address" required >
+              <label for="inputEmail">Email Address</label>
+            </div>
+            <div class="form-label-group">
+              <input type="text"  class="user-input" id="city" name="city" placeholder="City" required >
+              <label for="inputEmail">City</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-label-group">
+              <input type="username"  class="user-input" id="username" name="username" placeholder="Username" required >
+              <label for="inputEmail">Username</label>
+            </div>
+            <div class="form-label-group">
+              <input type="password" class="user-input" id="password" name="password" placeholder="Password" required >
+              <label for="inputEmail">Password</label>
+            </div>
+            <div class="form-label-group">
+              <input type="text" class="user-input" id="phone" name="phone" placeholder="Valid Phone Number" required >
+              <label for="inputEmail">Valid Phone Number</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-check">
+          <input type="radio" class="form-check-input"  name="category" value="MDCAT" required>
+          <label class="form-check-label mr-4" for="materialUnchecked">MDCAT</label>
+          <input type="radio" class="form-check-input"  name="category" value="FUNG" >
+          <label class="form-check-label mr-4" for="materialChecked">FUNG</label>
+          <input type="radio" class="form-check-input"  name="category" value="GRE" >
+          <label class="form-check-label mr-4" for="materialChecked">GRE</label>
+          <input type="radio" class="form-check-input"  name="category" value="SAT" >
+          <label class="form-check-label mr-4" for="materialChecked">SAT</label>
+        </div>
+        <div class="form-check">
+          <input type="hidden" name="ref" id="reff" >
+        </div>
+      <button class="signin-button mt-3" type="submit">Sign up</button>
+      <div class="link"><a href="/login">Already have an account ?</a></div>
+    </div>
+  </form>
+</div>
+<script>
+  setTimeout(()=>{
+    document.getElementById("flash").style.display = "none"
+  },3000)
+  var ref = document.getElementById("ref").value;
+  if (typeof(Storage) !== "undefined") {
+    if(ref !== "kgohar48"){
+      localStorage.setItem("lastname", ref);
+    }
+  } 
+  document.getElementById("reff").value = localStorage.getItem("lastname");
+</script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" ></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>

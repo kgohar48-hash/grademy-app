@@ -1,0 +1,124 @@
+<%- include("../partials/header")  %>
+<link rel="stylesheet" href="/css/customquiz.css">
+
+<div class="container">
+    <div class="card" style="width: auto; height: auto;  cursor:auto;">
+        <div class="container">
+            <%- include("../partials/flash")  %>
+            <div class="row">
+                <div class="col-md-6">
+                    <h2 > Users : <%=totalUsers%></h2>
+                    <h2> Unverified : <%=totalUsers - totalVerified%></h2>
+                    <h2> Paid : <%=totalPaid%></h2>
+                </div>
+                <div class="col-md-6">
+                    <h2 > MDCAT : <%=totalMDCAT%></h2>
+                    <h2 > FUNG : <%=totalFUNG%></h2>
+                </div>
+            </div>
+        </div>
+        <a  data-toggle="collapse" class="btn btn-primary mr-3 ml-3" href="#checkinvites" role="button" aria-expanded="false" aria-controls="checkinvites">
+            check invites
+        </a>
+        <div class="collapse" id="checkinvites">
+            <form action="/user/status" method="POST">
+                <input type="hidden" name="invites" value="yo">
+                <input type="text" class="ml-3 mt-3 mb-3" name="username" placeholder="username">
+                <button class="btn btn-success">Submit</button>
+            </form>
+        </div>
+        <a  data-toggle="collapse" class="btn btn-primary mt-3  mr-3 ml-3" href="#verifyUser" role="button" aria-expanded="false" aria-controls="verifyUser">
+            Verify user
+        </a>
+        <div class="collapse" id="verifyUser">
+            <form action="/user/status" method="POST">
+                <input type="hidden" name="verification" value="yo">
+                <input type="text" class="ml-3 mt-3 mb-3" name="username" placeholder="username">
+                <button class="btn btn-success">Submit</button>
+            </form>
+        </div>
+        <a  data-toggle="collapse" class="btn btn-primary mt-3 mr-3 ml-3" href="#paidUser" role="button" aria-expanded="false" aria-controls="paidUser">
+            Paid user
+        </a>
+        <div class="collapse" id="paidUser">
+            <form action="/user/status" method="POST">
+                <input type="hidden" name="paid" value="yo">
+                <input type="text" class="ml-3 mt-3 mb-3" name="username" placeholder="username">
+                <button class="btn btn-success">Submit</button>
+            </form>
+        </div>
+        <a  data-toggle="collapse" class="btn btn-primary mt-3 mr-3 ml-3" href="#makeModerator" role="button" aria-expanded="false" aria-controls="makeModerator">
+            Make Moderator
+        </a>
+        <div class="collapse" id="makeModerator">
+            <form action="/user/status" method="POST">
+                <input type="hidden" name="moderator" value="yo">
+                <input type="text" class="ml-3 mt-3 mb-3" name="username" placeholder="username">
+                <button class="btn btn-success">Submit</button>
+            </form>
+        </div>
+        <a  data-toggle="collapse" class="btn btn-primary mt-3 mr-3 ml-3" href="#makeAcademy" role="button" aria-expanded="false" aria-controls="makeAcademy">
+            Make Academy
+        </a>
+        <div class="collapse" id="makeAcademy">
+            <form action="/user/status" method="POST">
+                <input type="hidden" name="academy" value="yo">
+                <input type="text" class="ml-3 mt-3 mb-3" name="username" placeholder="username">
+                <button class="btn btn-success">Submit</button>
+            </form>
+        </div>
+        <a  data-toggle="collapse" class="btn btn-primary mt-3  mr-3 ml-3" href="#usermcqs" role="button" aria-expanded="false" aria-controls="usermcqs">
+            Users solved mcqs
+        </a>
+        <div class="collapse" id="usermcqs">
+            <form action="/user/status" method="POST">
+                <input type="hidden" name="mcqs" value="yo">
+                <input type="text" class="ml-3 mt-3 mb-3" name="numberofmcqs" placeholder="Number of MCQs">
+                <button class="btn btn-success">Submit</button>
+            </form>
+        </div>
+        <a  data-toggle="collapse" class="btn btn-primary mt-3 mr-3 ml-3" href="#promo" role="button" aria-expanded="false" aria-controls="promo">
+            Make a Promo
+        </a>
+        <div class="collapse" id="promo">
+            <form action="/user/promo" method="POST">
+                <input type="text" class="ml-3 mt-3 mb-3" name="title" placeholder="Promo title">
+                <input type="text" class="ml-3 mt-3 mb-3" name="value" placeholder="Value">
+                <input type="number" class="ml-3 mt-3 mb-3" name="usageLimit" placeholder="Usage limit">
+                <button class="btn btn-success">Submit</button>
+            </form>
+        </div>
+        <a  data-toggle="collapse" class="btn btn-primary mt-3 mr-3 ml-3 mb-3" href="#bulksms" role="button" aria-expanded="false" aria-controls="bulksms">
+            Send bulk sms
+        </a>
+        <div class="collapse" id="bulksms">
+            <form action="/user/sms" method="POST">
+                <div class="custom-control custom-checkbox  ml-3 mr-3 mt-3">
+                    <input type="checkbox" class="custom-control-input ml-3 mr-3" id="all" name="users" value="all">
+                    <label class="custom-control-label ml-3 mr-3" for="all">All users</label>
+                    <input type="checkbox" class="custom-control-input ml-3 mr-3" id="paid" name="users" value="paid">
+                    <label class="custom-control-label ml-3 mr-3" for="paid">Paid users</label>
+                    <input type="checkbox" class="custom-control-input ml-3 mr-3" id="unpaid" name="users" value="unpaid">
+                    <label class="custom-control-label ml-3 mr-3" for="unpaid">Unpaid users</label>
+                    <input type="checkbox" class="custom-control-input ml-3 mr-3" id="mdcat" name="users" value="mdcat">
+                    <label class="custom-control-label ml-3 mr-3" for="mdcat">MDCAT users</label>
+                    <input type="checkbox" class="custom-control-input ml-3 mr-3" id="fung" name="users" value="fung">
+                    <label class="custom-control-label ml-3 mr-3" for="fung">FUNG users</label>
+                  </div>
+                <div class="form-group">
+                    <div class="wrapper mr-3 md-3 ml-3 mt-3">
+                      <textarea name="smstext" class="form-control" id="the-textarea"  placeholder="SMS content"autofocus></textarea>
+                      <div id="the-count" class="float-right" style="color: white;">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group ml-3 mr-3">
+                    <button class="btn btn-lg btn-success btn-block ">
+                    Send
+                    </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include("../partials/footer")  %>

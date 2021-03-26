@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Grademy - Quiz</title>
+    <link rel="stylesheet"  type="text/css" href="/css/app.css" />
+    <link rel="stylesheet"  type="text/css" href="/css/game.css" />
+    <link rel="stylesheet"  href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" >
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" ></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>    
+  </head>
+  <body>
+    <input type="hidden" id="username" value=<%=currentUser.username%> >
+    <input type="hidden" id="category" value=<%=currentUser.category%> >
+    <div id="mySidepanel" class="sidepanel">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+      <div id="sidebar-container"></div>
+    </div>
+    <span style="font-size: large;" class="badge badge-pill badge-success mt-3"><div id="subject">Subject</div><span style="font-size: large;" class="badge badge-pill badge-primary"><div id="chapter">Chapter</div></span></span>
+    <div class="container1 mt-4">
+      <div id="game" class="justify-center flex-column">
+        <div id="hud">
+          <div id="hud-item">
+            <p id="progressText" class="hud-prefix">
+              Question
+            </p>
+            <div id="progressBar" >
+              <div id="progressBarFull" ></div>
+            </div>
+          </div>
+          
+          <div id="hud-item">
+            <div id="app" class="timer mb-4"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <h2 id="question">What is the answer to this questions?</h2>
+          </div>
+          <div class="col-md-6">
+            <div id="submit-button"></div>
+            <button class="btn btn-secondary btn-lg" id="skipButton">Skip</button>
+            <button class="btn btn-lg btn-success float-right" style="width: fit-content;" onclick="openNav()">☰ </button> 
+            <div id="choices-container">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script src="/static/game.js"></script>  
+  </body>
+</html>

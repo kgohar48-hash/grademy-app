@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>Grademy</title>
+		<link rel="stylesheet"  href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" >
+		<link rel="icon" type="image/png" sizes="32x32" href="https://res.cloudinary.com/grademy/image/upload/v1592985715/favicon-32x32_gb7rei.png">
+	</head>
+	<body>	
+		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+			<a class="navbar-brand" href="/">Grademy</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarCollapse">
+				<ul class="navbar-nav mr-auto">
+					<% if(!currentUser){ %>
+						
+					<%} else { %>
+						<li class="nav-item">
+							<a class="nav-link" href="/dashboard">Dashboard</a>
+							</li>
+							<!-- <li class="nav-item">
+								<a class="nav-link" href="/newsfeed">Newsfeed</a>
+							</li> -->
+							<%if(currentUser.myAcademy != "none"){%>
+							<li class="nav-item">
+								<a class="nav-link" href="/dashboard/customquiz/<%=currentUser.myAcademy%>">My Academy</a>
+							</li>
+							<%}%>
+							<%if(currentUser.isAdmin || currentUser.isModerator){%>
+							<li class="nav-item">
+								<a class="nav-link" href="/admin">Admin</a>
+							</li>
+							<%}%>
+							<%if(currentUser.isAcademy){%>
+								<li class="nav-item">
+									<a class="nav-link" href="/user/counselling">Counselling</a>
+								</li>
+							<%}%>	
+							<%if(!currentUser.isPaid){%>
+								<li class="nav-item">
+									<a class="nav-link " href="/user/plan">Pricing</a>
+								</li>
+							<%}%>
+							<%if(currentUser.isAdmin){%>
+								<li class="nav-item">
+									<a class="nav-link " href="/user/controls">Controls </a>
+								</li>
+							<%}%>
+							
+					<% } %>
+				</ul>
+				
+				<div >
+					<div class="collapse navbar-collapse" id="navbarCollapse">
+						<ul class=" navbar-nav ">
+							<% if(!currentUser){ %>
+								<li class="nav-item"> <a href="/login" class="nav-link">Login</a></li>
+								<li class="nav-item"><a href="/signup" class="nav-link">Sign Up</a></li>
+							<%} else { %>
+								<li class="nav-item"><a href="#" class="nav-link"> <%=currentUser.username%> </a></li>
+								<li class="nav-item"><a href="/logout" class="nav-link">Logout</a></li>
+							<% } %>
+						</ul>
+					</div>
+			</div>
+			</div>
+		</nav>
+		
+		
+	
+	
+		
+		
+
+
+
+<div class="row">
+    <div class="col-lg-4">
+       <div class="card profile-card-2">
+        <div class="card-img-block">
+            <img class="img-fluid" src="assets/images/gallery/31.jpg" alt="Card image cap">
+        </div>
+        <div class="card-body pt-5">
+            <img src="assets/images/avatars/avatar-15.png" alt="profile-image" class="profile">
+            <h5 class="card-title">Mark Stern</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <div class="icon-block">
+              <a href="javascript:void();"><i class="fa fa-facebook bg-facebook text-white"></i></a>
+              <a href="javascript:void();"> <i class="fa fa-twitter bg-twitter text-white"></i></a>
+              <a href="javascript:void();"> <i class="fa fa-google-plus bg-google-plus text-white"></i></a>
+            </div>
+        </div>
+
+        <div class="card-body border-top border-light">
+             <div class="media align-items-center">
+               <div>
+                   <img src="assets/images/timeline/html5.svg" class="skill-img" alt="skill img">
+               </div>
+                 <div class="media-body text-left ml-3">
+                   <div class="progress-wrapper">
+                     <p>HTML5 <span class="float-right">65%</span></p>
+                     <div class="progress" style="height: 5px;">
+                      <div class="progress-bar gradient-blooker" style="width:65%"></div>
+                     </div>
+                    </div>                   
+                </div>
+              </div>
+              <hr>
+              <div class="media align-items-center">
+               <div><img src="assets/images/timeline/bootstrap-4.svg" class="skill-img" alt="skill img"></div>
+                 <div class="media-body text-left ml-3">
+                   <div class="progress-wrapper">
+                     <p>Bootstrap 4 <span class="float-right">50%</span></p>
+                     <div class="progress" style="height: 5px;">
+                      <div class="progress-bar gradient-purpink" style="width:50%"></div>
+                     </div>
+                    </div>                   
+                </div>
+              </div>
+               <hr>
+              <div class="media align-items-center">
+               <div><img src="assets/images/timeline/angular-icon.svg" class="skill-img" alt="skill img"></div>
+                 <div class="media-body text-left ml-3">
+                   <div class="progress-wrapper">
+                     <p>AngularJS <span class="float-right">70%</span></p>
+                     <div class="progress" style="height: 5px;">
+                      <div class="progress-bar gradient-ibiza" style="width:70%"></div>
+                     </div>
+                    </div>                   
+                </div>
+              </div>
+                <hr>
+              <div class="media align-items-center">
+               <div><img src="assets/images/timeline/react.svg" class="skill-img" alt="skill img"></div>
+                 <div class="media-body text-left ml-3">
+                   <div class="progress-wrapper">
+                     <p>React JS <span class="float-right">35%</span></p>
+                     <div class="progress" style="height: 5px;">
+                      <div class="progress-bar gradient-scooter" style="width:35%"></div>
+                     </div>
+                    </div>                   
+                </div>
+              </div>
+              
+          </div>
+    </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card">
+         <div class="card-body">
+         <ul class="nav nav-tabs nav-tabs-primary top-icon nav-justified">
+             <li class="nav-item">
+                 <a href="javascript:void();" data-target="#profile" data-toggle="pill" class="nav-link active"><i class="icon-user"></i> <span class="hidden-xs">Profile</span></a>
+             </li>
+             <li class="nav-item">
+                 <a href="javascript:void();" data-target="#messages" data-toggle="pill" class="nav-link"><i class="icon-envelope-open"></i> <span class="hidden-xs">Messages</span></a>
+             </li>
+             <li class="nav-item">
+                 <a href="javascript:void();" data-target="#edit" data-toggle="pill" class="nav-link"><i class="icon-note"></i> <span class="hidden-xs">Edit</span></a>
+             </li>
+         </ul>
+         <div class="tab-content p-3">
+             <div class="tab-pane active" id="profile">
+                 <h5 class="mb-3">User Profile</h5>
+                
+                 <!--/row-->
+             </div>
+             <div class="tab-pane" id="messages">
+               
+             </div>
+             <div class="tab-pane" id="edit">
+               
+             </div>
+         </div>
+     </div>
+   </div>
+   </div>
+     

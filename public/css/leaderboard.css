@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700&display=swap');
+
+
+
+.lboard_wrap{
+	font-size: 1rem;
+	margin-bottom: 5em;
+	background: #263238;
+	color: #fff;
+	width: 95%;
+	height: 85%;
+	padding: 0%;
+	border-radius: 5px;
+	list-style: none;
+	box-sizing: border-box;
+	font-family: 'Montserrat', sans-serif;
+}
+
+.lboard_wrap .lboard_item{
+	color: #fff;
+}
+
+.lboard_wrap .lboard_mem{
+	display: flex;
+	align-items: center;
+	padding: 15px 0;
+	border-bottom: 1px solid #ffe773;
+}
+
+.lboard_wrap .lboard_mem:first-child{
+	padding-top: 0;
+}
+
+.lboard_wrap .lboard_mem:last-child{
+	padding-bottom: 0;
+	border-bottom: 0;
+}
+
+.lboard_wrap .lboard_mem .img{
+	width: 50px;
+}
+
+.lboard_wrap .lboard_mem img{
+	display: block;
+	width: 100%;
+}
+
+.lboard_wrap .lboard_mem .name_bar{
+	margin: 0 20px;
+	width: calc(100% - 150px);
+}
+
+.lboard_wrap .lboard_mem .name_bar p{
+	color: #fff;
+}
+
+.lboard_wrap .lboard_mem .name_bar p span{
+	margin-right: 5px;
+}
+
+.lboard_wrap .lboard_mem .points{
+	width: 100px;
+	color: #fff;
+}
+
+.lboard_wrap .lboard_mem .name_bar .bar_wrap{
+	width: 100%;
+	height: 5px;
+	background: #d5b000;
+	margin-top: 5px;
+	border-radius: 5px;
+	position: relative;
+	overflow: hidden;
+}
+
+.lboard_wrap .lboard_mem .name_bar .bar_wrap .inner_bar{
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 5px;
+	background: #fff;
+	border-radius: 5px;
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
+}
+@media (max-width: 400px){
+	.lboard_wrap{
+		font-size: 0.8rem;
+		margin-bottom: 5em;
+		background: #263238;
+		color: #fff;
+		width: 95%;
+		height: 85%;
+		padding: 0%;
+		border-radius: 5px;
+		list-style: none;
+		box-sizing: border-box;
+		font-family: 'Montserrat', sans-serif;
+	}
+  }
+  @media (max-width: 990px) and (min-width: 770px){
+	.lboard_wrap{
+		font-size: 0.8rem;
+		margin-bottom: 5em;
+		background: #263238;
+		color: #fff;
+		width: 95%;
+		height: 85%;
+		padding: 0%;
+		border-radius: 5px;
+		list-style: none;
+		box-sizing: border-box;
+		font-family: 'Montserrat', sans-serif;
+	}
+  }

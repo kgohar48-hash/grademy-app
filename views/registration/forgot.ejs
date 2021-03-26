@@ -1,0 +1,26 @@
+<%- include("../partials/header")  %>
+<link rel="stylesheet"  type="text/css" href="/css/floating-labels.css" />
+<div class="container">
+    <div class="" >
+       <div style="width: 40% ; min-width: 300px ; margin:25px auto ; color: black;">
+        <form class="form-signin" action="/forgot" method="POST">
+            <div class="text-center mb-4 mt-0">
+              <%- include("../partials/flash")  %>
+              <h1 class="h3 mb-3 font-weight-normal .text-secondary">Forgot password</h1>
+              <p ">Enter your phone number</p>
+              <div class="form-label-group" style=" color: black  ;">
+              <input type="text" id="text"  maxlength="11" class="form-control" name="phone" placeholder="Enter you number" required autofocus>
+              <label for="inputEmail">Enter you number</label>
+              </div>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Send key</button>
+          </form>
+       </div>
+    </div>
+</div>
+<script>
+  setTimeout(()=>{
+    document.getElementById("flash").style.display = "none"
+    console.log("hide flash")
+  },2000)
+</script>

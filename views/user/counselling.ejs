@@ -1,0 +1,49 @@
+<%- include("../partials/header")  %>
+<link rel="stylesheet" href="/css/customquiz.css">
+
+<div class="container">
+    <header class=" jumbotron">
+        <div class="container">
+			<%- include("../partials/flash")  %>
+            <h1>
+                Grademy counselling!
+            </h1>
+            <p>
+                Be the guiding tourch, don't let your junior repeat the same mistakes that you have done.
+			</p>
+			<p>"A candle loses nothing by lighting another candle"</p>
+        </div>
+	</header>
+	<div class="row">
+		<%allRequests.forEach(Request => {%>
+			<div class="col-lg-3 col-md-4 col-sm-6 mt-3">
+				<div class="card" style="height: 25em;">
+					<div class="card-body">
+					
+							<li>Name : <%=Request.name%></li>
+							<li>Session : <%=Request.category%></li>
+							<%if(Request.acceptedBy){%>
+								<li>Resolved by : <%=Request.acceptedBy%></li>
+							<%}%>	
+							<li>Query : <%=Request.question%></li>
+						
+					</div>
+					<div class="card-footer mt-auto">
+						<%if(!Request.status){%>
+							<form action="/counselling/details" method="POST">
+								<input  type="hidden" name="requestId" value="<%=Request._id%>">
+								<button class="btn btn-success btn-lg btn-block">Accept</button>
+							</form>
+						<%}else{%>
+							<button class="btn btn-primary btn-lg btn-block">Accepted</button>
+						<%}%>	
+					</div>
+				</div>
+			</div>
+		<%});%>
+	</div>
+	
+</div>
+
+
+<%- include("../partials/footer")  %>

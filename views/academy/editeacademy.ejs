@@ -1,0 +1,85 @@
+<%- include("../partials/header")  %>
+<link rel="stylesheet" href="/css/customquiz.css">
+<link rel="stylesheet"  type="text/css" href="/css/floating-labels.css" />
+<link rel="stylesheet"  type="text/css" href="/css/login.css" />
+<div class="container " >
+    <form  action="/academy/new"  enctype="multipart/form-data" class="signup-form newacademy" method="POST">
+        <div class="signup-div">
+          <div class="logo"><img class="logo" src="https://res.cloudinary.com/grademy/image/upload/v1592388510/fuehwqgkf3g4qg86tyeg.png"></div>
+          <div class="title">Create your academy !</div>
+          <%- include("../partials/flash")  %>
+          <div class="fields">
+            <div class="row">
+              <div >
+                <div class="form-label-group">
+                  <input type="text" id="academy-name" name="academy[academyName]" placeholder=" " required <%if(academy){%> value="<%=academy.academyName%>" <%}%> >
+                  <label >Academy Name</label>
+                </div>
+                <div class="form-label-group">
+                  <textarea  id="punch-line" name="academy[punchLine]" placeholder="Punch Line" required oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'><%if(academy){%><%=academy.punchLine%> <%}%></textarea>
+                  <label >Punch Line</label>
+                </div>
+                <div class="form-label-group">
+                    <textarea  id="overview" name="academy[overview]" placeholder=" " erequired oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'><%if(academy){%> <%=academy.overview%> <%}%></textarea>
+                  <label >Academy overview</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+                <label >Cover Image</label>
+                <input class="btn btn-success" type="file" id="image" name="image" accept="image/*" required>	
+            </div>
+            <label >Test type :</label>
+            <div class="form-check">
+              <input type="radio" class="form-check-input"  name="academy[test]" value="MDCAT" required>
+              <label class="form-check-label mr-4" for="materialUnchecked">NMDCAT</label>
+              <input type="radio" class="form-check-input"  name="academy[test]" value="FUNG" >
+              <label class="form-check-label mr-4" for="materialChecked">FUNG</label>
+              <input type="radio" class="form-check-input"  name="academy[test]" value="GRE" >
+              <label class="form-check-label mr-4" for="materialChecked">GRE</label>
+              <input type="radio" class="form-check-input"  name="academy[test]" value="SAT" >
+              <label class="form-check-label mr-4" for="materialChecked">SAT</label>
+            </div>
+            <label class="mt-3" >Subject :</label>
+            <div class="form-check">
+              <input type="radio" class="form-check-input"  name="academy[subject]" value="math" required>
+              <label class="form-check-label mr-4" for="materialUnchecked">Math</label>
+              <input type="radio" class="form-check-input"  name="academy[subject]" value="biology" >
+              <label class="form-check-label mr-4" for="materialChecked">Biology</label>
+              <input type="radio" class="form-check-input"  name="academy[subject]" value="physics" >
+              <label class="form-check-label mr-4" for="materialChecked">Physics</label>
+              <input type="radio" class="form-check-input"  name="academy[subject]" value="chemistry" >
+              <label class="form-check-label mr-4" for="materialChecked">Chemistry</label>
+              <input type="radio" class="form-check-input"  name="academy[subject]" value="english">
+              <label class="form-check-label mr-4" for="materialChecked">English</label>
+            </div>
+            <%if(academy){%><button class="signin-button mt-3" type="submit">Update</button> <%}else{%><button class="signin-button mt-3" type="submit">Create</button> <%}%>
+        </div>
+      </form>
+</div>
+
+<!-- <div class="card">
+    <div class="card-header">
+
+    </div>
+    <div class="card-body">
+        <form action="/academy/new" method="POST" class="center">
+            <div class="form-label-group">
+                <input type="text"  class="user-input" id="name" name="punchLine" placeholder="Punch Line" required >
+                <label for="inputEmail">Punch Line</label>
+            </div>
+            <div class="">
+                <textarea name="about" placeholder="About you" required></textarea>
+                <label for="inputEmail">About us</label>
+            </div>
+            <div class="form-label-group">
+                <input type="text"  class="user-input" id="name" name="coverPicture" placeholder="Cover Picture" required >
+                <label for="inputEmail">Cover Picture</label>
+            </div>
+            <p>
+                <button type="submit" class="btn btn-md btn-primary">Submit</button>
+            </p>
+        </form>
+    </div>
+</div> -->
+

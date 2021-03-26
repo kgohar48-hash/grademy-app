@@ -1,0 +1,47 @@
+<%- include("../partials/header") %>
+<link rel="stylesheet" href="/css/customquiz.css">
+<input type="hidden" id="username" value="<%=currentUser.username%>">
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+
+<div class="container">
+	<header class=" jumbotron mr-3" style="padding-bottom: 0px;">
+		<div class="container">
+			<%- include("../partials/flash") %>
+			<h1>
+				<%=academy.academyName%> Quizzes !
+            </h1>
+            <p id="quiz-description"></p>
+            <div class="text-muted" id='createdOn'></div>
+            <%if(academy.owner.username == currentUser.username){%>
+                <p>
+                    <a class="btn btn-primary  mt-3" id="post-quiz"  >Post a Quiz</a>
+                </p>
+            <%}%>
+            <div class="collapse video" >
+                <div class="card-header">
+                    <span data-toggle="collapse" class="btn btn-primary float-right" href=".video">X</span>
+                </div>
+                <div class="card card-body mt-3 mb-3" style="width: auto; height: auto; background: #414345  ;">
+                    <div class="video-container">
+                        <iframe id="video" width="560" height="315"
+                        src="https://www.youtube.com/embed/tgbNymZ7vqY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                        </iframe> 
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <%academy.quizcategories.forEach(category=>{%>
+                    <div class="col-md-4">
+                        <div class="btn btn-lg btn-primary btn-block mb-2 category-titles" ><%=category.title%></div>
+                    </div>
+                <%})%>
+            </div>
+		</div>
+	</header>
+	<div class="row " id="customquizContainer" >
+		
+	</div>
+</div>
+
+<%- include("../partials/footer") %>
+<script src="/static/academyquizzeslist.js"></script>
