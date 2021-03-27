@@ -10,7 +10,7 @@ var express          = require("express"),
 	User			 = require("./models/user");
 
 // process.env.PORT , process.env.IP
-app.listen (  8000	,async function(){
+app.listen (  process.env.PORT , process.env.IP || 8000	,async function(){
 	await connectingToDB()
 	console.log("grademy serving listening...")
 	// fix route paths
