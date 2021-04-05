@@ -15,7 +15,20 @@ router.get("/aboutdashboard", function(req,res){
 })
 
 router.post("/dashboard/quiz/score",function(req,res){
-	res.render("dashboard/quiz/score" , req.body)
+	User.findOne({username : req.body.ownerId} ,(err , foundUser)=>{
+		if(err || !foundUser){
+			console.log(err)
+		}else{
+			console.log("yo")
+			if(foundUser.isAcademy){
+				console.log("academy is")
+				res.render("dashboard/quiz/score" , { data : req.body , isAcademy : true})
+			}else{
+				console.log("not academy")
+				res.render("dashboard/quiz/score" , { data : req.body , isAcademy : false})
+			}
+		}
+	})
 })
 
 module.exports = router ;

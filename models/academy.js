@@ -15,7 +15,6 @@ var academySchema = new mongoose.Schema({
     overview : {type : String , default:""},
     subject : {type : String , default:""},
     test  : {type : String , default:""},
-    quizAttempts : {type : Number , default : 0},
     level : {type : Number , default : 1},
     feedback : {
         givenBy : [

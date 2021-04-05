@@ -22,5 +22,5 @@ var newCustomQuizSchema = new mongoose.Schema({
     discussionVideoURL : {type : String , default : ""} ,
     createdAt: {type: Date, default: Date.now}
 })
-// add features for teacher & academies
+
 module.exports = mongoose.model("NewCustomQuiz" , newCustomQuizSchema)

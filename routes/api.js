@@ -27,7 +27,7 @@ router.get("/currentuser",middelware.isLoggedIn , function(req,res){
 	res.json(positionsData)
 })
 //API to pass data to template's javascript file
-router.get("/data",middelware.isLoggedIn , function(req,res){
+router.get("/data" , function(req,res){
 	var data = dataToBePassed ;
 	res.json(data)
 })

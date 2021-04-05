@@ -13,7 +13,7 @@
 	</head>
 	<body>	
 		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-			<a class="navbar-brand" href="/">Grademy</a>
+			<a class="navbar-brand" href="/">Grademy <sub> Beta</sub></a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 			</button>
@@ -33,20 +33,19 @@
 						<li class="nav-item">
 							<a class="nav-link" href="/academy">Academies</a>
 						</li>
-						<%if(currentUser.isAdmin || currentUser.isModerator){%>
+						<%if(currentUser.isAdmin){%>
 						<li class="nav-item">
 							<a class="nav-link" href="/admin">Admin</a>
 						</li>
-						<%}%>
-					<%if(currentUser.isAcademy){%>
 						<li class="nav-item">
 							<a class="nav-link" href="/user/counselling">Counselling</a>
 						</li>
-					<%}%>	
+					<%}%>
+						
 					<%if(!currentUser.isPaid){%>
-							<li class="nav-item">
+							<!-- <li class="nav-item">
 								<a class="nav-link " href="/user/plan">Pricing</a>
-							</li>
+							</li> -->
 					<%}%>
 					<%if(currentUser.isAdmin){%>
 							<li class="nav-item">

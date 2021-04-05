@@ -57,7 +57,7 @@ function init(){
                         vote : 'up'
                     })
                 }
-                fetch("http://localhost:8000/newsfeed/vote/"+postId , options);
+                fetch("https://protected-mesa-71767.herokuapp.com/newsfeed/vote/"+postId , options);
             }else{
                 voteNumber.innerText--
                 e.target.classList.replace("fas" , "far")
@@ -70,7 +70,7 @@ function init(){
                         vote : 'up'
                     })
                 }
-                fetch("http://localhost:8000/newsfeed/unvote/"+postId , options);
+                fetch("https://protected-mesa-71767.herokuapp.com/unvote/"+postId , options);
             }
             
         })
@@ -92,7 +92,7 @@ function init(){
                         vote : 'down'
                     })
                 }
-                fetch("http://localhost:8000/newsfeed/vote/"+postId, options);
+                fetch("https://protected-mesa-71767.herokuapp.com/newsfeed/vote/"+postId, options);
             }else{
                 voteNumber.innerText++
                 e.target.classList.replace("fas" , "far")
@@ -105,22 +105,22 @@ function init(){
                         vote : 'down'
                     })
                 }
-                fetch("http://localhost:8000/newsfeed/unvote/"+postId, options);
+                fetch("https://protected-mesa-71767.herokuapp.com/newsfeed/unvote/"+postId, options);
             }
         })
     });
     
     // if academy
-    if(window.location.href == "http://localhost:8000/newsfeed"){
+    if(window.location.href == "https://protected-mesa-71767.herokuapp.com/newsfeed"){
         // general
-        newsfeedTitle.innerText = "Grademy Cummunity !"
+        newsfeedTitle.innerText = "Grademy Community !"
         newsfeedTagline.innerText = "Get connected with the grademy cummunity across Pakistan"
     
     }else{
         // academy
         console.log("oy :",lastPoint)
     
-        client.get('http://localhost:8000/data',async function(res) {
+        client.get('https://protected-mesa-71767.herokuapp.com/data',async function(res) {
             data = JSON.parse(res)
             newsfeedTitle.innerText =  data.academy.academyName +" Cummunity !"
             newsfeedTagline.innerText = data.academy.punchLine

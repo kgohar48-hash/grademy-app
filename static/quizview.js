@@ -56,6 +56,8 @@ var correct = 0 ;
 var incorrect = 0 ;
 var unattempted = 0;
 var skipped = 0;
+var totalAttempts = 0;
+
 init();
 async function init(){
     await fetchingData();
@@ -69,7 +71,7 @@ async function init(){
 function fetchingData (){
     return new Promise((resolve,reject)=>{
         var client = new HttpClient();
-        client.get('http://localhost:8000/data',async function(res) {
+        client.get('https://protected-mesa-71767.herokuapp.com/data',async function(res) {
             quiz = JSON.parse(res) 
             console.log(quiz)
             getKeyOfCorrectness()
@@ -87,7 +89,11 @@ async function getQuestion(i){
     if(i != 0){
         questionCorrectnessChart.destroy()
     }
-
+    
+    correctResponse = 0;
+    incorrectResponce = 0 ;
+    skippedResponce = 0 ;
+    
     questionCounter = i + 1
     progressBarFull.style.width = `${(questionCounter / questions.length) * 100}%`;
     progressText.innerText = `Question ${questionCounter}/${questions.length}`;
@@ -95,7 +101,8 @@ async function getQuestion(i){
     currentQuestion = questions[i]
     // choices
     var choicesString = ''
-    var totalAttempts = currentQuestion.skipped + currentQuestion.correct +currentQuestion.incorrect 
+    totalAttempts = currentQuestion.userResponse.reduce((a, b) => a + b, 0)
+    console.log(totalAttempts)
     for(var choiceIndex = 0 ; currentQuestion.choice.length >= choiceIndex ; choiceIndex++){
       if(currentQuestion.choice.length > choiceIndex){
         choicesString += `<div class="choice-container" id="option&#${65 + choiceIndex}"><p class="choice-prefix">&#${65 + choiceIndex}</p><p class="choice-text" style="background:linear-gradient(to right, #CDF4F0  ${(currentQuestion.userResponse[choiceIndex+1]/totalAttempts)*100}%,#ffffff ${(currentQuestion.userResponse[choiceIndex+1]/totalAttempts)*100}%);  " data-number="${1 + choiceIndex}">Loading </p></div><span class="">${Math.round((currentQuestion.userResponse[choiceIndex+1]/totalAttempts)*100)}%</span>`
@@ -110,9 +117,11 @@ async function getQuestion(i){
             // MathJax.typeset()
             // for correct
             if(currentQuestion.answer == choiceNumber){
+                correctResponse = currentQuestion.userResponse[choiceNumber]
                 choice.parentElement.classList.add("correct")
             }else{
                 // if incorrect
+                incorrectResponce += currentQuestion.userResponse[choiceNumber]
                 if(key[i] == choiceNumber){
                     choice.parentElement.classList.add("incorrectt")
                 }
@@ -133,7 +142,7 @@ async function getQuestion(i){
         type: 'doughnut',
         data: {
             datasets: [{
-                data: [currentQuestion.correct, currentQuestion.incorrect, currentQuestion.skipped],
+                data: [correctResponse, incorrectResponce, totalAttempts - (correctResponse + incorrectResponce)],
                 backgroundColor: [
                     '#3ed124',
                     '#de290d',
@@ -389,5 +398,6 @@ function quizStatsChart(ctx ,title){
         }
     });
 }
+
 
 // extracting same data repeatedly

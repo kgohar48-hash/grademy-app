@@ -6,15 +6,16 @@
                 <img height="300" src="https://res.cloudinary.com/grademy/image/upload/v1595151836/undraw_winners_ao2o_mpwlbr.svg">
                 <div class="text-center">
                     <h4>You Scored</h4>
-                    <h2><%=score%>/<span style="color: #fff591;"><%= correct*4 + incorrect*4 +skipped*4%></span></h2>
-                    <h4><span style="color: #388E3C;">Correct : <%=correct%></span><span style="color: #c62828;">  Incorrect : <%=incorrect%></span>  <span style="color: #f9d56e;">  Skipped : <%=skipped%></span></h4>
+                    <h2><%=data.score%>/<span style="color: #fff591;"><%= data.correct*4 + data.incorrect*4 +data.skipped*4%></span></h2>
+                    <h4><span style="color: #388E3C;">Correct : <%=data.correct%></span><span style="color: #c62828;">  Incorrect : <%=data.incorrect%></span>  <span style="color: #f9d56e;">  Skipped : <%=data.skipped%></span></h4>
                 </div>
                 <a class="btn btn-lg btn-primary btn-block" href="/dashboard">Dashboard</a>
-                <%if(ownerId == ''){%>
+                <%if(isAcademy){%>
+                    <a class="btn btn-lg btn-primary btn-block" href="/dashboard/newcustomquiz/<%=data.ownerId%>">Back to quiz list</a>
                 <%}else{%>
-                    <a class="btn btn-lg btn-primary btn-block" href="/dashboard/newcustomquiz/<%=ownerId%>"><%=ownerId%></a>
+                    <a class="btn btn-lg btn-primary btn-block" href="/dashboard/newcustomquiz/<%=data.ownerId%>">Back to quiz list</a>
                 <%}%>        
-                <a href="/dashboard/newcustomquiz/view/view/<%=quizId%>" class="btn btn-lg btn-primary btn-block mt-2">View quiz</a>
+                <a href="/dashboard/newcustomquiz/view/view/<%=data.quizId%>" class="btn btn-lg btn-primary btn-block mt-2">View quiz</a>
             </div>
         </div>
     </div>

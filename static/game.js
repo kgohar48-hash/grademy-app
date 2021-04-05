@@ -41,11 +41,11 @@ var timerForEachMcq = 0 ;
 var sidebarHTMLString = ''
 var choicesSelected = 0 ;
 var responseToChoice = []
-// https://immense-waters-07682.herokuapp.com/data
+// https://protected-mesa-71767.herokuapp.com/data
 // http://localhost:3000/data
 //Questions fetch APi
 var client = new HttpClient();
-    client.get('http://localhost:8000/data',async function(res) {
+    client.get('https://protected-mesa-71767.herokuapp.com/data',async function(res) {
       var loadedQuiz = JSON.parse(res)
       console.log(loadedQuiz)
       quizId = loadedQuiz.foundQuiz._id
@@ -226,7 +226,7 @@ function submiting(){
       },
       body : JSON.stringify(submitQuiz)
     }
-    fetch("http://localhost:8000/newcustomquiz" , options);
+    fetch("https://protected-mesa-71767.herokuapp.com/newcustomquiz" , options);
   })
 }
 //categorycheck

@@ -11,7 +11,7 @@ var HttpClient = function() {
     }
 }
 var client = new HttpClient();
-client.get('http://localhost:8000/data',async function(res) {
+client.get('https://protected-mesa-71767.herokuapp.com/data',async function(res) {
     data = JSON.parse(res)
     init()
 });
@@ -104,23 +104,25 @@ function init(){
         }else{
             starRatings[data.academy.reviews[i].rating - 1]++
             ratingSum += data.academy.reviews[i].rating
-            if(data.user.username == data.academy.reviews[i].author.username){
+            if(data.user != null && data.user.username == data.academy.reviews[i].author.username){
                 console.log("review given")
                 reviewed = true
             }
         }
     }
-    for(var i = 0 ; data.user.myAcademies.length >= i ; i++){
-        if(data.user.myAcademies.length == i){
-            // terminate
-            if(joined){
-                joinBtn.classList.remove('btn-primary')
-                joinBtn.classList.add('btn-success')
-                joinBtn.innerHTML = "Joined"
-            }
-        }else{
-            if(data.user.myAcademies[i] == data.academy._id){
-                joined = true
+    if(data.user != null ){
+        for(var i = 0 ; data.user.myAcademies.length >= i ; i++){
+            if(data.user.myAcademies.length == i){
+                // terminate
+                if(joined){
+                    joinBtn.classList.remove('btn-primary')
+                    joinBtn.classList.add('btn-success')
+                    joinBtn.innerHTML = "Joined"
+                }
+            }else{
+                if(data.user.myAcademies[i] == data.academy._id){
+                    joined = true
+                }
             }
         }
     }
@@ -140,7 +142,7 @@ function init(){
                 },
                 body : JSON.stringify({academyId : academyToBeUnjoined})
                 }
-            fetch("http://localhost:8000/academy/leave" , options);
+            fetch("https://protected-mesa-71767.herokuapp.com/leave" , options);
         }else{
             e.target.classList.remove('btn-primary')
             e.target.classList.add('btn-success')
@@ -154,7 +156,7 @@ function init(){
                 },
                 body : JSON.stringify({academyId : academyToBeJoined})
             }
-            fetch("http://localhost:8000/academy/join" , options);
+            fetch("https://protected-mesa-71767.herokuapp.com/academy/join" , options);
         }
     })
 }
@@ -178,7 +180,7 @@ function gettingFeedback(){
             methodologySum += data.academy.feedback.teachingMethod[i]
             lectureQualitySum += data.academy.feedback.lecturesQuality[i]
             studentSatisfactionSum += data.academy.feedback.studentSatisfaction[i]
-            if(data.academy.feedback.givenBy[i].id == data.user._id){
+            if(data.user != null  &&  data.academy.feedback.givenBy[i].id == data.user._id){
                 feedbackGiven = true
             }
         }

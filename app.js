@@ -8,9 +8,8 @@ var express          = require("express"),
 	LocalStrategy	 = require("passport-local"),
 	methodOverride 	 = require("method-override"),
 	User			 = require("./models/user");
-
-// process.env.PORT , process.env.IP
-app.listen (  process.env.PORT , process.env.IP || 8000	,async function(){
+	// process.env.PORT , process.env.IP
+app.listen ( 8000	,async function(){
 	await connectingToDB()
 	console.log("grademy serving listening...")
 	// fix route paths

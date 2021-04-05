@@ -15,6 +15,16 @@ var commentSchema =  mongoose.Schema({
             ref : "Comment"
         }
     ],
+    votes : {type : Number, default : 0},
+    votedBy : [
+        {
+            id : {
+                type : mongoose.Schema.Types.ObjectId ,
+                ref : "User"
+            },
+            username : String 
+        }
+    ],
     createdAt: {type: Date, default: Date.now}
 })
 

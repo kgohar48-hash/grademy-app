@@ -62,7 +62,7 @@ router.post("/newmcqs/test",middelware.isLoggedIn ,async function(req,res){
 							}
 						}
 					})					
-					res.redirect("/customquiz/newquiz")
+					res.redirect("/academy")
 				}
 			})
 		}else{
@@ -103,7 +103,7 @@ router.post("/dashboard/newcustomquiz" ,middelware.isLoggedIn ,async function(re
 							}else{
 								userfound.myQuizzes.push(quiz._id)
 								userfound.save()
-								res.redirect("/dashboard/newcustomquiz/"+req.user._id)
+								res.redirect("/dashboard/newcustomquiz/"+req.user.username)
 							}
 						})
 					}
@@ -228,7 +228,7 @@ router.post("/dashboard/newcustomquiz" ,middelware.isLoggedIn ,async function(re
 })
 //custom quiz view page
 router.get("/dashboard/newcustomquiz/:id" ,middelware.isLoggedIn , function(req,res){
-	User.findById(req.params.id , function(err , foundUser){
+	User.findOne({username : req.params.id} , function(err , foundUser){
 		if(err || !foundUser){
 			console.log("error aya")
 			console.log(err)
@@ -413,8 +413,6 @@ router.post("/newcustomquiz",middelware.isLoggedIn , async function(req,res){
 		}
 	})
 	//Saving and undating user's score and chapter performance
-	
-	
 })
 //extracting questions out of the custom quiz (start now button) & passing it to data API
 router.get("/dashboard/newcustomquiz/view/start/:id",middelware.isLoggedIn , function(req,res){

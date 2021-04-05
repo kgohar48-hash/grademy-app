@@ -396,11 +396,11 @@ async function init(){
 }
 //fetching currentuser API
 
-// https://immense-waters-07682.herokuapp.com/currentuser
+// https://protected-mesa-71767.herokuapp.com/currentuser
 function fetchingcurrentuser(){
     return new Promise((resolve,reject)=>{
         var client = new HttpClient();
-        client.get('http://localhost:8000/currentuser', function(res) {
+        client.get('https://protected-mesa-71767.herokuapp.com/currentuser', function(res) {
             var loadedData = JSON.parse(res)
             currentuser = loadedData.user;
             positionArr = loadedData.position

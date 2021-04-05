@@ -11,10 +11,8 @@ var mcqSchema = new mongoose.Schema ({
     choice :[],
     answer : [],
     userResponse : [],
-    solution : String,
-    correct : {type: Number , default : 0},
-    incorrect : {type: Number , default : 0},
-    skipped : {type: Number , default : 0},
+    solution : {type: String , default : ""},
+    solutionVideo : {type: String , default : ""},
     avgCorrectTime : {type: Number , default : 54},
     createdAt: {type: Date, default: Date.now}
 })

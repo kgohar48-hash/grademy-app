@@ -10,7 +10,7 @@ const express			= require("express"),
       Review		= require("../models/review"),
       Quizcategory		= require("../models/quizcategory"),
       middelware 		 = require("../middelware");
-      
+
       var multer = require('multer');
 
 var storage = multer.diskStorage({
@@ -28,13 +28,14 @@ var imageFilter = function (req, file, cb) {
 var upload = multer({ storage: storage, fileFilter: imageFilter})
 
 var cloudinary = require('cloudinary');
+const middelwareObj = require("../middelware");
 cloudinary.config({ 
   cloud_name: 'grademy', 
   api_key: '311168857733876', 
   api_secret: 'f0BHt4UDpJExkZUNkHwnBUAHfLY'
 });
-
-router.get("/academy",middelware.isLoggedIn,(req,res)=>{
+// all academies index route
+router.get("/academy",(req,res)=>{
     Academy.find({}).populate("reviews").exec((err , foundAcademies)=>{
         if(err){
             console.log(err)
@@ -46,24 +47,29 @@ router.get("/academy",middelware.isLoggedIn,(req,res)=>{
                     dataToBePassed = foundAcademies;
                     res.render("academy/index" , {academies : foundAcademies , joinedStatus : joinedStatus})
                 }else{
-                    req.user.myAcademies.forEach(academy =>{
-                        if(String(academy)  == String(foundAcademies[i]._id)){
-                            joinedStatus[i] = true
-                        }
-                    })
+                    if(req.user){
+                          // checking if he has joined any academy
+                          req.user.myAcademies.forEach(academy =>{
+                            if(String(academy)  == String(foundAcademies[i]._id)){
+                                joinedStatus[i] = true
+                            }
+                        })
+                    }
                 }
             }
         }
     })
 })
+// new academy form
 router.get("/academy/new",middelware.isLoggedIn,(req,res)=>{
-    res.render("academy/new")
+    if(req.user.isAcademy){
+        res.render("academy/new")
+    }else{
+        res.send("you are not autherized")
+    }
 })
 // academy route
 router.post("/academy/new",middelware.isLoggedIn, upload.single('image'),function(req,res){
-	console.log("ko")
-	console.log("file : ",req.file)
-	console.log("body :",req.body)
     if(req.user.isAcademy){
         cloudinary.uploader.upload(req.file.path, function(result) {
 			req.body.academy.coverPicture = result.secure_url;
@@ -97,25 +103,32 @@ router.get("/academy/:id",(req,res)=>{
         if (err || !foundAcademy) {
             console.log(err);
         } else {
-            dataToBePassed = {
-                academy : foundAcademy,
-                user : req.user
+            if(req.user != null){
+                dataToBePassed = {
+                    academy : foundAcademy,
+                    user : req.user
+                }
+            }else{
+                dataToBePassed = {
+                    academy : foundAcademy,
+                    user : null
+                }
             }
             res.render("academy/academyPortfolio", { academy: foundAcademy });
         }
     })
 })
 // edit academy
-router.get("/academy/:id/edit",(req,res)=>{
+router.get("/academy/:id/edit",middelwareObj.checkAcademyOwnership ,(req,res)=>{
     Academy.findById(req.params.id ,(err, foundAcademy) => {
         if (err || !foundAcademy) {
             console.log(err);
-        } else {
+        }else{
             res.render("academy/new", { academy: foundAcademy });
         }
     })
 })
-router.post("/academy/:id/edit",middelware.isLoggedIn, upload.single('image'),function(req,res){
+router.post("/academy/:id/edit",middelwareObj.checkAcademyOwnership, upload.single('image'),function(req,res){
     if(req.user.isAcademy){
         cloudinary.uploader.upload(req.file.path, function(result) {
 			req.body.academy.coverPicture = result.secure_url;
@@ -231,7 +244,7 @@ router.post("/academy/leave",middelware.isLoggedIn,async (req,res)=>{
 })
 // new quiz section
 // add a middlewear to check ownership
-router.post("/academy/:id/section",middelware.isLoggedIn,async (req,res)=>{
+router.post("/academy/:id/section",middelwareObj.checkAcademyOwnership,async (req,res)=>{
     var newQuizCategory = {
         title : req.body.title,
         description : req.body.description
@@ -249,8 +262,6 @@ router.post("/academy/:id/section",middelware.isLoggedIn,async (req,res)=>{
                 }else{
                     foundAcademy.quizcategories.push(quizCategoryMade)
                     foundAcademy.save()
-                    console.log(foundAcademy.quizcategories)
-                    console.log("quiz section made")
                     res.redirect("/academy/"+foundAcademy._id)
                 }
             })
@@ -279,7 +290,7 @@ router.get("/academy/section/:id",middelware.isLoggedIn,async (req,res)=>{
     })
 })
 // academy quiz edit
-router.get("/academy/quiz/:id/edit",middelware.isLoggedIn,(req,res)=>{
+router.get("/academy/quiz/:id/edit",middelware.checkQuizOwnership,(req,res)=>{
     newCustomQuiz.findById(req.params.id,(err,foundQuiz)=>{
         if(err || !foundQuiz){
             console.log(err)
@@ -294,7 +305,7 @@ router.get("/academy/quiz/:id/edit",middelware.isLoggedIn,(req,res)=>{
         }
     })
 })
-router.post("/academy/quiz/:id/edit",middelware.isLoggedIn,(req,res)=>{
+router.post("/academy/quiz/:id/edit",middelware.checkQuizOwnership,(req,res)=>{
     newCustomQuiz.findById(req.params.id,(err,foundQuiz)=>{
         if(err || !foundQuiz){
             console.log(err)
@@ -356,9 +367,5 @@ router.post("/academy/feedback/:id",middelware.isLoggedIn , (req,res)=>{
         }
     })
 })
-router.post("/academy/dummy/:id",middelware.isLoggedIn,(req,res)=>{
-    console.log("dummy route hit")
-    dataToBePassed = req.body
-    res.redirect("/academy/"+req.params.id)
-})
+
 module.exports = router ;
