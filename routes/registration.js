@@ -66,9 +66,10 @@ router.post("/signup" , function(req,res){
 		else{
 				
 			user.save();
-			req.flash("success" , "Please verify your phone number")
-			//render verify form & check if we get the flash
-			res.render("registration/verify")
+			passport.authenticate("local")(req, res, function(){
+				req.flash("success", "Welcome to Grademy " + user.name);
+				res.redirect("/dashboard"); 
+			});
 		}
 	})
 })
@@ -101,21 +102,14 @@ router.post("/login", passport.authenticate("local",
 		failureRedirect: "/login",
 		failureFlash: 'Invalid username or password.' 
     }), function(req, res){
-		if(!req.user.isVerified){
-			// send them they token again
-			req.logout();
-			req.flash("error" , "Please verify your phone number")
-			res.render("registration/verify")
+		if(req.session.returnTo != ""){
+			res.redirect(req.session.returnTo || '/dashboard');
+			req.session.returnTo = "";
+			req.session.save()
+			console.log("session exist")
 		}else{
-			if(req.session.returnTo != ""){
-				res.redirect(req.session.returnTo || '/dashboard');
-				req.session.returnTo = "";
-				req.session.save()
-				console.log("session exist")
-			}else{
-				res.redirect('/dashboard');
-				console.log("session not exist")
-			}
+			res.redirect('/dashboard');
+			console.log("session not exist")
 		}
 });
 //logout route
@@ -126,7 +120,8 @@ router.get("/logout" , function(req,res){
 })
 //render forgot password form
 router.get("/forgot" , function(req,res){
-	res.render("registration/forgot")
+	res.send("This app is under beta testing, please contact us at +92 313 0157543 to get your new password")
+	// res.render("registration/forgot")
 })
 //render forgot password post route
 router.post("/forgot" , function(req,res){

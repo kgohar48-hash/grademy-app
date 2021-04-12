@@ -22,7 +22,12 @@ router.post("/dashboard/quiz/score",function(req,res){
 			console.log("yo")
 			if(foundUser.isAcademy){
 				console.log("academy is")
-				res.render("dashboard/quiz/score" , { data : req.body , isAcademy : true})
+				if(req.session.section != ""){
+					sectionUrl = req.session.section
+				}else{
+					sectionUrl = "/dashboard/newcustomquiz/"+req.body.ownerId
+				}
+				res.render("dashboard/quiz/score" , { data : req.body , isAcademy : true , sectionUrl})
 			}else{
 				console.log("not academy")
 				res.render("dashboard/quiz/score" , { data : req.body , isAcademy : false})

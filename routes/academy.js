@@ -270,6 +270,7 @@ router.post("/academy/:id/section",middelwareObj.checkAcademyOwnership,async (re
 })
 // academy quizzes
 router.get("/academy/section/:id",middelware.isLoggedIn,async (req,res)=>{
+    req.session.section = req.originalUrl
     Academy.findById(req.params.id).populate({
         path : 'quizcategories',
         model : 'Quizcategory',
