@@ -156,7 +156,7 @@ function init(){
                 },
                 body : JSON.stringify({academyId : academyToBeJoined})
             }
-            fetch("https://protected-mesa-71767.herokuapp.com/academy/join" , options);
+            fetch("https://protected-mesa-71767.herokuapp.com/join" , options);
         }
     })
 }

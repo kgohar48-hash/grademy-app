@@ -443,6 +443,9 @@ function positionCheck(array){
             }else{
                 indexNumber ++
             }
+            if(indexNumber == array.length){
+                resolve(indexNumber)
+            }
         });
     }).catch((reject)=>{
         console.log("error here in positioncheck : " + reject)

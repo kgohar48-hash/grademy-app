@@ -172,7 +172,7 @@ getNewQuestion = () => {
               setTimeout(() => {
                 selectedChoice.parentElement.classList.remove(classToApply);
                 getNewQuestion();
-              }, 200);
+              }, 500);
             }
           });
         });
