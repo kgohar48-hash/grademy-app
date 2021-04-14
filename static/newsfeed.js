@@ -57,7 +57,7 @@ function init(){
                         vote : 'up'
                     })
                 }
-                fetch("https://protected-mesa-71767.herokuapp.com/newsfeed/vote/"+postId , options);
+                fetch("https://www.grademy.org/newsfeed/vote/"+postId , options);
             }else{
                 voteNumber.innerText--
                 e.target.classList.replace("fas" , "far")
@@ -70,7 +70,7 @@ function init(){
                         vote : 'up'
                     })
                 }
-                fetch("https://protected-mesa-71767.herokuapp.com/unvote/"+postId , options);
+                fetch("https://www.grademy.org/unvote/"+postId , options);
             }
             
         })
@@ -92,7 +92,7 @@ function init(){
                         vote : 'down'
                     })
                 }
-                fetch("https://protected-mesa-71767.herokuapp.com/newsfeed/vote/"+postId, options);
+                fetch("https://www.grademy.org/newsfeed/vote/"+postId, options);
             }else{
                 voteNumber.innerText++
                 e.target.classList.replace("fas" , "far")
@@ -105,13 +105,13 @@ function init(){
                         vote : 'down'
                     })
                 }
-                fetch("https://protected-mesa-71767.herokuapp.com/newsfeed/unvote/"+postId, options);
+                fetch("https://www.grademy.org/newsfeed/unvote/"+postId, options);
             }
         })
     });
     
     // if academy
-    if(window.location.href == "https://protected-mesa-71767.herokuapp.com/newsfeed"){
+    if(window.location.href == "https://www.grademy.org/newsfeed"){
         // general
         newsfeedTitle.innerText = "Grademy Community !"
         newsfeedTagline.innerText = "Get connected with the grademy cummunity across Pakistan"
@@ -120,7 +120,7 @@ function init(){
         // academy
         console.log("oy :",lastPoint)
     
-        client.get('https://protected-mesa-71767.herokuapp.com/data',async function(res) {
+        client.get('https://www.grademy.org/data',async function(res) {
             data = JSON.parse(res)
             newsfeedTitle.innerText =  data.academy.academyName +" Cummunity !"
             newsfeedTagline.innerText = data.academy.punchLine

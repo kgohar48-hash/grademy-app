@@ -31,7 +31,7 @@ async function fetchingCustumQuizzes(){
     try {
         return new Promise((resolve, reject) => {
             var client = new HttpClient();
-            client.get('https://protected-mesa-71767.herokuapp.com/quizlistapi', function (res) {
+            client.get('https://www.grademy.org/quizlistapi', function (res) {
                 var quizz = JSON.parse(res);
                 quizzes = quizz;
                 resolve();

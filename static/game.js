@@ -45,7 +45,7 @@ var responseToChoice = []
 // http://localhost:3000/data
 //Questions fetch APi
 var client = new HttpClient();
-    client.get('https://protected-mesa-71767.herokuapp.com/data',async function(res) {
+    client.get('https://www.grademy.org/data',async function(res) {
       var loadedQuiz = JSON.parse(res)
       console.log(loadedQuiz)
       quizId = loadedQuiz.foundQuiz._id
@@ -226,7 +226,7 @@ function submiting(){
       },
       body : JSON.stringify(submitQuiz)
     }
-    fetch("https://protected-mesa-71767.herokuapp.com/newcustomquiz" , options);
+    fetch("https://www.grademy.org/newcustomquiz" , options);
   })
 }
 //categorycheck

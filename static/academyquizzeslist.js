@@ -11,7 +11,7 @@ var HttpClient = function() {
     }
 }
 var client = new HttpClient();
-client.get('https://protected-mesa-71767.herokuapp.com/data',async function(res) {
+client.get('https://www.grademy.org/data',async function(res) {
     data = JSON.parse(res)
     init()
 });

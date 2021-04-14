@@ -11,7 +11,7 @@ var HttpClient = function() {
     }
 }
 var client = new HttpClient();
-client.get('https://protected-mesa-71767.herokuapp.com/data',async function(res) {
+client.get('https://www.grademy.org/data',async function(res) {
     data = JSON.parse(res)
     init()
 });
@@ -142,7 +142,7 @@ function init(){
                 },
                 body : JSON.stringify({academyId : academyToBeUnjoined})
                 }
-            fetch("https://protected-mesa-71767.herokuapp.com/leave" , options);
+            fetch("https://www.grademy.org/leave" , options);
         }else{
             e.target.classList.remove('btn-primary')
             e.target.classList.add('btn-success')
@@ -156,7 +156,7 @@ function init(){
                 },
                 body : JSON.stringify({academyId : academyToBeJoined})
             }
-            fetch("https://protected-mesa-71767.herokuapp.com/join" , options);
+            fetch("https://www.grademy.org/join" , options);
         }
     })
 }
