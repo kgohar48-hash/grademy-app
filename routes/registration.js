@@ -64,11 +64,18 @@ router.post("/signup" , function(req,res){
 			req.flash("error" , err.message)
 			res.redirect("/signup")}
 		else{
-				
 			user.save();
 			passport.authenticate("local")(req, res, function(){
-				req.flash("success", "Welcome to Grademy " + user.name);
-				res.redirect("/dashboard"); 
+				if(req.session.returnTo != ""){
+					res.redirect(req.session.returnTo || '/dashboard');
+					req.session.returnTo = "";
+					req.session.save()
+					console.log("session exist")
+				}else{
+					req.flash("success", "Welcome to Grademy " + user.name);
+					res.redirect('/dashboard');
+					console.log("session not exist")
+				}
 			});
 		}
 	})
