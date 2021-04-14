@@ -100,7 +100,7 @@
                 <div class="card">
                   <div class="card-body mystats">
                     <h1>My stats</h1>
-                    <h4>Grademy position : <span id="position" class="float-right" ></span></h4>
+                    <h4>Grademy Position : <span id="position" class="float-right" ></span></h4>
                     <h4>Mcqs solved : <span id="attempts" class="float-right" ></span></h4>
                     <h4>My score : <span id="myscore" class="float-right" ></span></h4>
                     <h4><a class="btn btn-success" href="/dashboard/mcqs/correct/<%=currentUser._id%>">Correct </a> <span id="mycorrect" class="float-right" ><%=currentUser.correct.length%></span></h4>
@@ -1243,6 +1243,6 @@
   var scroll = new SmoothScroll('a[href*="#"]');
 </script>
 <%- include("../partials/footer")  %>
-<script src="/static/chart.js"></script>
+<script src="/static/dashboard.js"></script>
 
 
