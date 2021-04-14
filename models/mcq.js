@@ -13,7 +13,7 @@ var mcqSchema = new mongoose.Schema ({
     userResponse : [],
     solution : {type: String , default : ""},
     solutionVideo : {type: String , default : ""},
-    avgCorrectTime : {type: Number , default : 54},
+    avgCorrectTime : {type: Number , default : 10},
     createdAt: {type: Date, default: Date.now}
 })
 // work on tags

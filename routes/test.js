@@ -6,9 +6,9 @@ const express		 = require("express"),
 
 
 // route to convert pool to mcqs DB 
-router.get('/pooltomcqs',async function (req,res) {
+router.get('/pooltomcqs/:subject',async function (req,res) {
 	var mcqsToDB = []
-	var subject = "english"
+	var subject = req.params.subject
 	await Pool.findOne({},async function(err,pool){
 		if(err){
 			console.log(err)
@@ -41,7 +41,6 @@ router.get('/pooltomcqs',async function (req,res) {
 								question : pool[subject][chap].questions[questionIndex].question ,
 								choice : [ pool[subject][chap].questions[questionIndex].choice1 , pool[subject][chap].questions[questionIndex].choice2 , pool[subject][chap].questions[questionIndex].choice3 , pool[subject][chap].questions[questionIndex].choice4],
 								answer : [ pool[subject][chap].questions[questionIndex].answer ],
-								solution : '',
 								userResponse : [0,0,0,0,0]
 							})
 						}
