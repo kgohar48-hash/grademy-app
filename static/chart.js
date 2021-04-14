@@ -401,6 +401,7 @@ function fetchingcurrentuser(){
         var client = new HttpClient();
         client.get('https://www.grademy.org/currentuser', function(res) {
             var loadedData = JSON.parse(res)
+            
             currentuser = loadedData.user;
             positionArr = loadedData.position
             biologyPositionArr = loadedData.biologyPosition
