@@ -86,6 +86,7 @@ router.post("/dashboard/newcustomquiz" ,middelware.isLoggedIn ,async function(re
 	console.log(req.body)
 	var mcqsToBeAdded = []
 	if(Array.isArray(req.body.subjects)){
+		console.log("multiple chapters")
 		for(var i = 0 ; req.body.subjects.length >= i ; i++){
 			if(i == req.body.subjects.length){
 				// terminate
@@ -159,6 +160,7 @@ router.post("/dashboard/newcustomquiz" ,middelware.isLoggedIn ,async function(re
 			}
 		}
 	}else{
+		console.log("single chapter")
 		await Mcq.find({subject: req.body.subjects , chapter : req.body.chapters} ,async function(err,foundMcqs){
 			if(err){
 				console.log(err)
@@ -217,7 +219,7 @@ router.post("/dashboard/newcustomquiz" ,middelware.isLoggedIn ,async function(re
 							}else{
 								userfound.myQuizzes.push(quiz._id)
 								userfound.save()
-								res.redirect("/dashboard/newcustomquiz/"+req.user._id)
+								res.redirect("/dashboard/newcustomquiz/"+req.user.username)
 							}
 						})
 					}

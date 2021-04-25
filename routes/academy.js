@@ -368,5 +368,11 @@ router.post("/academy/feedback/:id",middelware.isLoggedIn , (req,res)=>{
         }
     })
 })
+// dummy route to redirect user after submitting feedbakc
+router.post("/academy/dummy/:id",middelware.isLoggedIn,(req,res)=>{
+    console.log("dummy route hit")
+    dataToBePassed = req.body
+    res.redirect("/academy/"+req.params.id)
+})
 
 module.exports = router ;
