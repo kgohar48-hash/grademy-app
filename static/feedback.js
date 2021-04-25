@@ -31,7 +31,7 @@ var HttpClient = function() {
   // http://localhost:3000/data
   //Questions fetch APi
   var client = new HttpClient();
-      client.get('http://localhost:8000/data',async function(res) {
+      client.get('https://www.grademy.org/data',async function(res) {
         var loadedQuiz = JSON.parse(res)
         console.log(loadedQuiz)
         questions = [{
@@ -133,6 +133,6 @@ var HttpClient = function() {
         },
         body : JSON.stringify(submitQuiz)
       }
-      fetch("http://localhost:8000/academy/feedback/"+academyId , options);
+      fetch("https://www.grademy.org/academy/feedback/"+academyId , options);
     })
   }
