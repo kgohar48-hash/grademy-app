@@ -16,6 +16,7 @@ var academySchema = new mongoose.Schema({
     subject : {type : String , default:""},
     test  : {type : String , default:""},
     level : {type : Number , default : 1},
+    isPublic : {type : Boolean, default : true},
     feedback : {
         givenBy : [
             {
