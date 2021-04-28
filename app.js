@@ -11,7 +11,7 @@ var express          = require("express"),
 	// process.env.PORT , process.env.IP
 app.listen ( process.env.PORT , process.env.IP	,async function(){
 	await connectingToDB()
-	console.log("grademy beta serving listening...")
+	console.log("grademy betaa serving listening...")
 	// fix route paths
 	//Router call
 	var commentsRoutes		= require("./routes/comments"),
