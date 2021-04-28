@@ -9,7 +9,7 @@ var express          = require("express"),
 	methodOverride 	 = require("method-override"),
 	User			 = require("./models/user");
 	// process.env.PORT , process.env.IP
-app.listen ( process.env.PORT , process.env.IP	,async function(){
+app.listen ( 8000	,async function(){
 	await connectingToDB()
 	console.log("grademy betaa serving listening...")
 	// fix route paths
