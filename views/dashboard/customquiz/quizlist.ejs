@@ -16,7 +16,7 @@
 			<p>
 				Make your own quiz to challenge yourself!
 			</p>
-			<%if(currentUser.isAcademy){%>
+			<%if(!currentUser.isAcademy){%>
 				<p>
 					<a class="btn btn-primary  mt-3" href="/customquiz/newquiz"  >Create a Quiz</a>
 				</p>
