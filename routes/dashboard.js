@@ -7,7 +7,11 @@ var middelware = require("../middelware");
 // Dashboard
 // ===========================================================
 router.get("/dashboard",middelware.isLoggedIn , function(req,res){
-	res.render("dashboard/index" ) 
+	if(req.user.isAcademy){
+		res.redirect("academy")
+	}else{
+		res.render("dashboard/index" ) 
+	}
 })
 
 router.get("/aboutdashboard", function(req,res){

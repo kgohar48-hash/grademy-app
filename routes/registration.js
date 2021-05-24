@@ -23,16 +23,7 @@ router.get("/signup" , function(req,res){
 })
 // register with refernce
 router.get("/signup/:id" , function(req,res){
-	User.findById(req.params.id , function(err,foundUser){
-		if(err){
-			console.log(err)
-			// if failed then
-			res.render("registration/signup" , {ref : "kgohar48"})
-		}
-		else{
-			res.render("registration/signup", {ref : foundUser.username})
-		}
-	})
+	res.render("registration/signup", {ref : req.params.id})
 })
 // signup logic
 router.post("/signup" , function(req,res){
@@ -52,9 +43,7 @@ router.post("/signup" , function(req,res){
 		phone : req.body.phone,
 		city : req.body.city,
 		ref : reference,
-		category : req.body.category,
-		// if signup using the link of an academy
-		myAcademy : req.body.myAcademy 
+		category : req.body.category 
 	})
 	
 	var newPassword = req.body.password
@@ -82,21 +71,23 @@ router.post("/signup" , function(req,res){
 })
 //verification 
 router.post("/verification" , function (req,res) {
-	var token = req.body.token
-	User.findOne({token : token } , function (err , foundUser) {
-		if(!foundUser || err ){
-			req.flash("error" , "Incorrect key try again or contact admin")
-			return res.render("verify")
-		}
-		else{
-			foundUser.isVerified = true ;
-			foundUser.save();
-			positionSorting();
-			req.flash("success" , foundUser.username +" is verified now")
-			res.redirect("/login")
-			// it does verify user but keep loading   error to be fixed
-		}
-	})
+	
+	res.send("in beta testing, please contact admin")
+	// var token = req.body.token
+	// User.findOne({token : token } , function (err , foundUser) {
+	// 	if(!foundUser || err ){
+	// 		req.flash("error" , "Incorrect key try again or contact admin")
+	// 		return res.render("verify")
+	// 	}
+	// 	else{
+	// 		foundUser.isVerified = true ;
+	// 		foundUser.save();
+	// 		positionSorting();
+	// 		req.flash("success" , foundUser.username +" is verified now")
+	// 		res.redirect("/login")
+	// 		// it does verify user but keep loading   error to be fixed
+	// 	}
+	// })
 	
 })
 //login page & logic

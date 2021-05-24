@@ -368,6 +368,18 @@ router.post("/academy/feedback/:id",middelware.isLoggedIn , (req,res)=>{
         }
     })
 })
+// switch student account into teaching account
+router.get("/academy/switch/toteacher",middelware.isLoggedIn,(req,res)=>{
+    User.findByIdAndUpdate(req.user._id, {isAcademy : true},(err, foundUser)=>{
+        if(err || !foundUser){
+            console.log(err)
+        }else{
+            console.log("no problem till here")
+			req.flash("success" , foundUser.name +" you have switched to teaching account" )
+            res.redirect("/academy")
+        }
+    })
+})
 // dummy route to redirect user after submitting feedbakc
 router.post("/academy/dummy/:id",middelware.isLoggedIn,(req,res)=>{
     console.log("dummy route hit")

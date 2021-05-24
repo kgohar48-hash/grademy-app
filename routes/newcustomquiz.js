@@ -274,6 +274,7 @@ router.get("/dashboard/newcustomquiz/:id" ,middelware.isLoggedIn , function(req,
 // need to be refactored & intelligence has yet to be added & change for academies custom dashboard.
 router.post("/newcustomquiz",middelware.isLoggedIn , async function(req,res){	
 	dataFromQuiz = {
+		id : req.user._id,
 		username : req.body.username,
 		userScore : req.body.userScore,
 		key : req.body.key ,
