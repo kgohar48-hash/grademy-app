@@ -11,7 +11,7 @@ var HttpClient = function() {
     }
 }
 var client = new HttpClient();
-client.get('https://www.grademy.org/data',async function(res) {
+client.get('http://localhost:8000/data',async function(res) {
     data = JSON.parse(res)
     init()
 });
@@ -62,7 +62,7 @@ var liveSessionsNumber = 0;
 
 
 function init(){
-    about.innerText = data.academy.overview
+    about.innerHTML = data.academy.overview
     stars.forEach(star => {
         star.addEventListener("mouseover" , e=>{
             if(e.target.dataset["number"] > ratingInput.value){
@@ -142,7 +142,7 @@ function init(){
                 },
                 body : JSON.stringify({academyId : academyToBeUnjoined})
                 }
-            fetch("https://www.grademy.org/leave" , options);
+            fetch("http://localhost:8000/leave" , options);
         }else{
             e.target.classList.remove('btn-primary')
             e.target.classList.add('btn-success')
@@ -156,7 +156,7 @@ function init(){
                 },
                 body : JSON.stringify({academyId : academyToBeJoined})
             }
-            fetch("https://www.grademy.org/join" , options);
+            fetch("http://localhost:8000/join" , options);
         }
     })
 }

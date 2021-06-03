@@ -292,7 +292,7 @@ router.get("/academy/section/:id",middelware.isLoggedIn,async (req,res)=>{
 })
 // academy quiz edit
 router.get("/academy/quiz/:id/edit",middelware.checkQuizOwnership,(req,res)=>{
-    newCustomQuiz.findById(req.params.id,(err,foundQuiz)=>{
+	newCustomQuiz.findById(req.params.id).populate("mcqs").exec(function(err , foundQuiz){
         if(err || !foundQuiz){
             console.log(err)
             res.send("you are not authorized")

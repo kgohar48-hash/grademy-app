@@ -76,7 +76,8 @@ router.post("/newmcqs/test",middelware.isLoggedIn ,async function(req,res){
 				question : req.body.questions[i].question,
 				choice : req.body.questions[i].choices,
 				answer : req.body.questions[i].answer,
-				solution : req.body.questions[i].solution
+				solution : req.body.questions[i].solution,
+				userResponse : Array(req.body.questions[i].choices.length+1).fill(0)
 			})
 		}
 	}
@@ -318,6 +319,7 @@ router.post("/newcustomquiz",middelware.isLoggedIn , async function(req,res){
 								if(err){
 									console.log(err)
 								}else{
+									
 									// adding response to mcq ,  an error happened here can't read foreach of null
 									// thukk
 									dataFromQuiz.key[j].forEach(atmp =>{

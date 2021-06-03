@@ -8,7 +8,20 @@ var newCustomQuizSchema = new mongoose.Schema({
             ref : "Mcq"
         }
     ],
-    solvedBy : [],
+    solvedBy : [
+        {
+            id : {
+                type : mongoose.Schema.Types.ObjectId ,
+                ref : "User"
+            },
+            username : String,
+            userScore : Number,
+            key : Array,
+            keyOfCorrectness : Array,
+            timeForEachMcq : Array,
+            date : {type: Date, default: Date.now}
+        }
+    ],
     madeBy : String ,
     comments : [
         {

@@ -41,5 +41,32 @@ router.get("/dashboard/mcqs/:category/:id", (req,res)=>{
     
 })
 
+router.get("/mcq/edit/:id", (req,res)=>{
+    Mcq.findById(req.params.id,(err,foundMcq)=>{
+        if(err || !foundMcq){
+            console.log(err)
+        }else{
+            res.render("dashboard/mcqs/edit", {mcq : foundMcq})
+        }
+    })
+})
+
+router.post("/mcq/edit/:id",(req,res)=>{
+    Mcq.findById(req.params.id , (err,foundMcq)=>{
+        if(err || !foundMcq){
+            console.log(err)
+        }else{
+            console.log(req.body)
+            foundMcq.question = req.body.mcq.question
+            foundMcq.choice = req.body.mcq.choice
+            foundMcq.answer.set(0 , req.body.mcq.answer)
+            console.log("update :",foundMcq)
+            foundMcq.save()
+            res.redirect("/mcq/edit/"+req.params.id)
+        }
+    })
+    console.log(req.body)
+})
+
 
 module.exports = router ;

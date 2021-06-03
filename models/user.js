@@ -128,6 +128,16 @@ var UserSchema = new mongoose.Schema({
             ref : "Mcq"
         }
     ],
+    notification : [
+        {
+            id : {
+            type : mongoose.Schema.Types.ObjectId,
+            ref : "Notification"
+            },
+            read : {type : Boolean, default : false}
+        }
+
+    ],
     createdAt: {type: Date, default: Date.now}
 })
 

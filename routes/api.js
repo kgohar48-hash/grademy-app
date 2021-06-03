@@ -133,13 +133,13 @@ function mcqsInfoData(category) {
 					if( typeof info[mcqsFound[i].subject] === 'undefined'){
 						info[mcqsFound[i].subject] = {}
 						if(typeof  info[mcqsFound[i].subject][mcqsFound[i].chapter] === 'undefined'){
-							info[mcqsFound[i].subject][mcqsFound[i].chapter] = 0
+							info[mcqsFound[i].subject][mcqsFound[i].chapter] = 1
 						}else{
 							info[mcqsFound[i].subject][mcqsFound[i].chapter] = info[mcqsFound[i].subject][mcqsFound[i].chapter] + 1
 						}
 					}else{
 						if(typeof  info[mcqsFound[i].subject][mcqsFound[i].chapter] === 'undefined'){
-							info[mcqsFound[i].subject][mcqsFound[i].chapter] = 0
+							info[mcqsFound[i].subject][mcqsFound[i].chapter] = 1
 						}else{
 							info[mcqsFound[i].subject][mcqsFound[i].chapter] = info[mcqsFound[i].subject][mcqsFound[i].chapter] + 1
 						}

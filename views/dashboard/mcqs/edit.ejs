@@ -1,0 +1,68 @@
+<%- include("../../partials/header")  %>
+
+<div class="container">
+    <form  action="/mcq/edit/<%=mcq._id%>" method="POST">
+        <div class="card" style="background-color: rgb(56, 56, 56);">
+            <div class="card-header">
+
+            </div>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="input-group">
+                            <span class="input-group-text">Question</span>
+                            <textarea class="form-control" name="mcq[question]" aria-label="With textarea"><%=mcq.question%></textarea>
+                          </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mt-3">
+                            <div class="input-group">
+                                <span class="input-group-text">Choice A</span>
+                                <textarea class="form-control" name="mcq[choice]"  aria-label="With textarea"><%=mcq.choice[0]%></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-3">
+                            <div class="input-group">
+                                <span class="input-group-text">Choice B</span>
+                                <textarea class="form-control" name="mcq[choice]" aria-label="With textarea"><%=mcq.choice[1]%></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mt-3">
+                            <div class="input-group">
+                                <span class="input-group-text">Choice C</span>
+                                <textarea class="form-control" name="mcq[choice]" aria-label="With textarea"><%=mcq.choice[2]%></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-3">
+                            <div class="input-group">
+                                <span class="input-group-text">Choice D</span>
+                                <textarea class="form-control" name="mcq[choice]" aria-label="With textarea"><%=mcq.choice[3]%></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="input-group mb-3 mt-4 mr-4 ml-4">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text">Answer : </label>
+                    </div> 
+                    <select name="mcq[answer]" class="custom-select" id="addons" required>                   
+                        <%for(var i = 0 ; i < 4 ; i++){%>
+                            <%if(i == Number(mcq.answer[0]) - 1){%>
+                                <option selected value="<%=i + 1%>" ><%=i + 1%></option>
+                            <%}else{%>
+                                <option value="<%=i + 1%>" ><%=i + 1%></option>
+                            <%}%>
+                        <%}%>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Update</button>
+            </div>
+        </div>
+    </form>
+</div>
+<%- include("../../partials/footer")  %>
+

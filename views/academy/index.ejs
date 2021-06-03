@@ -2,15 +2,21 @@
 <% var i = 0 ;%>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <div class="container">
+    <%- include("../partials/flash")  %>
     <header class="jumbotron">
         <div class="container">
-            <h1>Meet your instructors!</h1>
-            <p>Choose your own favourite instructors</p>
             <%if(currentUser) { if(currentUser.isAcademy){%>
-            <p>
-               <a class="btn btn-primary btn-large" href="/academy/new">Start your academy</a>
-            </p>
-            <%}}%>
+                <h1>Start you teaching journey with us!</h1>
+                <p>
+                    <a class="btn btn-primary btn-large" href="/academy/new">Start your academy</a>
+                </p>
+            <%}else{%>
+                <h1>Meet your instructors!</h1>
+                <p>Have freedom to choose your own favourite teachers</p>
+            <%}}else{%>
+                <h1>Meet your instructors!</h1>
+                <p>Have freedom to choose your own favourite teachers</p>
+            <%}%>
         </div>
     </header>
     <div class="row" >

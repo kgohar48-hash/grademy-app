@@ -4,7 +4,7 @@
 		<h1 style="text-align : center">
 			Edite quiz
 		</h1>
-		<div style="width: 30% ; margin:25px auto ;">
+		<div style=" margin:25px auto ;">
 			<form action="/academy/quiz/<%=quiz._id%>/edit" method="POST">
 				<div class="form-group">
 					<input class="form-control" type="text" name="quiz[description]" value="<%=quiz.description%>" >	
@@ -15,6 +15,29 @@
 				<div class="form-group">
 					<input class="form-control" type="text" name="quiz[discussionVideoURL]" value="<%=quiz.discussionVideoURL%>" >	
 				</div>
+				<%for(var i = 0 ; i < quiz.mcqs.length ; i ++ ){%>
+					<div class="card mt-3" style="color: black;">
+						<div class="card-header">
+							Question # <%=i+1%>
+							<a href="/mcq/edit/<%=quiz.mcqs[i]._id%>" target="_blank" id="edit-btn" class="fas fa-edit btn btn-sm btn-warning float-right" ></a>
+						</div>
+						<div class="card-body">
+							Question : <%=quiz.mcqs[i].question%>
+							<%for(var j = 0 ; j < quiz.mcqs[i].choice.length ; j ++ ){%>
+								<p>
+									Choice <%=j+1%> : <%=quiz.mcqs[i].choice[j]%>
+								</p>
+							<%}%>
+						</div>
+						<div class="card-footer">
+							<%for(var k = 0 ; k < quiz.mcqs[i].answer.length ; k ++ ){%>
+								<p>
+									Answer : <%=quiz.mcqs[i].answer[k]%>
+								</p>
+							<%}%> 
+						</div>
+					</div>
+				<%}%>
 				<div class="form-group">
 					<button class="btn btn-lg btn-primary btn-block">
 					submit
@@ -24,7 +47,6 @@
 			<a href="/newsfeed" >Back</a>
 		</div>	
 	</div>
-	
 </div>
 
 

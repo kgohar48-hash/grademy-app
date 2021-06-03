@@ -24,7 +24,8 @@ var academySchema = new mongoose.Schema({
                     type : mongoose.Schema.Types.ObjectId,
                     ref : "User"
                 },
-                response : []
+                response : [],
+                date : {type: Date, default: Date.now}
             }
         ],
         funFactor : {type : Array , default : []},
@@ -39,6 +40,15 @@ var academySchema = new mongoose.Schema({
         // The instructor was motivating and enthusiastic
         energy : {type : Array , default : []}
     },
+    subscribers : [
+        {
+            id : {
+                type : mongoose.Schema.Types.ObjectId,
+                ref : "User"
+            },
+            date : {type: Date, default: Date.now}
+        }
+    ],
     students : [
         {
             type : mongoose.Schema.Types.ObjectId,
