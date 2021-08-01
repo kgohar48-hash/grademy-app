@@ -52,7 +52,38 @@ const express		 = require("express"),
 // 	res.send(mcqsToDB)
 // })
 router.get("/profile",(req,res)=>{
-	res.render("profile")
+	// score fix
+	// User.find({},async(err,foundUsers)=>{
+	// 	if(err){
+	// 		console.log(err)
+	// 	}else{
+	// 		for(var i = 0; i <= foundUsers.length;i++){
+	// 			sum = 0
+	// 			if(i==foundUsers.length){
+	// 				// terminates
+	// 				res.send("done")
+	// 			}else{
+	// 				await User.findById(foundUsers[i], (err,foundUser)=>{
+	// 					if(err || !foundUser){
+	// 						console.log(err)
+	// 					}else{
+	// 						console.log("i : "+ i)
+	// 						sumPhy = foundUser.score.physics.keyOfCorrectness.reduce((a, b) => a + b, 0)
+	// 						sumBio = foundUser.score.biology.keyOfCorrectness.reduce((a, b) => a + b, 0)
+	// 						sumEng = foundUser.score.english.keyOfCorrectness.reduce((a, b) => a + b, 0)
+	// 						foundUser.score.score = sumPhy + sumEng + sumBio
+	// 						foundUser.score.physics.score = sumPhy
+	// 						foundUser.score.english.score = sumEng
+	// 						foundUser.score.biology.score = sumBio
+	// 						foundUser.save()
+
+	// 					}
+	// 				})
+	// 			}
+	// 		}
+			
+	// 	}
+	// })
 })
 
 // router.get("/fix/responce",(req,res)=>{

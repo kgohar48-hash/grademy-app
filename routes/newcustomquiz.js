@@ -338,8 +338,8 @@ router.post("/newcustomquiz",middelware.isLoggedIn , async function(req,res){
 									if(foundUser.score[foundMcq.subject].keyOfCorrectness.length > 100){
 										choppedElement = foundUser.score[foundMcq.subject].keyOfCorrectness.shift()
 										// testing has to be done
-										foundUser.score[foundMcq.subject].score += choppedElement
-										foundUser.score.score += choppedElement
+										foundUser.score[foundMcq.subject].score -= choppedElement
+										foundUser.score.score -= choppedElement
 									}
 									if(dataFromQuiz.keyOfCorrectness[j] == 4 ){
 										// foundMcq.avgCorrectTime = ((foundMcq.avgCorrectTime * foundMcq.correct) + dataFromQuiz.timeForEachMcq[j]) / (foundMcq.correct + 1)
