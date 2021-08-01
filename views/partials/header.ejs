@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<title>Grademy</title>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<link rel="stylesheet"  href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" >
 		<link rel="stylesheet" href="/css/main.css" >
 		<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
@@ -63,6 +63,10 @@
 								<li class="nav-item"> <a href="/login" class="nav-link">Login</a></li>
 								<li class="nav-item"><a href="/signup" class="nav-link">Sign Up</a></li>
 							<%} else { %>
+								<button type="button" class="icon-button mt-1 mr-4">
+									<span class="material-icons nav-link">notifications</span>
+									<span class="icon-button__badge">2</span>
+								</button>
 								<li class="nav-item"><a href="#" class="nav-link"> <%=currentUser.username%> </a></li>
 								<li class="nav-item"><a href="/logout" class="nav-link">Logout</a></li>
 							<% } %>
