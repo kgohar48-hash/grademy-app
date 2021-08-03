@@ -308,6 +308,10 @@ router.post("/newcustomquiz",middelware.isLoggedIn , async function(req,res){
 						if(foundQuiz.mcqs.length == j){
 							//terminate
 							console.log("saved : ")
+							// saving solved quiz to students my quizzes if not made by him/her
+							if(foundQuiz.madeBy != foundUser.username){
+								foundUser.myQuizzes.push(foundQuiz)
+							}
 							await User.findByIdAndUpdate(foundUser._id,foundUser, function(err,userToBeUpdated){
 								if(err){
 									console.log(err)

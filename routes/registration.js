@@ -27,7 +27,7 @@ router.get("/signup/:id" , function(req,res){
 })
 // signup logic
 router.post("/signup" , function(req,res){
-	var token = randomstring.generate(5)
+	var token = Math.floor((Math.random() * 1000000) + 1)
 	// extracting ref
 	if(!req.body.ref){
 		var reference = 'kgohar48'

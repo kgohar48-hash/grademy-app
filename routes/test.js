@@ -1,8 +1,11 @@
+const newCustomQuiz = require("../models/newCustomQuiz");
+
 const express		 = require("express"),
 	router 			 = express.Router(),
     User			 = require("../models/user"),
 	Pool			 = require("../models/pool");
-	Mcq			 = require("../models/mcq");
+	Mcq			 	= require("../models/mcq");
+	
 
 
 // route to convert pool to mcqs DB 
@@ -52,36 +55,34 @@ const express		 = require("express"),
 // 	res.send(mcqsToDB)
 // })
 router.get("/profile",(req,res)=>{
-	// score fix
-	// User.find({},async(err,foundUsers)=>{
-	// 	if(err){
+	// newCustomQuiz.findById("6105e5513f31c60015f7e57a", (err , foundQuiz)=>{
+	// 	if(err || !foundQuiz){
 	// 		console.log(err)
 	// 	}else{
-	// 		for(var i = 0; i <= foundUsers.length;i++){
-	// 			sum = 0
-	// 			if(i==foundUsers.length){
-	// 				// terminates
-	// 				res.send("done")
-	// 			}else{
-	// 				await User.findById(foundUsers[i], (err,foundUser)=>{
-	// 					if(err || !foundUser){
-	// 						console.log(err)
-	// 					}else{
-	// 						console.log("i : "+ i)
-	// 						sumPhy = foundUser.score.physics.keyOfCorrectness.reduce((a, b) => a + b, 0)
-	// 						sumBio = foundUser.score.biology.keyOfCorrectness.reduce((a, b) => a + b, 0)
-	// 						sumEng = foundUser.score.english.keyOfCorrectness.reduce((a, b) => a + b, 0)
-	// 						foundUser.score.score = sumPhy + sumEng + sumBio
-	// 						foundUser.score.physics.score = sumPhy
-	// 						foundUser.score.english.score = sumEng
-	// 						foundUser.score.biology.score = sumBio
-	// 						foundUser.save()
-
-	// 					}
-	// 				})
+	// 		function shuffle(array) {
+	// 			var currentIndex = array.length,  randomIndex;
+			  
+	// 			// While there remain elements to shuffle...
+	// 			while (0 !== currentIndex) {
+			  
+	// 			  // Pick a remaining element...
+	// 			  randomIndex = Math.floor(Math.random() * currentIndex);
+	// 			  currentIndex--;
+			  
+	// 			  // And swap it with the current element.
+	// 			  [array[currentIndex], array[randomIndex]] = [
+	// 				array[randomIndex], array[currentIndex]];
 	// 			}
+	// 			return array;
 	// 		}
-			
+	// 		foundQuiz.mcqs = shuffle(foundQuiz.mcqs)
+	// 		newCustomQuiz.findByIdAndUpdate(foundQuiz._id , foundQuiz, (errr , updated)=>{
+	// 			if(errr){
+	// 				console.log(errr)
+	// 			}else{
+	// 				res.send(foundQuiz)
+	// 			}
+	// 		})
 	// 	}
 	// })
 })
