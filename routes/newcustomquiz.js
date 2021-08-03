@@ -231,43 +231,16 @@ router.post("/dashboard/newcustomquiz" ,middelware.isLoggedIn ,async function(re
 })
 //custom quiz view page
 router.get("/dashboard/newcustomquiz/:id" ,middelware.isLoggedIn , function(req,res){
-	User.findOne({username : req.params.id} , function(err , foundUser){
+	User.findOne({username : req.params.id}).populate({
+		path : 'myQuizzes',
+		model : "Newcustomquiz"
+	}).exec((err,foundUser)=>{
 		if(err || !foundUser){
-			console.log("error aya")
 			console.log(err)
 		}else{
-			console.log("user found")
-
-			var quizzes = []
-			init()
-			async function init (){
-				await fetchQuizzes()
-				// global variable
-				quizzesToBeSend = quizzes ;
-				res.render("dashboard/customquiz/quizlist" ,{academy : foundUser})
-			}
-			async function fetchQuizzes(){
-				try {
-					return new Promise(async(resolve, reject) => {
-						if(foundUser.myQuizzes.length == 0){
-							resolve()
-						}else{
-							await newCustomQuiz.find({madeBy : foundUser.username},function(err,quizzesFound){
-								if(err){
-									console.log(err)
-								}else{
-									quizzes = quizzesFound
-								}
-								resolve()
-							})
-							
-						}
-					});
-				}
-				catch (reject) {
-					console.log("error here in quiz fetching : " + reject);
-				}
-			}
+			// global variable
+			quizzesToBeSend = foundUser.myQuizzes
+			res.render("dashboard/customquiz/quizlist" ,{academy : foundUser})
 		}
 	})
 })

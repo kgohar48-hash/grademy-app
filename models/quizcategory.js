@@ -14,7 +14,7 @@ var quizcategorySchema = new mongoose.Schema({
     quizzes : [
         {
             type : mongoose.Schema.Types.ObjectId,
-            ref : "newCustomQuiz"
+            ref : "Newcustomquiz"
         }
     ],
     createdAt: {type: Date, default: Date.now}

@@ -36,4 +36,4 @@ var newCustomQuizSchema = new mongoose.Schema({
     createdAt: {type: Date, default: Date.now}
 })
 
-module.exports = mongoose.model("NewCustomQuiz" , newCustomQuizSchema)
+module.exports = mongoose.model("Newcustomquiz" , newCustomQuizSchema)

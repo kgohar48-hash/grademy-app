@@ -97,7 +97,7 @@ router.get("/academy/:id",(req,res)=>{
         model : 'Quizcategory',
         populate : {
             path : 'quizzes',
-            model : 'NewCustomQuiz'
+            model : 'Newcustomquiz'
         }
     }).exec((err, foundAcademy) => {
         if (err || !foundAcademy) {
@@ -276,7 +276,7 @@ router.get("/academy/section/:id",middelware.isLoggedIn,async (req,res)=>{
         model : 'Quizcategory',
         populate : {
             path : 'quizzes',
-            model : 'NewCustomQuiz'
+            model : 'Newcustomquiz'
         }
     }).exec((err, foundAcademy) => {
         if (err || !foundAcademy) {
