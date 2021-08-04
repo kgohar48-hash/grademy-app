@@ -51,7 +51,6 @@ router.post("/newmcqs/test",middelware.isLoggedIn ,async function(req,res){
 												}else{
 													foundCategory.quizzes.push(quiz)
 													foundCategory.save()
-													console.log("done sir")
 												}
 											})
 										}
