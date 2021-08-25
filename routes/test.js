@@ -5,7 +5,6 @@ const express		 = require("express"),
     User			 = require("../models/user"),
 	Pool			 = require("../models/pool");
 	Mcq			 	= require("../models/mcq");
-	
 
 
 // route to convert pool to mcqs DB 
@@ -54,8 +53,8 @@ const express		 = require("express"),
 // 	})
 // 	res.send(mcqsToDB)
 // })
-router.get("/profile",(req,res)=>{
-	// newCustomQuiz.findById("6105e5513f31c60015f7e57a", (err , foundQuiz)=>{
+router.get("/shuffle/:id",(req,res)=>{
+	// newCustomQuiz.findById(req.params.id, (err , foundQuiz)=>{
 	// 	if(err || !foundQuiz){
 	// 		console.log(err)
 	// 	}else{
@@ -121,4 +120,14 @@ router.get("/profile",(req,res)=>{
 // 		}
 // 	})
 // })
+router.get("/assignment/1",(req,res)=>{
+	newCustomQuiz.findById("60ff485968585300151a71d6").populate("mcqs").exec(function(err , foundQuiz){
+		if(err){
+			console.log(err)
+		}
+		else{
+			res.json(foundQuiz)
+		}
+	})
+})
 module.exports = router ;
