@@ -11,6 +11,12 @@ var mcqSchema = new mongoose.Schema ({
     choice :[],
     answer : [],
     userResponse : [],
+    comments : [
+        {
+            type : mongoose.Schema.Types.ObjectId,
+            ref : "Comment"
+        }
+    ],
     solution : {type: String , default : ""},
     solutionVideo : {type: String , default : ""},
     avgCorrectTime : {type: Number , default : 10},

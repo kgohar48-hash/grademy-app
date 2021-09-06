@@ -3,6 +3,7 @@ var router      = express.Router();
 var middelware  = require("../middelware");
 var Mcq		 	= require("../models/mcq");
 var User        = require("../models/user");
+var Comment     = require("../models/comment")
 
 router.get("/dashboard/mcqs/:category/:id", (req,res)=>{
     if(req.params.category != 'incorrect'){
@@ -51,7 +52,7 @@ router.get("/mcq/edit/:id", (req,res)=>{
     })
 })
 
-router.post("/mcq/edit/:id",(req,res)=>{
+router.post("/mcq/edit/:id", middelware.isLoggedIn ,(req,res)=>{
     Mcq.findById(req.params.id , (err,foundMcq)=>{
         if(err || !foundMcq){
             console.log(err)
@@ -66,6 +67,44 @@ router.post("/mcq/edit/:id",(req,res)=>{
         }
     })
     console.log(req.body)
+})
+// report route
+router.get("/mcq/report/:id", middelware.isLoggedIn ,(req,res)=>{
+    Mcq.findById(req.params.id,(err,foundMcq)=>{
+        if(err || !foundMcq){
+            console.log(err)
+        }else{
+            res.render("dashboard/mcqs/report", {mcq : foundMcq})
+        }
+    })
+})
+// comment post route
+router.post("/mcq/report/:id",middelware.isLoggedIn ,(req,res)=>{
+    var newCommnet = {
+		text : req.body.text,
+		author : {
+			id : req.user._id, 
+			username : req.user.username 
+		}
+	}
+    Mcq.findById(req.params.id,(err,foundMcq)=>{
+        if(err || !foundMcq){
+            console.log(err)
+        }else{
+            Comment.create(newCommnet , function (err , comment){
+				if(err || !comment){
+					console.log(err)
+				}
+				else{
+					foundMcq.comments.push(comment)
+					foundMcq.save()
+					console.log("comment saved")
+					req.flash("success", "Thank you ! Your report has been registered ");
+					res.redirect("/mcq/report/"+req.params.id)
+				}
+			})
+        }
+    })
 })
 
 

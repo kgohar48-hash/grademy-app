@@ -39,6 +39,7 @@ var progressBarFull = document.getElementById("progressBarFull")
 var progressText = document.getElementById("progressText")
 var nextButton = document.getElementById("nextButton")
 var previousButton = document.getElementById("previousButton")
+const reportButton = document.getElementById("reportMcq")
 var backButton      = document.getElementById('backButton')
 const sideBar = document.getElementById("sidebar-container")
 var avgTime = document.getElementById("avgTime")
@@ -99,6 +100,12 @@ async function getQuestion(i){
     progressText.innerText = `Question ${questionCounter}/${questions.length}`;
     questionText.innerHTML = questions[i].question
     currentQuestion = questions[i]
+    // show report Button
+    if(currentQuestion.chapter == "PMC MDCAT 2021"){
+        reportButton.href = "/mcq/report/"+currentQuestion._id
+      }else{
+        reportButton.style.display = 'none'
+      }
     // choices
     var choicesString = ''
     totalAttempts = currentQuestion.userResponse.reduce((a, b) => a + b, 0)

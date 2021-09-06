@@ -1,0 +1,62 @@
+<%- include("../../partials/header")  %>
+
+<div class="container">
+    <%- include("../../partials/flash")  %>
+
+    <form  action="/mcq/report/<%=mcq._id%>" method="POST">
+        <div class="card" style="background-color: rgb(56, 56, 56);">
+            <div class="card-header">
+
+            </div>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="input-group">
+                            <span class="input-group-text">Question</span>
+                            <textarea readonly class="form-control"  aria-label="With textarea"><%=mcq.question%></textarea>
+                          </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mt-3">
+                            <div class="input-group">
+                                <span class="input-group-text">Choice A</span>
+                                <textarea readonly class="form-control"  aria-label="With textarea"><%=mcq.choice[0]%></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-3">
+                            <div class="input-group">
+                                <span class="input-group-text">Choice B</span>
+                                <textarea readonly class="form-control"  aria-label="With textarea"><%=mcq.choice[1]%></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mt-3">
+                            <div class="input-group">
+                                <span class="input-group-text">Choice C</span>
+                                <textarea readonly class="form-control"  aria-label="With textarea"><%=mcq.choice[2]%></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-3">
+                            <div class="input-group">
+                                <span class="input-group-text">Choice D</span>
+                                <textarea readonly class="form-control"  aria-label="With textarea"><%=mcq.choice[3]%></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="input-group mb-3 mt-4 mr-4 ml-4">
+                    <div class="input-group">
+                        <span class="input-group-text">Statement : </span>
+                        <textarea  class="form-control" name="text" aria-label="With textarea"></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-danger btn-lg btn-block">Report</button>
+            </div>
+        </div>
+    </form>
+</div>
+<%- include("../../partials/footer")  %>
+

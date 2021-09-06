@@ -17,7 +17,8 @@ const progressText = document.getElementById("progressText");
 const scoreText = document.getElementById("score");
 const progressBarFull = document.getElementById("progressBarFull");
 const submitButton = document.getElementById("submit-button");
-const skipButton = document.getElementById("skipButton")
+const skipButton = document.getElementById("skipButton");
+const reportButton = document.getElementById("reportMcq")
 const currentUser = document.getElementById("username");
 const category = document.getElementById("category");
 const sideBar = document.getElementById("sidebar-container")
@@ -120,6 +121,12 @@ getNewQuestion = () => {
 
     const questionIndex = questionCounter - 1 ;
     currentQuestion = availableQuesions[questionIndex];
+    // show report Button
+    if(currentQuestion.chapter == "PMC MDCAT 2021"){
+      reportButton.href = "/mcq/report/"+currentQuestion._id
+    }else{
+      reportButton.style.display = 'none'
+    }
     question.innerHTML = currentQuestion.question;
     // update subject & chapter titles
     subjectTitle.innerText = currentQuestion.subject
