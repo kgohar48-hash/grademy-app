@@ -70,7 +70,7 @@ router.post("/mcq/edit/:id", middelware.isLoggedIn ,(req,res)=>{
 })
 // report route
 router.get("/mcq/report/:id", middelware.isLoggedIn ,(req,res)=>{
-    Mcq.findById(req.params.id,(err,foundMcq)=>{
+    Mcq.findById(req.params.id).populate("comments").exec((err,foundMcq)=>{
         if(err || !foundMcq){
             console.log(err)
             res.redirect("/")

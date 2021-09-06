@@ -54,6 +54,14 @@
                     </div>
                 </div>
                 <button type="submit" class="btn btn-danger btn-lg btn-block">Report</button>
+                <% mcq.comments.forEach(comment=>{%>
+                    <h4>
+                        <%=comment.author.username%> 
+                    </h4>
+                    <p><%=comment.text%></p>
+                    <p class="text-muted">Published <%=String(comment.createdAt.getDate()).padStart(2, '0');%>/<%=comment.createdAt.getMonth()+1%>/<%=comment.createdAt.getFullYear()%> </p>
+                    <hr style="border-top: 1px solid rgb(87, 87, 87); margin: 5px 0px;">
+                <%})%>
             </div>
         </div>
     </form>
