@@ -73,6 +73,7 @@ router.get("/mcq/report/:id", middelware.isLoggedIn ,(req,res)=>{
     Mcq.findById(req.params.id,(err,foundMcq)=>{
         if(err || !foundMcq){
             console.log(err)
+            res.redirect("/")
         }else{
             res.render("dashboard/mcqs/report", {mcq : foundMcq})
         }
@@ -90,6 +91,7 @@ router.post("/mcq/report/:id",middelware.isLoggedIn ,(req,res)=>{
     Mcq.findById(req.params.id,(err,foundMcq)=>{
         if(err || !foundMcq){
             console.log(err)
+            res.redirect("/")
         }else{
             Comment.create(newCommnet , function (err , comment){
 				if(err || !comment){
