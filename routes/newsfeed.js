@@ -52,7 +52,7 @@ router.get("/" , function(req,res){
 	
 })
 // newsfeed for academy
-router.get("/:id" , function(req,res){
+router.get("/:id" , middelware.isLoggedIn, function(req,res){
 	Academy.findById(req.params.id).populate({
         path : 'cummunityposts',
         model : 'Post',
@@ -253,7 +253,7 @@ router.get("/:id" , function(req,res){
 })
 // a single user can vote 2 times
 // vote
-router.post('/vote/:id',(req,res)=>{
+router.post('/vote/:id', middelware.isLoggedIn,(req,res)=>{
 	console.log("body : ",req.body)
 	Post.findById(req.params.id, (err , foundPost)=>{
 		if(err || !foundPost){
@@ -291,7 +291,7 @@ router.post('/vote/:id',(req,res)=>{
 	})
 })
 // vote delete
-router.post('/unvote/:id',(req,res)=>{
+router.post('/unvote/:id', middelware.isLoggedIn,(req,res)=>{
 	console.log("body unvote: ",req.body)
 	Post.findById(req.params.id, (err , foundPost)=>{
 		if(err || !foundPost){
