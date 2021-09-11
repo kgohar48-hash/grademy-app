@@ -30,7 +30,7 @@ cloudinary.config({
 });
 
 
-router.get("/" , function(req,res){
+router.get("/", middelware.isLoggedIn , function(req,res){
 	Post.find({}).populate("comments").exec((err , posts)=>{
 		if(err){
 			console.log(err)
