@@ -130,4 +130,37 @@ router.get("/assignment/1",(req,res)=>{
 		}
 	})
 })
+// delete route
+router.get("/deletethis",(req,res)=>{
+	User.find({},(err , foundUsers)=>{
+		if(err || !foundUsers){
+			console.log(err)
+		}else{
+			datarequested = []
+			for(var i =0; i <= foundUsers.length ; i++){
+				if(i == foundUsers.length){
+					res.send(datarequested)
+				}else{
+					index = 0 ;
+					datarequested.forEach(slot => {
+						if (slot.ratio < Math.round((foundUsers[i].correct.length/foundUsers[i].incorrect.length) * 100) / 100 && foundUsers[i].incorrect.length > 0){
+							return index 
+						}
+						else{
+							index++
+						}
+					});			
+					datarequested.splice(index, 0, {
+						user : foundUsers[i].username,
+						ratio : Math.round((foundUsers[i].correct.length/foundUsers[i].incorrect.length) * 100) / 100 || 0 ,
+						correct : foundUsers[i].correct.length,
+						incorrect : foundUsers[i].incorrect.length,
+						skipped : foundUsers[i].skipped.length,
+						mcqs : foundUsers[i].correct.length + foundUsers[i].incorrect.length + foundUsers[i].skipped.length
+					});
+				}
+			}
+		}
+	})
+})
 module.exports = router ;

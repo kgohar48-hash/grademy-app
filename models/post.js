@@ -3,6 +3,10 @@ var mongoose = require("mongoose")
 var postSchema = new mongoose.Schema ({
 	image : String ,
     text : String,
+    mcq : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "Mcq"
+    },
     author : {
         id : {
             type : mongoose.Schema.Types.ObjectId ,

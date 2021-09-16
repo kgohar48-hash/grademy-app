@@ -42,6 +42,16 @@ router.get("/dashboard/mcqs/:category/:id", (req,res)=>{
     
 })
 
+// send mcq
+router.get("/mcq/:id", (req,res)=>{
+    Mcq.findById(req.params.id, (err, foundMcq)=>{
+        if(err || !foundMcq){
+            console.log(err)
+        }else{
+            res.json(foundMcq)
+        }
+    })
+})
 router.get("/mcq/edit/:id", (req,res)=>{
     Mcq.findById(req.params.id,(err,foundMcq)=>{
         if(err || !foundMcq){

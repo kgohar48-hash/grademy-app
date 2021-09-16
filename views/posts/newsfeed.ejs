@@ -1,4 +1,5 @@
 <%- include("../partials/header") %>
+<link rel="stylesheet" href="/css/newsfeed.css">
 
 <div class="container">
 	<header class=" jumbotron">
@@ -66,6 +67,24 @@
 				</div>
 				<%if(post.image){%>
 					<img src="<%=post.image%>" class="card-img-top" alt="...">
+				<%}if(post.mcq){%>
+					<div class="container ml-2 mr-2" >
+						<h4><%=post.mcq.question%></h4>
+						<hr style="border-top: 1px solid rgb(87, 87, 87); margin: 5px 10px;">
+						<% for (var i = 0; i < post.mcq.choice.length ; i++){%>
+							<div class="choice-container mt-1"  data-id="<%=post.mcq._id%>" >
+								<span style="display: none;" class="response float-right mr-2"><%=post.mcq.userResponse[i+1]%></span>
+								<p class="choice-text ml-2" data-id="<%=post.mcq._id%>" data-number="<%=1+i%>">
+									<%=post.mcq.choice[i]%> 
+								</p>
+							</div>
+						<%}%>
+						<hr style="border-top: 1px solid rgb(87, 87, 87); margin: 5px 10px;">
+						<div class="solvedBy">
+							solved by <%=post.mcq.userResponse[0] + post.mcq.userResponse[1] + post.mcq.userResponse[2] + post.mcq.userResponse[3] + post.mcq.userResponse[4]%>
+						</div>
+					</div>
+					
 				<%}%>	
 				<div class="caption ml-3 mr-3 mt-2">
 					<p class="card-title">

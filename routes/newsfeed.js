@@ -31,7 +31,7 @@ cloudinary.config({
 
 
 router.get("/", middelware.isLoggedIn , function(req,res){
-	Post.find({}).populate("comments").exec((err , posts)=>{
+	Post.find({}).populate("comments").populate("mcq").exec((err , posts)=>{
 		if(err){
 			console.log(err)
 		}
@@ -59,7 +59,11 @@ router.get("/:id" , middelware.isLoggedIn, function(req,res){
         populate : {
             path : 'comments',
             model : 'Comment'
-        }
+        },
+		populate : {
+			path : 'mcq',
+			model : 'Mcq'
+		}
     }).exec((err, foundAcademy) => {
         if (err || !foundAcademy) {
             console.log(err);

@@ -1,3 +1,4 @@
+
 var HttpClient = function() {
     this.get = function(aUrl, aCallback) {
         var anHttpRequest = new XMLHttpRequest();
@@ -37,6 +38,7 @@ var voteNumber = document.getElementById('voteNumber')
 var newsfeedTitle = document.getElementById('newsfeed-title')
 var newsfeedTagline = document.getElementById('newsfeed-tagline')
 var postForm = document.getElementById('post-form')
+var choices     = Array.from(document.getElementsByClassName("choice-container"))
 var lastPoint ={}
 var data ={}
 
@@ -128,4 +130,35 @@ function init(){
         });
         
     }
+    // choice functions
+    choices.forEach(choice =>{
+        choice.addEventListener("click",e =>{
+            var id = e.target.dataset["id"]
+            var choiceSelected = e.target.dataset["number"]
+            client.get('https://www.grademy.org/mcq/'+id,async function(res) {
+            mcqfetched = JSON.parse(res)
+            totalAttempts = mcqfetched.userResponse.reduce((a, b) => a + b, 0)
+            console.log(mcqfetched)
+            var choiceIndex = 0
+            choices.forEach(option=>{
+                if(option.dataset["id"] == id){
+                    choiceIndex++
+                    option.style.background =`linear-gradient(to right, #2C2C2C  ${(mcqfetched.userResponse[choiceIndex]/totalAttempts)*100}%,#1A1A1A ${(mcqfetched.userResponse[choiceIndex]/totalAttempts)*100}%)`
+                    if(choiceSelected == mcqfetched.answer[0] && choiceIndex == choiceSelected){
+                        option.classList.add("correct")
+                    }else{
+                        if(choiceIndex == choiceSelected){
+                            option.classList.add("incorrect")
+                        }
+                        if(choiceIndex == mcqfetched.answer[0]){
+                            option.classList.add("correct")
+                        }
+                    }
+                }
+               
+            })
+        });
+        })
+    })
+    // when choice is clicked
 }
