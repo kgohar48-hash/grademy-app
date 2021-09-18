@@ -225,6 +225,7 @@ router.post("/academy/leave",middelware.isLoggedIn,async (req,res)=>{
                                     if(toString(foundUser._id)  == toString(foundAcademy.students[j])){
                                         console.log("user found and leaving")
                                         foundAcademy.students.splice(j, 1);
+                                        j = academyCounter
                                         console.log("done from academy side")
                                     }
                                 }
@@ -232,9 +233,10 @@ router.post("/academy/leave",middelware.isLoggedIn,async (req,res)=>{
                         }
                     })
                 }else{
-                    if(foundUser.myAcademies[i] == req.body.academyId){
+                    if(toString(foundUser.myAcademies[i]) == toString(req.body.academyId)){
                         console.log("academy found and leaving")
                         foundUser.myAcademies.splice(i, 1);
+                        i = userCounter
                         console.log("done from user side")
                     }
                 }
