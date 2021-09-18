@@ -4,6 +4,7 @@ var middelware  = require("../middelware");
 var Mcq		 	= require("../models/mcq");
 var User        = require("../models/user");
 var Comment     = require("../models/comment")
+var Post        = require("../models/post")
 
 router.get("/dashboard/mcqs/:category/:id", (req,res)=>{
     if(req.params.category != 'incorrect'){
@@ -43,7 +44,7 @@ router.get("/dashboard/mcqs/:category/:id", (req,res)=>{
 })
 
 // send mcq
-router.get("/mcq/:id", (req,res)=>{
+router.get("/mcq/send/:id", (req,res)=>{
     Mcq.findById(req.params.id, (err, foundMcq)=>{
         if(err || !foundMcq){
             console.log(err)
@@ -52,6 +53,54 @@ router.get("/mcq/:id", (req,res)=>{
         }
     })
 })
+// mcq post by students
+router.get("/mcq/post",(req,res)=>{
+    console.log("yolo")
+    res.render("dashboard/mcqs/postmcq")
+})
+// post route for mcq by student
+router.post("/mcq/post",(req,res)=>{
+    var mcqByStudent = {
+        category : req.user.category ,
+        type : 4100,
+        subject : req.body.mcq.subject,
+        chapter : req.body.mcq.chapter ,
+        postedBy : req.user.username,
+        question : req.body.mcq.question,
+        choice :req.body.mcq.choice,
+        answer : [req.body.mcq.answer],
+        userResponse : [0,0,0,0,0],
+        solution : req.body.mcq.solution
+    }
+    Mcq.create(mcqByStudent,(err, mcqMade)=>{
+        if(err){
+            console.log(err)
+        }else{
+            Post.create({
+                author : {
+                    id : req.user,
+                    username : req.user.username
+                },
+                mcq : mcqMade
+            },(err,postMade)=>{
+                if(err){
+                    console.log(err)
+                }else{
+                    User.findById(req.user._id , (err,foundUser)=>{
+                        if(err || !foundUser){
+                            console.log(err)
+                        }else{
+                            foundUser.myPosts.push(postMade)
+                            foundUser.save()
+                            res.redirect('/newsfeed' );
+                        }
+                    })
+                }
+            })
+        }
+    })
+})
+// get route for edit
 router.get("/mcq/edit/:id", (req,res)=>{
     Mcq.findById(req.params.id,(err,foundMcq)=>{
         if(err || !foundMcq){
@@ -61,7 +110,7 @@ router.get("/mcq/edit/:id", (req,res)=>{
         }
     })
 })
-
+// post route for edit
 router.post("/mcq/edit/:id", middelware.isLoggedIn ,(req,res)=>{
     Mcq.findById(req.params.id , (err,foundMcq)=>{
         if(err || !foundMcq){

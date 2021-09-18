@@ -1,0 +1,93 @@
+<%- include("../../partials/header")  %>
+
+<div class="container">
+    <form  action="/mcq/post" method="POST">
+        <div class="card" style="background-color: rgb(56, 56, 56);">
+            <div class="card-header">
+
+            </div>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="input-group">
+                            <span class="input-group-text">Question</span>
+                            <textarea class="form-control" name="mcq[question]" aria-label="With textarea" required></textarea>
+                          </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mt-3">
+                            <div class="input-group">
+                                <span class="input-group-text">Choice A</span>
+                                <textarea class="form-control" name="mcq[choice]"  aria-label="With textarea" required></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-3">
+                            <div class="input-group">
+                                <span class="input-group-text">Choice B</span>
+                                <textarea class="form-control" name="mcq[choice]" aria-label="With textarea" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mt-3">
+                            <div class="input-group">
+                                <span class="input-group-text">Choice C</span>
+                                <textarea class="form-control" name="mcq[choice]" aria-label="With textarea" required></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-3">
+                            <div class="input-group">
+                                <span class="input-group-text">Choice D</span>
+                                <textarea class="form-control" name="mcq[choice]" aria-label="With textarea" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        
+                        <div class="col-md-6 mt-3">
+                            <div class="input-group">
+                                <span class="input-group-text">Solution</span>
+                                <textarea class="form-control" name="mcq[solution]" aria-label="With textarea" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer container">
+                <div class="row ">
+                    <div class="input-group mb-3 mt-4 mr-4 ml-4">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text">Answer : </label>
+                        </div> 
+                        <select name="mcq[answer]" class="custom-select" required>                   
+                            <option value="1" selected>1</option>
+                            <option value="2" >2</option>
+                            <option value="3" >3</option>
+                            <option value="4" >4</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group mb-3 mt-4 mr-4 ml-4">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text">Subject : </label>
+                        </div> 
+                        <select name="mcq[subject]" class="custom-select" required>                   
+                            <option value="physics" selected>Physics</option>
+                            <option value="biology" >Biology</option>
+                            <option value="chemistry" >Chemistry</option>
+                            <option value="english" >English</option>
+                        </select>
+                        <div class="input-group mt-2">
+                            <span class="input-group-text">Chapter</span>
+                            <textarea class="form-control" name="mcq[chapter]" aria-label="With textarea" style="text-transform: lowercase;" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg btn-block">POST</button>
+            </div>
+        </div>
+    </form>
+</div>
+<%- include("../../partials/footer")  %>
+

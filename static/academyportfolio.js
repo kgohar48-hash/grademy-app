@@ -142,7 +142,7 @@ function init(){
                 },
                 body : JSON.stringify({academyId : academyToBeUnjoined})
                 }
-            fetch("https://www.grademy.org/leave" , options);
+            fetch("https://www.grademy.org/academy/leave" , options);
         }else{
             e.target.classList.remove('btn-primary')
             e.target.classList.add('btn-success')
@@ -156,7 +156,7 @@ function init(){
                 },
                 body : JSON.stringify({academyId : academyToBeJoined})
             }
-            fetch("https://www.grademy.org/join" , options);
+            fetch("https://www.grademy.org/academy/join" , options);
         }
     })
 }
