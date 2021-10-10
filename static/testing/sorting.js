@@ -172,6 +172,7 @@ async function getQuestion(i){
 }
 function submiting(){
     submit.addEventListener("click" , function(){
+        console.log("sending data to backend")
       submit.style.display = 'none'
       const options = {
         method : 'POST' ,
