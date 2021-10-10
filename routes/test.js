@@ -189,13 +189,13 @@ router.post("/sorting/biology",middelware.isLoggedIn,async(req,res)=>{
 			console.log("all done")
 		}else{
 			var newCommnet = {
-				text : listOfChapters[i].chapter,
+				text : selectedChapters[i].chapter,
 				author : {
 					id : req.user._id, 
 					username : req.user.username 
 				}
 			}
-			await Mcq.findById(listOfChapters[i].id,async(err,foundMcq)=>{
+			await Mcq.findById(selectedChapters[i].id,async(err,foundMcq)=>{
 				if(err || !foundMcq){
 					console.log(err)
 					res.redirect("/")
