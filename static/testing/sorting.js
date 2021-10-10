@@ -70,7 +70,7 @@ function fetchingData (){
 
 async function getQuestion(i){
    
-    if(selectedChapters.length == 21){
+    if(selectedChapters.length == mcqs.length){
         submitButton.innerHTML = '<form action="/sorting/redirect" method="POST"><button class="btn btn-primary btn-lg" id="submit">Submit</button></form>'
         const submit = document.getElementById("submit");
         submiting()
