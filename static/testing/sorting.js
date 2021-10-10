@@ -198,7 +198,6 @@ nextButton.addEventListener('click',()=>{
     }
     else{
         nextButton.style.display = 'none'
-        backButton.style.display = 'block'
     }
 })
 previousButton.addEventListener('click',()=>{
