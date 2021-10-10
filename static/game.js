@@ -49,6 +49,7 @@ var client = new HttpClient();
     client.get('https://www.grademy.org/data',async function(res) {
       var loadedQuiz = JSON.parse(res)
       console.log(loadedQuiz)
+      console.log("changed")
       quizId = loadedQuiz.foundQuiz._id
       // await checkCategory(loadedQuiz.foundQuiz);
       if(loadedQuiz.foundQuiz.madeBy){
