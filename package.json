@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app",
-    "app": "nodemon app"
+    "app": "nodemon app",
+    "postinstall": "ng build"
   },
   "author": "",
   "license": "ISC",
