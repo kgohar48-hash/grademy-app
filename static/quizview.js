@@ -78,7 +78,8 @@ function fetchingData (){
             getKeyOfCorrectness()
             questions = quiz.mcqs
             await leaderboard(quiz.solvedBy , quizPositions , questions.length*4 );
-            resolve();          
+            resolve();
+                      
         });
     }).catch(err =>{
         console.log(err)
