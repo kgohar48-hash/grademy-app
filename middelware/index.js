@@ -102,6 +102,16 @@ middelwareObj.isLoggedIn = function(req,res,next){
 		res.redirect("/login") 
 	}
 }
+// check if admin
+middelwareObj.isAdmin = function(req,res,next){
+	if(req.user.isAdmin){
+		return next() ; 
+	}
+	else {
+		req.res("Your are not authenticated")
+	}
+}
+
 
 
 module.exports = middelwareObj ;

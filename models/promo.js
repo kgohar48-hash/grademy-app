@@ -4,8 +4,16 @@ var promoSchema = new mongoose.Schema ({
     title : String,
     usageLimit : Number ,
     value : Number,
-	usedBy : [],
-    status : {type : Boolean , default:true},
+	usedBy : [
+        {
+            id : {
+                type : mongoose.Schema.Types.ObjectId,
+                ref : "User"
+            },
+            username : String
+        }
+    ],
+    active : {type : Boolean , default:true},
     createdAt: {type: Date, default: Date.now}
 })
 

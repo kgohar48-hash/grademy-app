@@ -23,6 +23,10 @@ var UserSchema = new mongoose.Schema({
         type : Boolean ,
         default : true 
     },
+    isPaidPlus : {
+        type : Boolean ,
+        default : false 
+    },
     isVerified : {
         type : Boolean ,
         default : true 
@@ -126,6 +130,12 @@ var UserSchema = new mongoose.Schema({
         {
             type : mongoose.Schema.Types.ObjectId,
             ref : "Mcq"
+        }
+    ],
+    transactions :[
+        {
+            type : mongoose.Schema.Types.ObjectId,
+            ref : "Transaction"
         }
     ],
     notification : [

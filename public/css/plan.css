@@ -14,13 +14,12 @@ article {
   max-width:700px;
   margin:0 auto;
   height:750px;
-  position:relative;
 }
 
 table {
   border-collapse:collapse;
   table-layout:fixed; width:100%;  
-   background: #232526;
+  background: #232526;
 }
 
 td, th {
@@ -42,6 +41,9 @@ td.default {
 }
 .bg-blue {
   border-top:3px solid #0097CF;
+}
+.bg-green {
+  border-top:3px solid chartreuse;
 }
 .sep {
   font-weight:bold;

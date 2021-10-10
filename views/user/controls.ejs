@@ -17,6 +17,16 @@
                 </div>
             </div>
         </div>
+        <a  data-toggle="collapse" class="btn btn-primary mt-3  mr-3 ml-3 mb-3" href="#tid" role="button" aria-expanded="false" aria-controls="tid">
+            Add TID
+        </a>
+        <div class="collapse" id="tid">
+            <form action="/payment/tid/add" method="POST">
+                <input type="number" class="ml-3 mt-3 mb-3" name="amount" placeholder="Amount">
+                <input type="number" class="ml-3 mt-3 mb-3" name="tid" placeholder="TID">
+                <button class="btn btn-success">Add</button>
+            </form>
+        </div>
         <a  data-toggle="collapse" class="btn btn-primary mr-3 ml-3" href="#checkinvites" role="button" aria-expanded="false" aria-controls="checkinvites">
             check invites
         </a>
@@ -81,7 +91,7 @@
             Make a Promo
         </a>
         <div class="collapse" id="promo">
-            <form action="/user/promo" method="POST">
+            <form action="/payment/promo/create" method="POST">
                 <input type="text" class="ml-3 mt-3 mb-3" name="title" placeholder="Promo title">
                 <input type="text" class="ml-3 mt-3 mb-3" name="value" placeholder="Value">
                 <input type="number" class="ml-3 mt-3 mb-3" name="usageLimit" placeholder="Usage limit">

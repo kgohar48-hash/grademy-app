@@ -2,62 +2,181 @@
 <link rel="stylesheet" href="/css/plan.css">
 
 <!-- DIRTY Responsive pricing table HTML -->
-<div class="container">
+<div class="container mb-4">
   <%- include("../../partials/flash")  %>
     <article >
-        <table>
-          <thead>
-            <tr>
-              <th >Features</th>
-              <th class="bg-purple">Free trial</th>
-              <th class="bg-blue">Premium</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Access till Dec 2020</td>
-              <td  ><span class="txt-top">&#8360;</span><span style="color: chartreuse;" class="txt-l">0</span></td>
-              <td  ><span class="txt-top">&#8360;</span><span style="color: chartreuse;" class="txt-l">3000</span></td>
-            </tr>
-            <tr>
-              <td>Dashboard access</td>
-              <td><span class="tick">&#10004;</span></td>
-              <td><span class="tick">&#10004;</span></td>
-            </tr>
-            <tr>
-              <td>MCQs limit</td>
-              <td><span class="tick">upto 500</span></td>
-              <td><span class="tick">10,000+</span></td>
-            </tr>
-            <tr>
-                <td>Counselling session requests</td>
-                <td class="tick">upto 2</td>
-                <td class="tick">unlimited</td>
-            </tr>
-            <tr>
-              <td>View attempted quiz</td>
-              <td><span class="cross">&#10008;</span></td>
-              <td><span class="tick">&#10004;</span></td>
-            </tr>
-            <tr>
-              <td>Grademy quizzes video discussions</td>
-              <td><span class="cross">&#10008;</span></td>
-              <td><span class="tick">&#10004;</span></td>
-            </tr>
-            <tr>
-              <td>Join an academy</td>
-              <td><span class="cross">&#10008;</span></td>
-              <td><span class="tick">&#10004;</span></td>
-            </tr>
-            <tr>
-              <td>Grademy quiz SMS alert</td>
-              <td><span class="cross">&#10008;</span></td>
-              <td><span class="tick">&#10004;</span></td>
-            </tr>
-          </tbody>
-        </table>
-        <a class="btn btn-success btn-lg btn-block mt-3" href="/payment">Upgrade now</a>
+      <div class="row">
+        <div class="col-md-6">
+          <h6>CURRENT BALANCE</h6>
+          <h4>Rs 5,000.00</h4>
+        </div>
+      </div>
+      <div class="card" style="background-color: rgb(43, 43, 43);">
+        <div class="row ml-3 mr-3 mt-4 mb-3">
+          <div class="col-sm-6" >
+            <h6 >Amount In</h6>
+            <h4 style="color: chartreuse;">Rs 9,000.00</h4>
+          </div>
+          <div class="col-ms-5" style="border-left: 1px solid rgb(87, 87, 87); margin: 5px 10px;">
+            <h6 class="ml-3">Amount Out</h6>
+            <h4 class="ml-3" style="color: red;">Rs 4,000.00</h4>
+          </div>
+        </div>
+      </div>
+      <a class="btn btn-primary btn-lg btn-block mt-3 mb-3" >Pricing Plans</a>
+      <table>
+        <thead>
+          <tr>
+            <th >Features</th>
+            <th class="bg-purple">Freemium</th>
+            <th class="bg-blue">Premium</th>
+            <th class="bg-green">Premium<sup>+Plus</sup></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Test attempt</td>
+            <td><span class="tick">&#10004;</span></td>
+            <td><span class="tick">&#10004;</span></td>
+            <td><span class="tick">&#10004;</span></td>
+          </tr>
+          <tr>
+            <td>Recorded lectures</td>
+            <td><span class="tick">&#10004;</span></td>
+            <td><span class="tick">&#10004;</span></td>
+            <td><span class="tick">&#10004;</span></td>
+          </tr>
+          <tr>
+            <td>Dashboard access</td>
+            <td><span class="tick">&#10004;</span></td>
+            <td><span class="tick">&#10004;</span></td>
+            <td><span class="tick">&#10004;</span></td>
+          </tr>
+          <tr>
+            <td>Post in community</td>
+            <td><span class="tick">&#10004;</span></td>
+            <td><span class="tick">&#10004;</span></td>
+            <td><span class="tick">&#10004;</span></td>
+          </tr>
+          <tr>
+            <td>Post Images in community</td>
+            <td><span class="cross">&#10008;</span></td>
+            <td><span class="cross">&#10008;</span></td>
+            <td><span class="tick">&#10004;</span></td>
+          </tr>
+          <tr>
+            <td>Custom Test</td>
+            <td><span class="tick">upto 100 </span><sub>MCQs</sub></td>
+            <td><span class="tick"><%=MCQcount%>+ </span><sub>MCQs</sub></td>
+            <td><span class="tick"><%=MCQcount%>+ </span><sub>MCQs</sub></td>
+          </tr>
+          <tr>
+            <td>View attempted quiz</td>
+            <td><span class="cross">&#10008;</span></td>
+            <td><span class="tick">&#10004;</span></td>
+            <td><span class="tick">&#10004;</span></td>
+          </tr>
+          <tr>
+            <td>Live sessions</td>
+            <td><span class="cross">&#10008;</span></td>
+            <td><span class="tick">&#10004;</span></td>
+            <td><span class="tick">&#10004;</span></td>
+          </tr>
+          <tr>
+            <td>Grademy quiz SMS alert</td>
+            <td><span class="cross">&#10008;</span></td>
+            <td><span class="tick">&#10004;</span></td>
+            <td><span class="tick">&#10004;</span></td>
+          </tr>
+          <tr>
+            <td>Counselling session requests</td>
+            <td><span class="cross">&#10008;</span></td>
+            <td class="tick">1 session<sub>/month</sub></td>
+            <td class="tick">4 sessions<sub>/month</sub></td>
+          </tr>
+          <tr>
+            <td>Subjective test checking</td>
+            <td><span class="cross">&#10008;</span></td>
+            <td><span class="cross">&#10008;</span></td>
+            <td><span class="tick">&#10004;</span></td>
+          </tr>
+          <tr>
+            <td>24/7 access to teacher</td>
+            <td><span class="cross">&#10008;</span></td>
+            <td><span class="cross">&#10008;</span></td>
+            <td><span class="tick">&#10004;</span></td>
+          </tr>
+          <tr>
+            <td>Pricing</td>
+            <td  ><span class="txt-top">&#8360;</span><span style="color: chartreuse;" class="txt-l">0</span><sub>/month</sub></td>
+            <td  ><span class="txt-top">&#8360;</span><span style="color: chartreuse;" class="txt-l">2000</span><sub>/month</sub></td>
+            <td  ><span class="txt-top">&#8360;</span><span style="color: chartreuse;" class="txt-l">3500</span><sub>/month</sub></td>
+          </tr>
+        </tbody>
+      </table>
+      <a class="btn btn-success btn-lg btn-block mt-3 mb-3" href="/payment">Upgrade now</a>
+      <div class="account mt-4">
+        <h3 class="mt-4">Transaction History</h3>
+        <hr style="border-top: 1px solid rgb(87, 87, 87); margin: 5px 10px;">
+        <div id="transactions-container">
+
+        </div>
+        
+        <h3 class="mt-4">Recharge your account</h3>
+        <hr style="border-top: 1px solid rgb(87, 87, 87); margin: 5px 10px;">
+        <ul>
+          <li>
+            <h4>Make a transaction to the following Jazz Cash/Easy Paisa account</h4>
+            <h6>Account number : 03084737543</h6>
+            <h6>Account title : Gohar Khan Awan</h6>
+          </li>
+          <li>Add your TID which you have recieved below. Your transaction will be procced in 15 minutes</li>
+          <li>For more info contact us at +92 313 0157543</li>
+          <form action="/payment/tid/students" method="POST">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroup-sizing-default">TID</span>
+                </div>
+                <input type="number" name="tid" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                <button class="btn btn-success ml-3">Confirm</button>
+              </div>
+          </form>
+        </ul>
+        <h3 class="mt-4">Apply PROMO</h3>
+        <hr style="border-top: 1px solid rgb(87, 87, 87); margin: 5px 10px;">
+        <form action="/none" method="POST">
+          <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">PROMO CODE</span>
+              </div>
+              <input type="textarea" name="promocode" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+              <button class="btn btn-success ml-3">Apply</button>
+            </div>
+        </form>
+        <h3 class="mt-4">Withdraw amount</h3>
+        <hr style="border-top: 1px solid rgb(87, 87, 87); margin: 5px 10px;">
+        <ul>
+          <li>
+            Amount greater than Rs.10,000 will be processed within 2 working days
+          </li>
+          <li>Amount less than Rs.10,000 will be processed within 7 working days</li>
+          <li>For more info contact us at +92 313 0157543</li>
+          <form action="/none" method="POST">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroup-sizing-default">Amount</span>
+                </div>
+                <input type="number" name="promocode" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                <button class="btn btn-success ml-3">Withdraw</button>
+              </div>
+          </form>
+        </ul>
+      </div>
     </article>
+    
 </div>
 
-<%- include("../../partials/footer")  %>
+<script src="../../../static/pricing.js">
+
+</script>
+
