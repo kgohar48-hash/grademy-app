@@ -74,7 +74,7 @@ async function getQuestion(i){
         submitButton.innerHTML = '<form action="/sorting/redirect" method="POST"><button class="btn btn-primary btn-lg" id="submit">Submit</button></form>'
         const submit = document.getElementById("submit");
         submiting()
-        console.log("done sorting")
+        console.log("done sorting by student")
     }
     if(i == 20){
         nextButton.style.display = 'none'
