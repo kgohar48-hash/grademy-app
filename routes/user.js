@@ -252,26 +252,7 @@ router.post("/user/status",middelware.isLoggedIn, function(req,res){
         res.redirect("/dashboard")
     }
 })
-//generate prmo code
-router.post("/user/promo",middelware.isLoggedIn,function(req,res){
-    var promoObj = {
-        title : req.body.title ,
-        usageLimit : req.body.usageLimit,
-        value : req.body.value ,
-        usedBy : [],
-        status : true
-    }
-    Promo.create(promoObj , function(err , promo){
-        if(err){
-            console.log(err)
-            res.redirect("/dashboard")
-        }else{
-            console.log(promo)
-            req.flash("succuss" ,promo.title+ " has been made")
-            res.redirect("/user/controls")
-        }
-    })
-})
+
 //promo use
 router.post("/user/promouse" , middelware.isLoggedIn ,function(req,res){
     User.findById(req.user._id , function(err , user){

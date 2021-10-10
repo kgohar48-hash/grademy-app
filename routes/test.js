@@ -5,7 +5,8 @@ const express		 = require("express"),
     User			 = require("../models/user"),
 	Pool			 = require("../models/pool");
 	Mcq			 	= require("../models/mcq");
-
+	Comment			= require("../models/comment")
+	var middelware  = require("../middelware");
 
 // route to convert pool to mcqs DB 
 // router.get('/pooltomcqs/:subject',async function (req,res) {
@@ -130,37 +131,92 @@ router.get("/assignment/1",(req,res)=>{
 		}
 	})
 })
-// delete route
-router.get("/deletethis",(req,res)=>{
-	User.find({},(err , foundUsers)=>{
-		if(err || !foundUsers){
+
+// sort biology mcqs by students-moderators
+router.get("/sort/biology",middelware.isLoggedIn,(req,res)=>{
+	Mcq.find({subject : "biology"}).populate({
+		path : 'comments',
+		model : "Comment"
+	}).exec((err,foundMCQs)=>{
+		if(err || !foundMCQs){
 			console.log(err)
+			res.send(err)
 		}else{
-			datarequested = []
-			for(var i =0; i <= foundUsers.length ; i++){
-				if(i == foundUsers.length){
-					res.send(datarequested)
+			var MCQsToSend = []
+			for(var i=0 ; foundMCQs.length >= i; i++){
+				console.log("i : "+i)
+				if(foundMCQs.length == i){
+					console.log("terminate")
+					console.log("about to send")
+					res.send(MCQsToSend)
 				}else{
-					index = 0 ;
-					datarequested.forEach(slot => {
-						if (slot.ratio < Math.round((foundUsers[i].correct.length/foundUsers[i].incorrect.length) * 100) / 100 && foundUsers[i].incorrect.length > 0){
-							return index 
+					if(MCQsToSend.length <= 20 && foundMCQs[i].comments.length < 10 || !foundMCQs[i].comments){
+						if(MCQsToSend.length == 20){
+							i = foundMCQs.length - 1
 						}
-						else{
-							index++
+						if(!foundMCQs[i].comments){
+							console.log("comments are undefined")
+							MCQsToSend.push(foundMCQs[i])
+						}else{
+							for(var j=0;foundMCQs[i].comments.length >= j ; j++){
+								console.log("j : "+j)
+								if(foundMCQs[i].comments.length == j){
+									// terminate
+									MCQsToSend.push(foundMCQs[i])
+								}else{
+									if(foundMCQs[i].comments[j].author.username == req.user.username){
+										j = foundMCQs[i].comments.length + 1
+									}
+								}
+							}
 						}
-					});			
-					datarequested.splice(index, 0, {
-						user : foundUsers[i].username,
-						ratio : Math.round((foundUsers[i].correct.length/foundUsers[i].incorrect.length) * 100) / 100 || 0 ,
-						correct : foundUsers[i].correct.length,
-						incorrect : foundUsers[i].incorrect.length,
-						skipped : foundUsers[i].skipped.length,
-						mcqs : foundUsers[i].correct.length + foundUsers[i].incorrect.length + foundUsers[i].skipped.length
-					});
+					}
 				}
 			}
 		}
 	})
+})
+// route to show students the sorting page
+router.get("/sorting",middelware.isLoggedIn,(req,res)=>{
+	res.render("testing/sorting")
+})
+// route to save student sorting response
+router.post("/sorting/biology",middelware.isLoggedIn,async(req,res)=>{
+	console.log(req.body)
+	var selectedChapters = req.body
+	for(var i=0 ; selectedChapters.length >= i ; i++){
+		if(selectedChapters.length == i){
+			console.log("all done")
+		}else{
+			var newCommnet = {
+				text : listOfChapters[i].chapter,
+				author : {
+					id : req.user._id, 
+					username : req.user.username 
+				}
+			}
+			await Mcq.findById(listOfChapters[i].id,(err,foundMcq)=>{
+				if(err || !foundMcq){
+					console.log(err)
+					res.redirect("/")
+				}else{
+					await Comment.create(newCommnet , function (err , comment){
+						if(err || !comment){
+							console.log(err)
+						}
+						else{
+							foundMcq.comments.push(comment)
+							foundMcq.save()
+							console.log("comment saved")
+						}
+					})
+				}
+			})
+		}
+	}
+})
+// redirect to dashboard
+router.post("/sorting/redirect",middelware.isLoggedIn,(req,res)=>{
+	res.redirect("/dashboard")
 })
 module.exports = router ;
