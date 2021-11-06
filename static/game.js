@@ -46,7 +46,7 @@ var responseToChoice = []
 // http://localhost:3000/data
 //Questions fetch APi
 var client = new HttpClient();
-    client.get('https://www.grademy.org/data',async function(res) {
+    client.get('http://localhost:8000/data',async function(res) {
       var loadedQuiz = JSON.parse(res)
       console.log(loadedQuiz)
       console.log("changed")
@@ -234,7 +234,7 @@ function submiting(){
       },
       body : JSON.stringify(submitQuiz)
     }
-    fetch("https://www.grademy.org/newcustomquiz" , options);
+    fetch("http://localhost:8000/newcustomquiz" , options);
   })
 }
 //categorycheck

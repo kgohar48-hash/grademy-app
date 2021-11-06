@@ -118,8 +118,8 @@ router.get("/logout" , function(req,res){
 })
 //render forgot password form
 router.get("/forgot" , function(req,res){
-	res.send("This app is under beta testing, please contact us at +92 313 0157543 to get your new password")
-	// res.render("registration/resetpassword")
+	// res.send("This app is under beta testing, please contact us at +92 313 0157543 to get your new password")
+	res.render("registration/resetpassword")
 })
 //render forgot password post route
 router.post("/forgot" , function(req,res){

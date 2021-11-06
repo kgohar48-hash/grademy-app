@@ -219,4 +219,5 @@ router.post("/sorting/biology",middelware.isLoggedIn,async(req,res)=>{
 router.post("/sorting/redirect",middelware.isLoggedIn,(req,res)=>{
 	res.redirect("/dashboard")
 })
+
 module.exports = router ;

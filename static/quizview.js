@@ -62,7 +62,6 @@ var totalAttempts = 0;
 init();
 async function init(){
     await fetchingData();
-    getSidebar()
     quizStats()
     getQuestion(0);
 }
@@ -72,7 +71,7 @@ async function init(){
 function fetchingData (){
     return new Promise((resolve,reject)=>{
         var client = new HttpClient();
-        client.get('https://www.grademy.org/data',async function(res) {
+        client.get('http://localhost:8000/data',async function(res) {
             quiz = JSON.parse(res) 
             console.log(quiz)
             getKeyOfCorrectness()
@@ -251,9 +250,12 @@ getKeyOfCorrectness = () =>{
     var position = 0
     quiz.solvedBy.forEach(solved => {
         if(username == solved.username){
+            console.log("key found")
             key = solved.key
             keyOfCorrectness = solved.keyOfCorrectness
             timeForEachMcq = solved.timeForEachMcq
+            console.log(solved)
+
             myStats(solved , position)
             return 
         }else{
@@ -263,8 +265,11 @@ getKeyOfCorrectness = () =>{
 }
 // side panel
 getSidebar = () => {
+    console.log("io")
+
     sidebarHTMLString = ''
     for(var i = 0 ; keyOfCorrectness.length >= i ; i++){
+        console.log(i+" : "+keyOfCorrectness.length)
       if(keyOfCorrectness.length == i){
         sideBar.innerHTML = sidebarHTMLString
         indexBtns = Array.from(document.getElementsByClassName("indexBtn"));
@@ -277,6 +282,7 @@ getSidebar = () => {
           });
         });
       }else{
+          console.log("io")
         if(keyOfCorrectness[i] == 0 ){
           // skipped
           skipped++
@@ -317,7 +323,6 @@ function leaderboard(positionArray , obj , totalScore ){
                 resolve();
             }else{
                 var j = lb+1
-                console.log(j)
                 var txtscore = "positionscore"+j.toString()
                 var txtname = "positionname"+j.toString()
                 var txtprogress = "progressbar"+j.toString()
@@ -335,7 +340,6 @@ function leaderboard(positionArray , obj , totalScore ){
  
 // my stats
 function myStats (solved , position){
-    getSidebar()
     var myScore = document.getElementById("myScore")
     var myPosition = document.getElementById("myPosition")
     var myCorrect = document.getElementById("myCorrect")

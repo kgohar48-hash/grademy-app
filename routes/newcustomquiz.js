@@ -406,21 +406,24 @@ router.get("/dashboard/newcustomquiz/view/start/:id",middelware.isLoggedIn , fun
 				foundQuiz : foundQuiz ,
 				currentuser : req.user
 			}
-			res.render("dashboard/quiz/quiz")
+			res.render("quiz/attempt")
 		}
 	})
 })
 //quiz view page
 router.get("/dashboard/newcustomquiz/view/view/:id",middelware.isLoggedIn , function(req,res){
 	newCustomQuiz.findById(req.params.id).populate("mcqs").exec(async function(err , foundQuiz){
-			if(err){
+		if(err){
 			console.log(err)
 			req.flash("error" , "error occured : kindly report this bug")
 			res.redirect("/dashboard")
 		}
 		else{
-			dataToBePassed = foundQuiz
-			res.render("dashboard/quiz/view")
+			dataToBePassed = {
+				foundQuiz : foundQuiz ,
+				currentuser : req.user
+			}
+			res.render("quiz/view")
 		}
 	})
 })

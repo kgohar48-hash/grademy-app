@@ -3,6 +3,7 @@ const express			= require("express"),
 	  User				= require("../models/user"),
 	  Mcq			 	= require("../models/mcq"),
 	  NewCustomQuiz		= require("../models/newCustomQuiz"),
+	  Transaction		= require("../models/transaction")
 	  middelware 		 = require("../middelware");
 
 // galobal variables
@@ -52,6 +53,7 @@ router.get('/mcqsinfoapi',(req,res)=>{
 // function calls
 var time = 0
 
+checkTransactions()
 positionSorting();
 askingForInfo();
 setInterval(()=>{time++}, 100)
@@ -60,6 +62,12 @@ setInterval(positionSorting, 1000 * 60*10);
 // function defination ====================================
 
 async function positionSorting(){ 
+	now = new Date();
+	millisTill10 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 1, 0, 0) - now;
+	if (millisTill10 < 0) {
+		millisTill10 += 86400000; // it's after 10am, try 10am tomorrow.
+	}
+	setTimeout(checkTransactions, millisTill10);
 	time = 0
 	console.log("position sorting started : ", time)
 	await User.find({},function(err,allUsers){
@@ -153,6 +161,28 @@ function askingForInfo() {
 	mcqsInfoData('FUNG')
 	mcqsInfoData('GRE')
 	mcqsInfoData('MDCAT')
+}
+// checking if promo or plan expired 
+
+async function checkTransactions() {
+	await Transaction.find({},(err , foundTransactions)=>{
+		if(err || !foundTransactions){
+			console.log(err)
+			return
+		}else{
+			for(var i = 0 ; foundTransactions.length >= i ; i++){
+				if(foundTransactions.length == i){
+					// terminate
+				}else{
+					if(foundTransactions[i].isPromo && (date.getDate() - new Date(foundTransactions[i].createdAt).getDate()) > 3 ) {
+						console.log("an expired promo found : "+ foundTransactions[i])
+					}
+				}
+			}
+			console.log(foundTransactions.length + " transactions")
+			return
+		}
+	})
 }
 
 module.exports = router ;

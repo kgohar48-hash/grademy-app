@@ -8,18 +8,18 @@
       <div class="row">
         <div class="col-md-6">
           <h6>CURRENT BALANCE</h6>
-          <h4>Rs 5,000.00</h4>
+          <h4 id="current-balance"></h4>
         </div>
       </div>
       <div class="card" style="background-color: rgb(43, 43, 43);">
         <div class="row ml-3 mr-3 mt-4 mb-3">
           <div class="col-sm-6" >
             <h6 >Amount In</h6>
-            <h4 style="color: chartreuse;">Rs 9,000.00</h4>
+            <h4 style="color: chartreuse;" id="balance-in"></h4>
           </div>
           <div class="col-ms-5" style="border-left: 1px solid rgb(87, 87, 87); margin: 5px 10px;">
             <h6 class="ml-3">Amount Out</h6>
-            <h4 class="ml-3" style="color: red;">Rs 4,000.00</h4>
+            <h4 class="ml-3" style="color: red;" id="balance-out"></h4>
           </div>
         </div>
       </div>
@@ -109,12 +109,26 @@
           <tr>
             <td>Pricing</td>
             <td  ><span class="txt-top">&#8360;</span><span style="color: chartreuse;" class="txt-l">0</span><sub>/month</sub></td>
-            <td  ><span class="txt-top">&#8360;</span><span style="color: chartreuse;" class="txt-l">2000</span><sub>/month</sub></td>
-            <td  ><span class="txt-top">&#8360;</span><span style="color: chartreuse;" class="txt-l">3500</span><sub>/month</sub></td>
+            <td  ><span class="txt-top">&#8360;</span><span style="color: chartreuse;" class="txt-l">1000</span><sub>/month</sub></td>
+            <td  ><span class="txt-top">&#8360;</span><span style="color: chartreuse;" class="txt-l">1500</span><sub>/month</sub></td>
+          </tr>
+          <tr>
+            <td>Upgrade Now</td>
+            <td  ></td>
+            <%if(!currentUser.isPaid && !currentUser.isPaidPlus){%>
+              <td  ><a class="btn btn-primary" href="/payment/plan/Premium">Upgrade</a></td>
+              <td  ><a class="btn btn-primary" href="/payment/plan/PremiumPlus">Upgrade</a></td>
+            <%}else{%>
+              <%if(currentUser.isPaid){%>
+                <td  ><a class="btn btn-success" href="#">Refund</a></td>
+                <td  ></td>
+              <%}if(currentUser.isPaidPlus){%>
+                <td  ></td>
+                <td  ><a class="btn btn-success" href="#">Refund</a></td>
+            <%}}%>
           </tr>
         </tbody>
       </table>
-      <a class="btn btn-success btn-lg btn-block mt-3 mb-3" href="/payment">Upgrade now</a>
       <div class="account mt-4">
         <h3 class="mt-4">Transaction History</h3>
         <hr style="border-top: 1px solid rgb(87, 87, 87); margin: 5px 10px;">
@@ -130,29 +144,65 @@
             <h6>Account number : 03084737543</h6>
             <h6>Account title : Gohar Khan Awan</h6>
           </li>
-          <li>Add your TID which you have recieved below. Your transaction will be procced in 15 minutes</li>
+          <li>Add your TID below which you have recieved (via text message). Your transaction will be procced in 15 minutes</li>
           <li>For more info contact us at +92 313 0157543</li>
           <form action="/payment/tid/students" method="POST">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroup-sizing-default">TID</span>
                 </div>
-                <input type="number" name="tid" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                <input type="text" name="tid" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
                 <button class="btn btn-success ml-3">Confirm</button>
               </div>
           </form>
         </ul>
+        
         <h3 class="mt-4">Apply PROMO</h3>
         <hr style="border-top: 1px solid rgb(87, 87, 87); margin: 5px 10px;">
-        <form action="/none" method="POST">
-          <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-default">PROMO CODE</span>
+        <ul>
+          <form action="/payment/promo/use" method="POST">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroup-sizing-default">PROMO CODE</span>
+                </div>
+                <input type="textarea" name="promocode" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                <button class="btn btn-success ml-3">Apply</button>
               </div>
-              <input type="textarea" name="promocode" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-              <button class="btn btn-success ml-3">Apply</button>
+          </form>
+        </ul>
+        <h3 class="mt-4">Associate Program</h3>
+        <hr style="border-top: 1px solid rgb(87, 87, 87); margin: 5px 10px;">
+        <ul>
+          <li>
+            <h6>
+              Under the Grademy associate program if any of your invitee buys a plan for the first time on platform, you will recieve a 50% commission.
+            </h6>
+          </li>
+          <li>
+            <h6>
+              So invite your friends & class fellows by using your invite link.
+            </h6>
+          </li>
+          <%if(invitees > 0){%>
+            <li>
+              <h6>
+                <%=invitees%> people signed up using your invite link.
+              </h6>
+            </li>
+          <%}%>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" style="background-color: rgb(209, 209, 209);" id="inputGroup-sizing-default">Invite link</span>
             </div>
-        </form>
+            <input type="textarea" name="promocode" class="form-control" id="invite-link" value="https://www.grademy.org/signup/<%=currentUser.username%>" readonly aria-label="Default" aria-describedby="inputGroup-sizing-default">
+            <div class="tooltipp">
+              <button class="btn btn-success ml-3" id="inviteCopyBtn" onclick="copyInviteLink()" onmouseout="copyBtnOnMounse()" >  
+                <span class="tooltipptext" id="myTooltipp">Copy to clipboard</span>
+                Copy
+              </button>
+            </div>
+          </div>
+        </ul>
         <h3 class="mt-4">Withdraw amount</h3>
         <hr style="border-top: 1px solid rgb(87, 87, 87); margin: 5px 10px;">
         <ul>
@@ -160,16 +210,15 @@
             Amount greater than Rs.10,000 will be processed within 2 working days
           </li>
           <li>Amount less than Rs.10,000 will be processed within 7 working days</li>
+          <li>Amount from the promo cannot be withdrawn.</li>
           <li>For more info contact us at +92 313 0157543</li>
-          <form action="/none" method="POST">
             <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="inputGroup-sizing-default">Amount</span>
-                </div>
-                <input type="number" name="promocode" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-                <button class="btn btn-success ml-3">Withdraw</button>
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">Amount</span>
               </div>
-          </form>
+              <input type="number" name="promocode" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+              <button class="btn btn-success ml-3">Withdraw</button>
+            </div>
         </ul>
       </div>
     </article>

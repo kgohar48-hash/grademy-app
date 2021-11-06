@@ -41,12 +41,9 @@
 							<a class="nav-link" href="/user/counselling">Counselling</a>
 						</li>
 					<%}%>
-						
-					<%if(!currentUser.isPaid){%>
-							<li class="nav-item">
-								<a class="nav-link " href="/user/plan">Pricing</a>
-							</li>
-					<%}%>
+					<li class="nav-item">
+						<a class="nav-link " href="/user/plan">Billing</a>
+					</li>
 					<%if(currentUser.isModerator){%>
 						<li class="nav-item">
 							<a class="nav-link " href="/sorting">Sort</a>

@@ -11,7 +11,7 @@ var HttpClient = function() {
     }
 }
 var client = new HttpClient();
-client.get('https://www.grademy.org/data',async function(res) {
+client.get('http://localhost:8000/data',async function(res) {
     data = JSON.parse(res)
     init()
 });

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet"  href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" >
+    <link rel="stylesheet" href="/css/main.css" >
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://res.cloudinary.com/grademy/image/upload/v1592985715/favicon-32x32_gb7rei.png">
+
+    <title>Grademt Quiz || <%=currentUser.category%></title>
+    <link rel="stylesheet" href="/css/quiz/app.css">
+    <script src="https://kit.fontawesome.com/05c9781d40.js" crossorigin="anonymous"></script>
+</head>
+
+<body>	
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <a class="navbar-brand" href="/">Grademy <sub> Beta</sub></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <% if(!currentUser){ %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/academy">Academies</a>
+                    </li>
+                <%} else { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/newsfeed">Newsfeed</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/academy">Academies</a>
+                    </li>
+                    <%if(currentUser.isAdmin){%>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin">Admin</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/counselling">Counselling</a>
+                    </li>
+                <%}%>
+                <li class="nav-item">
+                    <a class="nav-link " href="/user/plan">Billing</a>
+                </li>
+                <%if(currentUser.isModerator){%>
+                    <li class="nav-item">
+                        <a class="nav-link " href="/sorting">Sort</a>
+                    </li>
+                <%}%>
+                <%if(currentUser.isAdmin){%>
+                        <li class="nav-item">
+                            <a class="nav-link " href="/user/controls">Controls </a>
+                        </li>
+                <%}%>
+                        
+                <% } %>
+            </ul>
+            
+            <div >
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class=" navbar-nav ">
+                        <% if(!currentUser){ %>
+                            <li class="nav-item"> <a href="/login" class="nav-link">Login</a></li>
+                            <li class="nav-item"><a href="/signup" class="nav-link">Sign Up</a></li>
+                        <%} else { %>
+                            <button type="button" class="icon-button mt-1 mr-4">
+                                <span class="material-icons nav-link">notifications</span>
+                                <span class="icon-button__badge">2</span>
+                            </button>
+                            <li class="nav-item"><a href="#" class="nav-link"> <%=currentUser.username%> </a></li>
+                            <li class="nav-item"><a href="/logout" class="nav-link">Logout</a></li>
+                        <% } %>
+                    </ul>
+                </div>
+        </div>
+        </div>
+    </nav>
+    <div class="container" style="color: black;">
+        <button class="start_button hide">Start Test</button>
+        <div class="info_box">
+            <div class="info-title"><span>About this Test</span></div>
+            <div class="info-list">
+                <div class="info"><span>1</span>. This Test is from. <span class="sub">subject</span>, Chapter: <span class="chap">chapter</span>.</div>
+                <div class="info"><span>2</span>. The Test will contain <span class="num">x</span> MCQs.</div>
+                <div class="info"><span>3</span>. You will be allowed <span id="timefortest">34</span> mins to complete the quiz.</div>
+                <div class="info"><span>4</span>. You can't exit from the Test while you are attempting.</div>
+                <div class="info"><span>5</span>. You'll get <span>+4</span> points on each correct MCQ, <span>-1</span> point on each incorrect MCQ & <span>0</span> point on skipped MCQ.</div>
+                <div class="info"><span>6</span>. You will be able to view your test along with the solution key after you finish your test..</div>
+    
+            </div>
+            <div class="buttons">
+                <button  class="quit"><a href="javascript:history.back()">Exit Test</a></button>
+                <button class="start">Continue</button>
+            </div>
+        </div>
+        <div class="quiz_box hide">
+            <div class="quiz">
+                <header>
+                    <div class="title"></div>
+                    <div class="timer">
+                        <div class="time_left_txt">Time Left</div>
+                        <div class="time">
+                            <span class="timer_min">45</span>:<span class="timer_sec">00</span>
+                        </div>
+                    </div>
+                    <div class="time_line"></div>
+                </header>
+                <section>
+                    <div class="que_text"></div>
+                    <div class="option_list"></div>
+                </section>
+                <footer>
+                    <div class="total_que"></div>
+                    <div>
+                        <button class="skip_btn">Skip</button>
+                        <button class="next_btn">Next</button>
+                    </div>
+                </footer>
+            </div>
+            <div class="finish hide">Finish Attempt</div>
+            <div class="toggler">
+                <span>Jump to Question:</span>
+                <div class="t_buttons"></div>
+            </div>
+        </div>
+        <div class="result_box hide">
+            <div class="complete_text">You've completed the Test!</div>
+            <div class="icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="correct_text">Correct MCQs <b>x</b></div>
+            <div class="incorrect_text">Incorrect MCQs <b>x</b></div>
+            <div class="skip_text">Skipped MCQs <b>x</b> </div>
+            <p>To review your result click the Review Now button, or to Exit click the Quit button</p>
+            <div class="buttons">
+                <button class="review">Review Now!</button>
+                <button class="quit">Quit</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/static/quiz/attempt.js"></script>
+</body>
+
+</html>
