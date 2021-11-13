@@ -12,7 +12,7 @@ var HttpClient = function() {
     }
 }
 var client = new HttpClient();
-  client.get('http://localhost:8000/data',async function(res) {
+  client.get('https://still-citadel-93849.herokuapp.com/data',async function(res) {
       console.log(JSON.parse(res))
     data = JSON.parse(res).foundQuiz
     user = JSON.parse(res).currentuser
@@ -226,7 +226,7 @@ finish.addEventListener('click', () => {
 })
 
 reviewButton.addEventListener('click', () => {
-    window.location = "http://localhost:8000/dashboard/newcustomquiz/view/view/"+data._id
+    window.location = "https://still-citadel-93849.herokuapp.com/dashboard/newcustomquiz/view/view/"+data._id
     // inset link to review page
 })
 
@@ -266,7 +266,7 @@ function endQuiz() {
         },
         body : JSON.stringify(userObject)
         }
-        fetch("http://localhost:8000/newcustomquiz" , options);
+        fetch("https://still-citadel-93849.herokuapp.com/newcustomquiz" , options);
     
 }
 })

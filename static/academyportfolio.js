@@ -11,7 +11,7 @@ var HttpClient = function() {
     }
 }
 var client = new HttpClient();
-client.get('http://localhost:8000/data',async function(res) {
+client.get('https://still-citadel-93849.herokuapp.com/data',async function(res) {
     data = JSON.parse(res)
     init()
 });
@@ -142,7 +142,7 @@ function init(){
                 },
                 body : JSON.stringify({academyId : academyToBeUnjoined})
                 }
-            fetch("http://localhost:8000/academy/leave" , options);
+            fetch("https://still-citadel-93849.herokuapp.com/academy/leave" , options);
         }else{
             e.target.classList.remove('btn-primary')
             e.target.classList.add('btn-success')
@@ -156,7 +156,7 @@ function init(){
                 },
                 body : JSON.stringify({academyId : academyToBeJoined})
             }
-            fetch("http://localhost:8000/academy/join" , options);
+            fetch("https://still-citadel-93849.herokuapp.com/academy/join" , options);
         }
     })
 }

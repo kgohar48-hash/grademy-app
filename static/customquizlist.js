@@ -31,7 +31,7 @@ async function fetchingCustumQuizzes(){
     try {
         return new Promise((resolve, reject) => {
             var client = new HttpClient();
-            client.get('http://localhost:8000/quizlistapi', function (res) {
+            client.get('https://still-citadel-93849.herokuapp.com/quizlistapi', function (res) {
                 var quizz = JSON.parse(res);
                 quizzes = quizz;
                 resolve();

@@ -56,7 +56,7 @@ async function init(){
 function fetchingData (){
     return new Promise((resolve,reject)=>{
         var client = new HttpClient();
-        client.get('http://localhost:8000/sort/biology',async function(res) {
+        client.get('https://still-citadel-93849.herokuapp.com/sort/biology',async function(res) {
             mcqs = JSON.parse(res) 
             console.log(mcqs)
             questions = mcqs
@@ -181,7 +181,7 @@ function submiting(){
         },
         body : JSON.stringify(selectedChapters)
       }
-      fetch("http://localhost:8000/sorting/biology" , options);
+      fetch("https://still-citadel-93849.herokuapp.com/sorting/biology" , options);
     })
   }
 nextButton.addEventListener('click',()=>{

@@ -19,7 +19,7 @@ var HttpClient = function() {
 }
 // api calls
 var client = new HttpClient();
-client.get('http://localhost:8000/mcqsinfoapi',async function(res) {
+client.get('https://still-citadel-93849.herokuapp.com/mcqsinfoapi',async function(res) {
   var mcqsInfo = JSON.parse(res)
   console.log(mcqsInfo)
   dataArray.biology =  dataExtraction(mcqsInfo.FUNG.biology || mcqsInfo.MDCAT.biology)

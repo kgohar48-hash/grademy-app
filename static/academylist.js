@@ -1,5 +1,5 @@
 
-fetch('http://localhost:8000/data')
+fetch('https://still-citadel-93849.herokuapp.com/data')
 .then(response => response.json())
 .then(data => {
     var i = 0;
@@ -40,7 +40,7 @@ joinBtns.forEach(btn => {
                 },
                 body : JSON.stringify({academyId : academyToBeUnjoined})
                 }
-            fetch("http://localhost:8000/academy/leave" , options);
+            fetch("https://still-citadel-93849.herokuapp.com/academy/leave" , options);
         }else{
             e.target.classList.remove('btn-primary')
             e.target.classList.add('btn-success')
@@ -54,7 +54,7 @@ joinBtns.forEach(btn => {
                 },
                 body : JSON.stringify({academyId : academyToBeJoined})
             }
-            fetch("http://localhost:8000/academy/join" , options);
+            fetch("https://still-citadel-93849.herokuapp.com/academy/join" , options);
         }
     })
 });

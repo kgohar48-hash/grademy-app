@@ -47,7 +47,7 @@ async function fetchingData (){
     try {
         return new Promise((resolve, reject) => {
             var client = new HttpClient();
-            client.get('http://localhost:8000/data', async function (res) {
+            client.get('https://still-citadel-93849.herokuapp.com/data', async function (res) {
                 data = JSON.parse(res);
                 console.log(data);
                 if (data.category != "incorrect") {

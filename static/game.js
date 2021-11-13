@@ -46,7 +46,7 @@ var responseToChoice = []
 // http://localhost:3000/data
 //Questions fetch APi
 var client = new HttpClient();
-    client.get('http://localhost:8000/data',async function(res) {
+    client.get('https://still-citadel-93849.herokuapp.com/data',async function(res) {
       var loadedQuiz = JSON.parse(res)
       console.log(loadedQuiz)
       console.log("changed")
@@ -234,7 +234,7 @@ function submiting(){
       },
       body : JSON.stringify(submitQuiz)
     }
-    fetch("http://localhost:8000/newcustomquiz" , options);
+    fetch("https://still-citadel-93849.herokuapp.com/newcustomquiz" , options);
   })
 }
 //categorycheck
