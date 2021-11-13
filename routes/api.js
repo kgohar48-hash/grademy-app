@@ -166,6 +166,8 @@ function askingForInfo() {
 
 async function checkTransactions() {
 	await Transaction.find({},(err , foundTransactions)=>{
+		date = new Date()
+
 		if(err || !foundTransactions){
 			console.log(err)
 			return
