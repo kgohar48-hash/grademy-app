@@ -71,7 +71,7 @@ async function init(){
 function fetchingData (){
     return new Promise((resolve,reject)=>{
         var client = new HttpClient();
-        client.get('https://still-citadel-93849.herokuapp.com/data',async function(res) {
+        client.get('https://www.grademy.org/data',async function(res) {
             quiz = JSON.parse(res) 
             console.log(quiz)
             getKeyOfCorrectness()

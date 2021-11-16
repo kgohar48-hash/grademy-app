@@ -1,5 +1,5 @@
 
-fetch('https://still-citadel-93849.herokuapp.com/data')
+fetch('https://www.grademy.org/data')
 .then(response => response.json())
 .then(data => {
     var i = 0;
@@ -40,7 +40,7 @@ joinBtns.forEach(btn => {
                 },
                 body : JSON.stringify({academyId : academyToBeUnjoined})
                 }
-            fetch("https://still-citadel-93849.herokuapp.com/academy/leave" , options);
+            fetch("https://www.grademy.org/academy/leave" , options);
         }else{
             e.target.classList.remove('btn-primary')
             e.target.classList.add('btn-success')
@@ -54,7 +54,7 @@ joinBtns.forEach(btn => {
                 },
                 body : JSON.stringify({academyId : academyToBeJoined})
             }
-            fetch("https://still-citadel-93849.herokuapp.com/academy/join" , options);
+            fetch("https://www.grademy.org/academy/join" , options);
         }
     })
 });

@@ -12,7 +12,7 @@ var HttpClient = function() {
     }
 }
 var client = new HttpClient();
-  client.get('https://still-citadel-93849.herokuapp.com/data',async function(res) {
+  client.get('https://www.grademy.org/data',async function(res) {
       console.log(JSON.parse(res))
     quiz = JSON.parse(res).foundQuiz
     user = JSON.parse(res).currentuser
@@ -123,7 +123,7 @@ nextButton.addEventListener('click', () => {
 })
 
 finishButton.addEventListener('click', () => {
-    window.location = "https://still-citadel-93849.herokuapp.com/dashboard";
+    window.location = "https://www.grademy.org/dashboard";
 })
 
 function createToggler() {

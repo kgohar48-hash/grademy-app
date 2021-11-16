@@ -12,7 +12,7 @@ var HttpClient = function() {
     }
 }
 var client = new HttpClient();
-  client.get('https://still-citadel-93849.herokuapp.com/data',async function(res) {
+  client.get('https://www.grademy.org/data',async function(res) {
       console.log(JSON.parse(res))
     data = JSON.parse(res).foundQuiz
     user = JSON.parse(res).currentuser
@@ -226,7 +226,7 @@ finish.addEventListener('click', () => {
 })
 
 reviewButton.addEventListener('click', () => {
-    window.location = "https://still-citadel-93849.herokuapp.com/dashboard/newcustomquiz/view/view/"+data._id
+    window.location = "https://www.grademy.org/dashboard/newcustomquiz/view/view/"+data._id
     // inset link to review page
 })
 
@@ -266,7 +266,7 @@ function endQuiz() {
         },
         body : JSON.stringify(userObject)
         }
-        fetch("https://still-citadel-93849.herokuapp.com/newcustomquiz" , options);
+        fetch("https://www.grademy.org/newcustomquiz" , options);
     
 }
 })

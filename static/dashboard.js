@@ -399,7 +399,7 @@ async function init(){
 function fetchingcurrentuser(){
     return new Promise((resolve,reject)=>{
         var client = new HttpClient();
-        client.get('https://still-citadel-93849.herokuapp.com/currentuser', function(res) {
+        client.get('https://www.grademy.org/currentuser', function(res) {
             var loadedData = JSON.parse(res)
             
             currentuser = loadedData.user;

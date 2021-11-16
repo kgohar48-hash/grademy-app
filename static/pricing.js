@@ -13,7 +13,7 @@ var HttpClient = function() {
   }
  
   var client = new HttpClient();
-  client.get('https://still-citadel-93849.herokuapp.com/payment/transactions',async function(res) {
+  client.get('https://www.grademy.org/payment/transactions',async function(res) {
     user = JSON.parse(res)
     var date = new Date()
 
