@@ -98,8 +98,8 @@ function displayQues(index) {
     for(var i = 0 ; options.length > i;i++){
         options[i].style.background =`linear-gradient(to right, #cce5ff  ${(quiz.mcqs[index].userResponse[i+1]/totalAttempts)*100}%,aliceblue ${(quiz.mcqs[index].userResponse[i+1]/totalAttempts)*100}%)`
     }
-    if(quiz.mcqs[index].answer[0] == userResponse[index]){
-        options[(userResponse[index] - 1)].classList.add('correct');
+    if(quiz.mcqs[index].answer[0] == userResponse[index] || userResponse[index] == "0"){
+        options[(quiz.mcqs[index].answer[0] - 1)].classList.add('correct');
     }else{
         options[(userResponse[index] - 1)].classList.add('incorrect');
         options[(quiz.mcqs[index].answer[0] - 1)].classList.add('correct');
@@ -170,7 +170,7 @@ async function findUserResponse() {
         for(var i = 0 ; quiz.solvedBy.length > i ; i++){
             if(user.username == quiz.solvedBy[i].username){
                 UserSolution =  quiz.solvedBy[i]
-                position = i
+                position = i + 1
                 console.log("found solution")
                 resolve()
             }
