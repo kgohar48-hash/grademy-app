@@ -21,7 +21,7 @@ var UserSchema = new mongoose.Schema({
     },
     isPaid : {
         type : Boolean ,
-        default : true 
+        default : false 
     },
     isPaidPlus : {
         type : Boolean ,

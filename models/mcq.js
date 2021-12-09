@@ -25,6 +25,11 @@ var mcqSchema = new mongoose.Schema ({
 // work on tags
 // work on multiple correct answers
 // work on type
+// delete all mcqs with type 4103
+// delete all mcqs with type 4113 & chapter "Biological Molecules"
+// delete repeated mcqs of type 4137 chapter "man and His Environment"
+// type 4119 contains mcqs of biology chapter Kindom of Animalia & Kingdom of Plantea
+// fix the chapter name of type 4185 from "IV-A & VI-A Elements" to "Group V-A & Group VI-A Elements"
 
 // type of an mcqs will be defined by a 4 digit number like 1234.
 // 1st digit will define the type of mcq. 
@@ -36,5 +41,9 @@ var mcqSchema = new mongoose.Schema ({
 // 2nd digit will define the number of choices in that mcq 
 // 3rd digit is not assigned yet 
 // 4th digit is not assigned yet 
+
+// 4141 - 4161 physics
+// 4171 - 4197 chemistry
+// 4104 - 4137 biology
 
 module.exports = mongoose.model("Mcq" , mcqSchema)
