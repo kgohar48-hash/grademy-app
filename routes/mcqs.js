@@ -6,7 +6,7 @@ var User        = require("../models/user");
 var Comment     = require("../models/comment")
 var Post        = require("../models/post")
 
-router.get("/dashboard/mcqs/:category/:id", (req,res)=>{
+router.get("/dashboard/mcqs/:category/:id", middelware.isLoggedIn,(req,res)=>{
     if(req.params.category != 'incorrect'){
         User.findById(req.params.id).populate({
             path : req.params.category,
@@ -44,7 +44,7 @@ router.get("/dashboard/mcqs/:category/:id", (req,res)=>{
 })
 
 // send mcq
-router.get("/mcq/send/:id", (req,res)=>{
+router.get("/mcq/send/:id",middelware.isLoggedIn, (req,res)=>{
     Mcq.findById(req.params.id, (err, foundMcq)=>{
         if(err || !foundMcq){
             console.log(err)
@@ -54,12 +54,11 @@ router.get("/mcq/send/:id", (req,res)=>{
     })
 })
 // mcq post by students
-router.get("/mcq/post",(req,res)=>{
-    console.log("yolo")
+router.get("/mcq/post",middelware.isLoggedIn,(req,res)=>{
     res.render("dashboard/mcqs/postmcq")
 })
 // post route for mcq by student
-router.post("/mcq/post",(req,res)=>{
+router.post("/mcq/post",middelware.isLoggedIn,(req,res)=>{
     var mcqByStudent = {
         category : req.user.category ,
         type : 4100,
@@ -101,31 +100,39 @@ router.post("/mcq/post",(req,res)=>{
     })
 })
 // get route for edit
-router.get("/mcq/edit/:id", (req,res)=>{
+router.get("/mcq/edit/:id", middelware.isLoggedIn,(req,res)=>{
     Mcq.findById(req.params.id,(err,foundMcq)=>{
         if(err || !foundMcq){
             console.log(err)
         }else{
-            res.render("dashboard/mcqs/edit", {mcq : foundMcq})
+            if(foundMcq.postedBy == req.user.username){
+                res.render("dashboard/mcqs/edit", {mcq : foundMcq})
+            }else{
+                req.flash("error", "The mcq you are trying to edit isn't owned by you !!!")
+                res.redirect("/dashboard")
+            }
         }
     })
 })
 // post route for edit
-router.post("/mcq/edit/:id", middelware.isLoggedIn ,(req,res)=>{
+router.post("/mcq/edit/:id",middelware.isLoggedIn, middelware.isLoggedIn ,(req,res)=>{
     Mcq.findById(req.params.id , (err,foundMcq)=>{
         if(err || !foundMcq){
             console.log(err)
         }else{
-            console.log(req.body)
-            foundMcq.question = req.body.mcq.question
-            foundMcq.choice = req.body.mcq.choice
-            foundMcq.answer.set(0 , req.body.mcq.answer)
-            console.log("update :",foundMcq)
-            foundMcq.save()
-            res.redirect("/mcq/edit/"+req.params.id)
+            if(foundMcq.postedBy == req.user.username){
+                foundMcq.question = req.body.mcq.question
+                foundMcq.choice = req.body.mcq.choice
+                foundMcq.answer.set(0 , req.body.mcq.answer)
+                foundMcq.save()
+                res.redirect("/mcq/edit/"+req.params.id)
+            }else{
+                req.flash("error", "The mcq you are trying to edit isn't owned by you !!!")
+                res.redirect("/dashboard")
+            }
+            
         }
     })
-    console.log(req.body)
 })
 // report route
 router.get("/mcq/report/:id", middelware.isLoggedIn ,(req,res)=>{

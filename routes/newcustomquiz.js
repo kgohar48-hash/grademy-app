@@ -9,8 +9,14 @@ var Quizcategory	= require("../models/quizcategory")
 
 router.get("/customquiz/newquiz",middelware.isLoggedIn ,function(req,res){
 	if(!req.user.isAcademy){
-		// form to add a new quiz from the DB FOR STUDENTS (will add auth later)
-		res.render("dashboard/customquiz/newfromdb")
+		if(req.user.isPaid || req.user.isPaidPlus || req.user.score.attempted < 100){
+			// form to add a new quiz from the DB FOR STUDENTS (will add auth later)
+			res.render("dashboard/customquiz/newfromdb")
+		}else{
+			req.flash("error" , "This feature is only for paid users !!!")
+			res.redirect("/user/plan")
+		}
+		
 	}else{
 		// render react form to add new quiz for academy and save mcqs to DB
 		res.render('react/mcqsForm/index')
@@ -83,150 +89,155 @@ router.post("/newmcqs/test",middelware.isLoggedIn ,async function(req,res){
 })
 // post route to add a new quiz from the mcqs DB FOR STUDENTS 
 router.post("/dashboard/newcustomquiz" ,middelware.isLoggedIn ,async function(req,res){
-	console.log(req.body)
-	var mcqsToBeAdded = []
-	if(Array.isArray(req.body.subjects)){
-		console.log("multiple chapters")
-		for(var i = 0 ; req.body.subjects.length >= i ; i++){
-			if(i == req.body.subjects.length){
-				// terminate
-				await newCustomQuiz.create({madeBy : req.user.username },async function(err,quiz){
-					if(err){
-						console.log(err)
-					}else{
-						quiz.description = req.body.description
-						quiz.mcqs = mcqsToBeAdded
-						console.log("questions : ",mcqsToBeAdded.length)
-						quiz.save()
-						await User.findById(req.user._id , function(err,userfound){
-							if(err){
-								console.log(err)
-							}else{
-								userfound.myQuizzes.push(quiz._id)
-								userfound.save()
-								res.redirect("/dashboard/newcustomquiz/"+req.user.username)
-							}
-						})
-					}
-				})
-			}else{
-				await Mcq.find({subject: req.body.subjects[i] , chapter : req.body.chapters[i]} ,async function(err,foundMcqs){
-					if(err){
-						console.log(err)
-					}else{
-						await addingMcqs()
-						async function addingMcqs(){
-							try {
-								return new Promise((resolve, reject) => {
-									// in case due to faulty code NOM asked by user exceed actual NOM
-									console.log("i : ",i)
-									console.log("mcqs asked : mcqs found  "+req.body.numberOfMcqs[i] +" : "+ foundMcqs.length)
-									if(req.body.numberOfMcqs[i] > foundMcqs.length){
-										console.log("thuk activated")
-										req.body.numberOfMcqs[i] = foundMcqs.length
-									}
-									var initialValue = req.body.numberOfMcqs[i]
-									for (var j = 0; initialValue >= j; j++) {
-										if (initialValue == j) {
-											resolve();
-										} else {
-											var ifCorrected = false
-											for (let k = 0;req.user.correct.length >= k ; k++){
-												if(req.user.correct.length == k){
-													// terminate
-													if( !ifCorrected || initialValue >= foundMcqs.length){
-														console.log("mcq limit reached : ",initialValue >= foundMcqs.length)
-														mcqsToBeAdded.push(foundMcqs[j])
+	if(req.user.isPaid || req.user.isPaidPlus || req.user.score.attempted < 100){
+		var mcqsToBeAdded = []
+		if(Array.isArray(req.body.subjects)){
+			console.log("multiple chapters")
+			for(var i = 0 ; req.body.subjects.length >= i ; i++){
+				if(i == req.body.subjects.length){
+					// terminate
+					await newCustomQuiz.create({madeBy : req.user.username },async function(err,quiz){
+						if(err){
+							console.log(err)
+						}else{
+							quiz.description = req.body.description
+							quiz.mcqs = mcqsToBeAdded
+							console.log("questions : ",mcqsToBeAdded.length)
+							quiz.save()
+							await User.findById(req.user._id , function(err,userfound){
+								if(err){
+									console.log(err)
+								}else{
+									userfound.myQuizzes.push(quiz._id)
+									userfound.save()
+									res.redirect("/dashboard/newcustomquiz/"+req.user.username)
+								}
+							})
+						}
+					})
+				}else{
+					await Mcq.find({subject: req.body.subjects[i] , chapter : req.body.chapters[i]} ,async function(err,foundMcqs){
+						if(err){
+							console.log(err)
+						}else{
+							await addingMcqs()
+							async function addingMcqs(){
+								try {
+									return new Promise((resolve, reject) => {
+										// in case due to faulty code NOM asked by user exceed actual NOM
+										console.log("i : ",i)
+										console.log("mcqs asked : mcqs found  "+req.body.numberOfMcqs[i] +" : "+ foundMcqs.length)
+										if(req.body.numberOfMcqs[i] > foundMcqs.length){
+											console.log("thuk activated")
+											req.body.numberOfMcqs[i] = foundMcqs.length
+										}
+										var initialValue = req.body.numberOfMcqs[i]
+										for (var j = 0; initialValue >= j; j++) {
+											if (initialValue == j) {
+												resolve();
+											} else {
+												var ifCorrected = false
+												for (let k = 0;req.user.correct.length >= k ; k++){
+													if(req.user.correct.length == k){
+														// terminate
+														if( !ifCorrected || initialValue >= foundMcqs.length){
+															console.log("mcq limit reached : ",initialValue >= foundMcqs.length)
+															mcqsToBeAdded.push(foundMcqs[j])
+														}else{
+															console.log("mcq found : ",j)
+															initialValue++
+														}
 													}else{
-														console.log("mcq found : ",j)
-														initialValue++
-													}
-												}else{
-													if(req.user.correct[k] == foundMcqs[j]._id){
-														ifCorrected = true
-														k = req.user.correct.length - 1
+														if(req.user.correct[k] == foundMcqs[j]._id){
+															ifCorrected = true
+															k = req.user.correct.length - 1
+														}
 													}
 												}
 											}
 										}
-									}
-								});
-							} catch (reject_1) {
-								console.log("error in adding mcq : ", reject_1);
+									});
+								} catch (reject_1) {
+									console.log("error in adding mcq : ", reject_1);
+								}
 							}
 						}
-					}
-				})
+					})
+				}
 			}
-		}
-	}else{
-		console.log("single chapter")
-		await Mcq.find({subject: req.body.subjects , chapter : req.body.chapters} ,async function(err,foundMcqs){
-			if(err){
-				console.log(err)
-			}else{
-				await addingMcqs()
-				async function addingMcqs(){
-					try {
-						return new Promise((resolve, reject) => {
-							// in case due to faulty code NOM asked by user exceed actual NOM
-							console.log("mcqs asked : mcqs found  "+req.body.numberOfMcqs[i] +" : "+ foundMcqs.length)
-							if(req.body.numberOfMcqs > foundMcqs.length){
-								console.log("thuk activated")
-								req.body.numberOfMcqs = foundMcqs.length
-							}
-							var initialValue = req.body.numberOfMcqs
-							for (var j = 0; initialValue >= j; j++) {
-								if (initialValue == j) {
-									resolve();
-								} else {
-									var ifCorrected = false
-									for (let k = 0;req.user.correct.length >= k ; k++){
-										if(req.user.correct.length == k){
-											// terminate
-											if( !ifCorrected || initialValue >= foundMcqs.length){
-												console.log("mcq limit reached : ",initialValue >= foundMcqs.length)
-												mcqsToBeAdded.push(foundMcqs[j])
+		}else{
+			console.log("single chapter")
+			await Mcq.find({subject: req.body.subjects , chapter : req.body.chapters} ,async function(err,foundMcqs){
+				if(err){
+					console.log(err)
+				}else{
+					await addingMcqs()
+					async function addingMcqs(){
+						try {
+							return new Promise((resolve, reject) => {
+								// in case due to faulty code NOM asked by user exceed actual NOM
+								console.log("mcqs asked : mcqs found  "+req.body.numberOfMcqs[i] +" : "+ foundMcqs.length)
+								if(req.body.numberOfMcqs > foundMcqs.length){
+									console.log("thuk activated")
+									req.body.numberOfMcqs = foundMcqs.length
+								}
+								var initialValue = req.body.numberOfMcqs
+								for (var j = 0; initialValue >= j; j++) {
+									if (initialValue == j) {
+										resolve();
+									} else {
+										var ifCorrected = false
+										for (let k = 0;req.user.correct.length >= k ; k++){
+											if(req.user.correct.length == k){
+												// terminate
+												if( !ifCorrected || initialValue >= foundMcqs.length){
+													console.log("mcq limit reached : ",initialValue >= foundMcqs.length)
+													mcqsToBeAdded.push(foundMcqs[j])
+												}else{
+													console.log("mcq found : ",j)
+													initialValue++
+												}
 											}else{
-												console.log("mcq found : ",j)
-												initialValue++
-											}
-										}else{
-											if(req.user.correct[k] == foundMcqs[j]._id){
-												ifCorrected = true
-												k = req.user.correct.length - 1
+												if(req.user.correct[k] == foundMcqs[j]._id){
+													ifCorrected = true
+													k = req.user.correct.length - 1
+												}
 											}
 										}
 									}
 								}
-							}
-						});
-					} catch (reject_1) {
-						console.log("error in adding mcq : ", reject_1);
+							});
+						} catch (reject_1) {
+							console.log("error in adding mcq : ", reject_1);
+						}
 					}
+					await newCustomQuiz.create({madeBy : req.user.username },async function(err,quiz){
+						if(err){
+							console.log(err)
+						}else{
+							quiz.description = req.body.description
+							quiz.mcqs = mcqsToBeAdded
+							console.log("questions : ",mcqsToBeAdded.length)
+							quiz.save()
+							await User.findById(req.user._id , function(err,userfound){
+								if(err){
+									console.log(err)
+								}else{
+									userfound.myQuizzes.push(quiz._id)
+									userfound.save()
+									res.redirect("/dashboard/newcustomquiz/"+req.user.username)
+								}
+							})
+						}
+					})
 				}
-				await newCustomQuiz.create({madeBy : req.user.username },async function(err,quiz){
-					if(err){
-						console.log(err)
-					}else{
-						quiz.description = req.body.description
-						quiz.mcqs = mcqsToBeAdded
-						console.log("questions : ",mcqsToBeAdded.length)
-						quiz.save()
-						await User.findById(req.user._id , function(err,userfound){
-							if(err){
-								console.log(err)
-							}else{
-								userfound.myQuizzes.push(quiz._id)
-								userfound.save()
-								res.redirect("/dashboard/newcustomquiz/"+req.user.username)
-							}
-						})
-					}
-				})
-			}
-		})
+			})
+		}
+	}else{
+		req.flash("error" , "This feature is only for paid users !!!")
+		res.redirect("/user/plan")
 	}
+	
 })
 //custom quiz view page
 router.get("/dashboard/newcustomquiz/:id" ,middelware.isLoggedIn , function(req,res){
@@ -410,22 +421,42 @@ router.get("/dashboard/newcustomquiz/view/start/:id",middelware.isLoggedIn , fun
 		}
 	})
 })
-//quiz view page
-router.get("/dashboard/newcustomquiz/view/view/:id",middelware.isLoggedIn , function(req,res){
-	newCustomQuiz.findById(req.params.id).populate("mcqs").exec(async function(err , foundQuiz){
+router.get("/dashboard/newcustomquiz/start/:id",middelware.isLoggedIn , function(req,res){
+	newCustomQuiz.findById(req.params.id).populate("mcqs").exec(function(err , foundQuiz){
 		if(err){
 			console.log(err)
-			req.flash("error" , "error occured : kindly report this bug")
-			res.redirect("/dashboard")
 		}
 		else{
 			dataToBePassed = {
 				foundQuiz : foundQuiz ,
 				currentuser : req.user
 			}
-			res.render("quiz/view")
+			res.render("dashboard/quiz/quiz")
 		}
 	})
+})
+//quiz view page
+router.get("/dashboard/newcustomquiz/view/view/:id",middelware.isLoggedIn , function(req,res){
+	if(req.user.isPaid || req.user.isPaidPlus || req.user.score.attempted < 100){
+		newCustomQuiz.findById(req.params.id).populate("mcqs").exec(async function(err , foundQuiz){
+			if(err){
+				console.log(err)
+				req.flash("error" , "error occured : kindly report this bug")
+				res.redirect("/dashboard")
+			}
+			else{
+				dataToBePassed = {
+					foundQuiz : foundQuiz ,
+					currentuser : req.user
+				}
+				res.render("quiz/view")
+			}
+		})
+	}else{
+		req.flash("error" , "This feature is only for paid users !!!")
+		res.redirect("/user/plan")
+	}
+	
 })
 
 module.exports = router ;

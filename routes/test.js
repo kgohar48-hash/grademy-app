@@ -7,6 +7,7 @@ const express		 = require("express"),
 	Mcq			 	= require("../models/mcq");
 	Comment			= require("../models/comment")
 	var middelware  = require("../middelware");
+	var quizcategory  = require("../models/quizcategory")
 
 // route to convert pool to mcqs DB 
 // router.get('/pooltomcqs/:subject',async function (req,res) {
@@ -219,5 +220,74 @@ router.post("/sorting/biology",middelware.isLoggedIn,async(req,res)=>{
 router.post("/sorting/redirect",middelware.isLoggedIn,(req,res)=>{
 	res.redirect("/dashboard")
 })
+// mcq scraping
+// router.get("/sort/fetch/mcqs",(req,res)=>{
+// 	res.render("testing/mcqscrapter")
+// })
+//
 
+// quiz attempt data for academy
+router.get("/academy/quizcategory/attempt/:id",(req,res)=>{
+	quizcategory.findById(req.params.id).populate({
+		path : 'quizzes',
+		model : 'Newcustomquiz'
+	}).exec(async(err, foundCategory)=>{
+		if(err || !foundCategory){
+			console.log(err)
+		}else{
+			dateData = []
+			console.log("yo")
+			for(var i = 0 ; i <= foundCategory.quizzes.length ; i++){
+				if(i == foundCategory.quizzes.length){
+					res.send(dateData)
+				}else{
+					console.log("quiz complete")
+
+					await fetchQuizDates(foundCategory.quizzes[i])
+				}
+			}
+		}
+	})
+})
+
+function fetchQuizDates(quiz) {
+	return new Promise((resolve,reject)=>{
+		if(quiz.solvedBy.length != 0){
+			for(var j = 0; j <= quiz.solvedBy.length; j++){
+				if(j == quiz.solvedBy.length){
+					resolve()
+				}else{
+					console.log(dateData.length)
+					dateData.push(quiz.solvedBy[j].date)
+				}
+			}
+		}else{
+			resolve()
+		}
+	})
+}
+
+// dateDataOrdered = []
+// for(var i=0;i <= dateData.length ; i++){
+// 	if(i == dateData.length){
+// 		console.log(dateDataOrdered.reverse())
+// 	}else{
+// 		index = 0 ;
+// 		dateDataOrdered.forEach(date => {
+// 			if (Number(date.substring(5,7)) < Number(dateData[i].substring(5,7))){
+// 				if(Number(date.substring(8,10)) < Number(dateData[i].substring(8,10))){
+// 					console.log(dateDataOrdered.length)
+// 					return
+// 				}else{
+// 					index++
+// 				}
+// 			}
+// 			else{
+// 				index++
+// 			}
+// 		});	
+// 		dateDataOrdered.splice(index, 0, dateData[i]);
+		
+// 	}
+// }
 module.exports = router ;
