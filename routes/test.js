@@ -8,7 +8,7 @@ const express		 = require("express"),
 	Comment			= require("../models/comment")
 	var middelware  = require("../middelware");
 	var quizcategory  = require("../models/quizcategory")
-
+var Useractivity	=	require("../models/useractivity")
 // route to convert pool to mcqs DB 
 // router.get('/pooltomcqs/:subject',async function (req,res) {
 // 	var mcqsToDB = []
@@ -290,4 +290,6 @@ function fetchQuizDates(quiz) {
 		
 // 	}
 // }
+
+
 module.exports = router ;

@@ -2,6 +2,7 @@ var Post    = require("../models/post")
 var Comment = require("../models/comment")
 var Academy = require ("../models/academy")
 var customQuiz = require ("../models/newCustomQuiz")
+var Useractivity = require("../models/useractivity")
 var middelwareObj = {}
 
 middelwareObj.checkCommentOwnership = function(req,res,next){
@@ -97,6 +98,10 @@ middelwareObj.isLoggedIn = function(req,res,next){
 		return next() ; 
 	}
 	else {
+		activitylog ("login", {
+			username : "not logged in",
+			details : "came from "+req.originalUrl
+		})
 		req.session.returnTo = req.originalUrl; 
 		req.flash("error" , "Please login first!")
 		res.redirect("/login") 
@@ -112,6 +117,15 @@ middelwareObj.isAdmin = function(req,res,next){
 	}
 }
 
-
+function activitylog(page,obj) {
+	Useractivity.findById('61b357ffc86d5b7160714228', (err , foundLogs)=>{
+		if(err || !foundLogs){
+			console.log(err)
+		}else{
+			foundLogs[page].push(obj)
+			foundLogs.save()
+		}
+	})
+}
 
 module.exports = middelwareObj ;

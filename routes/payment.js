@@ -7,6 +7,8 @@ var Mcq			= require("../models/mcq")
 var Tid			= require("../models/tid")
 var Transaction	= require("../models/transaction")
 var Promo		= require("../models/promo");
+var Useractivity = require("../models/useractivity")
+
 const { model } = require("mongoose");
 //plan
 router.get("/user/plan",middelware.isLoggedIn,function(req,res){
@@ -18,6 +20,11 @@ router.get("/user/plan",middelware.isLoggedIn,function(req,res){
 				if(err || !foundUsers){
 					console.log(err)
 				}else{
+					activitylog ("billing", {
+						id : req.user._id,
+						username : req.user.username,
+						details : "visited billing page"
+					})
 					res.render("user/plans/plan",{MCQcount : count, invitees : foundUsers.length})
 				}
 			})
@@ -31,6 +38,11 @@ router.get("/payment/plan/:plan" ,middelware.isLoggedIn , function(req,res){
 		req.flash("error",`You have already purchased ${req.params.plan} plan`)
 		res.redirect("/user/plan")
 	}else{
+		activitylog ("payment", {
+			id : req.user._id,
+			username : req.user.username,
+			details : "visited payment page"
+		})
 		Feedback.find({},function(err,allFeedbacks){
 			if(err){
 				console.log(err)
@@ -52,7 +64,6 @@ router.get("/payment/plan/:plan" ,middelware.isLoggedIn , function(req,res){
 })
 // receive payment route
 router.get("/payment/paid/:plan",middelware.isLoggedIn ,(req,res)=>{
-	console.log("yo")
 	var amountIn = 0
 	var amountOut = 0
 	if(req.params.plan == "Premium"){
@@ -95,9 +106,19 @@ router.get("/payment/paid/:plan",middelware.isLoggedIn ,(req,res)=>{
 								}
 							})
 						}
+						activitylog ("payment", {
+							id : req.user._id,
+							username : req.user.username,
+							details : "success payment attempt"
+						})
 						req.flash("success","Thanks for purchaing "+req.params.plan+" plan, best of luck!!!")
 						res.redirect("/dashboard")
 					}else{
+						activitylog ("payment", {
+							id : req.user._id,
+							username : req.user.username,
+							details : "failed payment attempt"
+						})
 						req.flash("error","You have insufficient balance")
 						res.redirect("/user/plan")
 					}
@@ -328,6 +349,17 @@ async function trasanctionCreate(amount,statement,varified,isPromo,TID,to,from) 
 			res.redirect("/user/plan")
 		})
 		
+	})
+}
+
+function activitylog(page,obj) {
+	Useractivity.findById('61b357ffc86d5b7160714228', (err , foundLogs)=>{
+		if(err || !foundLogs){
+			console.log(err)
+		}else{
+			foundLogs[page].push(obj)
+			foundLogs.save()
+		}
 	})
 }
 
