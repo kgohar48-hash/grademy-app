@@ -8,7 +8,8 @@ const express		 = require("express"),
 	Comment			= require("../models/comment")
 	var middelware  = require("../middelware");
 	var quizcategory  = require("../models/quizcategory")
-var Useractivity	=	require("../models/useractivity")
+var Useractivity	=	require("../models/useractivity");
+const mcq = require("../models/mcq");
 // route to convert pool to mcqs DB 
 // router.get('/pooltomcqs/:subject',async function (req,res) {
 // 	var mcqsToDB = []
@@ -290,6 +291,50 @@ function fetchQuizDates(quiz) {
 		
 // 	}
 // }
+
+
+// getting the most wrong mcqs
+router.get("/mcqs/most/wrong",(req,res)=>{
+	// var totalAttempts = 0
+	// var sum = 0
+	// var NumberOfMcqs = 0
+	// var mcqsList = []
+	// var mcqsIds = []
+	// Mcq.find({subject : "physics"},(err, foundMcqs)=>{
+	// 	if(err || !foundMcqs){
+	// 		console.log(err)
+	// 	}else{
+	// 		for(var i = 0 ; i <= foundMcqs.length ; i++){
+	// 			if(i == foundMcqs.length ){
+	// 				console.log("Total attempt : ", totalAttempts)
+	// 				console.log("Number Of Mcqs : ", NumberOfMcqs)
+	// 				console.log("McqsList :"+ mcqsList.length+" : "+mcqsIds.length)
+	// 				res.send({
+	// 					mcqsList,
+	// 					mcqsIds
+	// 				})
+	// 			}else{
+	// 				sum = foundMcqs[i].userResponse.reduce(add, 0)
+	// 				totalAttempts =  totalAttempts + foundMcqs[i].userResponse.reduce(add, 0)
+
+	// 				if(sum > 30){
+	// 					NumberOfMcqs++
+	// 					index = 0 ;
+	// 					if((foundMcqs[i].userResponse[Number(foundMcqs[i].answer[0])]/sum) < 0.2 ){
+	// 						mcqsList.push(foundMcqs[i]);
+	// 						mcqsIds.push(foundMcqs[i]._id);
+	// 					}	
+						
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// })
+})
+
+function add(accumulator, a) {
+	return accumulator + a;
+}
 
 
 module.exports = router ;

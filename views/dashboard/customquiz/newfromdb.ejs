@@ -47,6 +47,10 @@
                   </div>  <!-- /div.col-md-12 -->
               </div>  <!-- /div.row -->
           </div>
+          <%if(typeof(sectionId) == 'undefined'){%>
+          <%}else{%>
+            <input type="hidden" value="<%=sectionId%>" name="sectionId">
+          <%}%>
           <div id="submit"></div>
           <h6 id="waitText" style="display: none;">Please wait this may take some time ...</h6>
           </form>

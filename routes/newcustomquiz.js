@@ -4,7 +4,8 @@ var middelware 		= require("../middelware");
 var Mcq		 		= require("../models/mcq");
 var User 			= require("../models/user");
 var newCustomQuiz   = require("../models/newCustomQuiz");
-var Quizcategory	= require("../models/quizcategory")
+var Quizcategory	= require("../models/quizcategory");
+const quizcategory = require("../models/quizcategory");
 
 
 router.get("/customquiz/newquiz",middelware.isLoggedIn ,function(req,res){
@@ -20,6 +21,12 @@ router.get("/customquiz/newquiz",middelware.isLoggedIn ,function(req,res){
 	}else{
 		// render react form to add new quiz for academy and save mcqs to DB
 		res.render('react/mcqsForm/index')
+	}
+})
+// form for teachers to make a quiz from the database
+router.get("/customquiz/new/section/:id",middelware.isLoggedIn, (req,res)=>{
+	if(req.user.isAcademy){
+		res.render("dashboard/customquiz/newfromdb", {sectionId : req.params.id})
 	}
 })
 router.get("/academy/quiz/new/:id",(req,res)=>{
@@ -89,10 +96,10 @@ router.post("/newmcqs/test",middelware.isLoggedIn ,async function(req,res){
 })
 // post route to add a new quiz from the mcqs DB FOR STUDENTS 
 router.post("/dashboard/newcustomquiz" ,middelware.isLoggedIn ,async function(req,res){
-	if(req.user.isPaid || req.user.isPaidPlus || req.user.score.attempted < 100){
+	console.log(req.body)
+	if(req.user.isPaid || req.user.isPaidPlus || req.user.isAcademy || req.user.score.attempted < 100){
 		var mcqsToBeAdded = []
 		if(Array.isArray(req.body.subjects)){
-			console.log("multiple chapters")
 			for(var i = 0 ; req.body.subjects.length >= i ; i++){
 				if(i == req.body.subjects.length){
 					// terminate
@@ -104,13 +111,27 @@ router.post("/dashboard/newcustomquiz" ,middelware.isLoggedIn ,async function(re
 							quiz.mcqs = mcqsToBeAdded
 							console.log("questions : ",mcqsToBeAdded.length)
 							quiz.save()
+							if(typeof(req.body.sectionId) != 'undefined'){
+								quizcategory.findById(req.body.sectionId, (err, foundCategory)=>{
+									if(err || !foundCategory){
+										console.log("error in finding category",err)
+									}else{
+										foundCategory.quizzes.push(quiz)
+										foundCategory.save()
+									}
+								})
+							}
 							await User.findById(req.user._id , function(err,userfound){
 								if(err){
 									console.log(err)
 								}else{
 									userfound.myQuizzes.push(quiz._id)
 									userfound.save()
-									res.redirect("/dashboard/newcustomquiz/"+req.user.username)
+									if(typeof(req.body.sectionId) != 'undefined'){
+										res.redirect("/academy/section/"+req.body.sectionId)
+									}else{
+										res.redirect("/dashboard/newcustomquiz/"+req.user.username)
+									}
 								}
 							})
 						}

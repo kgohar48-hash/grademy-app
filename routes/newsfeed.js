@@ -56,14 +56,13 @@ router.get("/:id" , middelware.isLoggedIn, function(req,res){
 	Academy.findById(req.params.id).populate({
         path : 'cummunityposts',
         model : 'Post',
-        populate : {
+        populate : [{
             path : 'comments',
             model : 'Comment'
-        },
-		populate : {
-			path : 'mcq',
-			model : 'Mcq'
-		}
+        },{
+			path : "mcq",
+			model : "Mcq"
+		}]
     }).exec((err, foundAcademy) => {
         if (err || !foundAcademy) {
             console.log(err);

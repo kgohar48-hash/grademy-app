@@ -21,15 +21,13 @@
     </header>
     <div class="row" >
         <% academies.forEach(academy=>{%>
-		<div class="col-lg-3 col-md-4 col-sm-6 mb-4" >
-            <div class="thumbnail rounded" style="background-color: rgb(48, 48, 48);">	
-                <img src="<%= academy.coverPicture %>" id="academy-cover" class="img-fluid rounded" >
-                <div class="caption ml-2 mr-2">
-                    <h6 ><%= academy.academyName %> <%if(joinedStatus[i]){%><div class="btn btn-sm btn-success mt-1 float-right join-btn" data-number="<%=academy._id%>" >Joined</div><%}else{%><div class="btn btn-sm btn-primary mt-1 float-right join-btn" data-number="<%=academy._id%>" >Join +</div><%}%></h6>
-                    <h8>Level <%= academy.level %> instructor</h8>
-                    <a href="/academy/<%= academy._id %>" style="color : whitesmoke">
-                        <p><h8><%= academy.punchLine %></h8></p>
-                    </a>
+		<div class="col-lg-3 col-md-4 col-sm-6 mb-4 " >
+            <div class="thumbnail rounded academy-card" data-id="<%=academy._id%>" style="background-color: rgb(48, 48, 48);">	
+                <img src="<%= academy.coverPicture %>" id="academy-cover" data-id="<%=academy._id%>" class="img-fluid rounded" >
+                <div class="caption ml-2 mr-2" >
+                    <h6 data-id="<%=academy._id%>"><%= academy.academyName %> <%if(joinedStatus[i]){%><div class="btn btn-sm btn-success mt-1 float-right join-btn" data-number="<%=academy._id%>" >Joined</div><%}else{%><div class="btn btn-sm btn-primary mt-1 float-right join-btn" data-number="<%=academy._id%>" >Join +</div><%}%></h6>
+                    <h8 data-id="<%=academy._id%>">Level <%= academy.level %> instructor</h8>
+                    <p data-id="<%=academy._id%>"><h8 data-id="<%=academy._id%>"><%= academy.punchLine %></h8></p>
                 </div>
                 <hr style="border-top: 1px solid rgb(87, 87, 87); margin: 5px 0px;">
                 <span class="ml-2 fa fa-star" style="color : orange"><span class="avgrating"></span>(<%=academy.reviews.length%>)</span>
