@@ -20,7 +20,6 @@ async function init(){
     await fetchingCustumQuizzes();
     await showCards();
     setTimeout(function () {
-        console.log("show content")
         footer.style.display = 'block'
         document.getElementById("loader").style.display = "none";
         document.getElementById("myDiv").style.display = "block";
@@ -33,7 +32,7 @@ async function fetchingCustumQuizzes(){
             var client = new HttpClient();
             client.get('https://www.grademy.org/quizlistapi', function (res) {
                 var quizz = JSON.parse(res);
-                quizzes = quizz;
+                quizzes = quizz.reverse()
                 resolve();
             });
         });
