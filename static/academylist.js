@@ -6,7 +6,6 @@ fetch('https://www.grademy.org/data')
     data.forEach(academy=>{
     ratingsum = 0;
     
-    console.log("yo",Object.keys(academy.reviews).length )
     for(var j=0 ; Object.keys(academy.reviews).length >=j ; j++){
         if(Object.keys(academy.reviews).length ==j){
             if(Object.keys(academy.reviews).length == 0){
@@ -23,8 +22,9 @@ fetch('https://www.grademy.org/data')
 });
 
 var avgRatings = Array.from(document.getElementsByClassName("avgrating"));
-
+var academyCard = Array.from(document.getElementsByClassName("academy-card"))
 var joinBtns = Array.from(document.getElementsByClassName("join-btn"));
+
 joinBtns.forEach(btn => {
     btn.addEventListener("click" , e=>{
         if(e.target.innerHTML == "Joined"){
@@ -32,7 +32,6 @@ joinBtns.forEach(btn => {
             e.target.classList.remove('btn-success')
             e.target.innerHTML = "Join+" 
             academyToBeUnjoined = e.target.dataset["number"]
-            console.log("unjoined : ", academyToBeUnjoined)
             var options = {
                 method : 'POST' ,
                 headers : {
@@ -46,7 +45,6 @@ joinBtns.forEach(btn => {
             e.target.classList.add('btn-success')
             e.target.innerHTML = "Joined"
             academyToBeJoined = e.target.dataset["number"]
-            console.log("joined : ", academyToBeJoined)
             var options = {
                 method : 'POST' ,
                 headers : {
@@ -59,3 +57,10 @@ joinBtns.forEach(btn => {
     })
 });
 
+academyCard.forEach(card => {
+    card.addEventListener("click" , e=>{
+        if(typeof(e.target.dataset["id"]) != "undefined"){
+            window.location = "https://www.grademy.org/academy/"+e.target.dataset["id"]
+        }
+    })
+});
