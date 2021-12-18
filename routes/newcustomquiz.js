@@ -5,7 +5,8 @@ var Mcq		 		= require("../models/mcq");
 var User 			= require("../models/user");
 var newCustomQuiz   = require("../models/newCustomQuiz");
 var Quizcategory	= require("../models/quizcategory");
-const quizcategory = require("../models/quizcategory");
+var quizcategory = require("../models/quizcategory");
+var Useractivity = require("../models/useractivity")
 
 
 router.get("/customquiz/newquiz",middelware.isLoggedIn ,function(req,res){
@@ -96,7 +97,7 @@ router.post("/newmcqs/test",middelware.isLoggedIn ,async function(req,res){
 })
 // post route to add a new quiz from the mcqs DB FOR STUDENTS 
 router.post("/dashboard/newcustomquiz" ,middelware.isLoggedIn ,async function(req,res){
-	console.log(req.body)
+	
 	if(req.user.isPaid || req.user.isPaidPlus || req.user.isAcademy || req.user.score.attempted < 100){
 		var mcqsToBeAdded = []
 		if(Array.isArray(req.body.subjects)){
@@ -109,8 +110,12 @@ router.post("/dashboard/newcustomquiz" ,middelware.isLoggedIn ,async function(re
 						}else{
 							quiz.description = req.body.description
 							quiz.mcqs = mcqsToBeAdded
-							console.log("questions : ",mcqsToBeAdded.length)
 							quiz.save()
+							activitylog ("makequiz", {
+								id : req.user._id,
+								username : req.user.username,
+								details : mcqsToBeAdded.length+" mcqs"
+							})
 							if(typeof(req.body.sectionId) != 'undefined'){
 								quizcategory.findById(req.body.sectionId, (err, foundCategory)=>{
 									if(err || !foundCategory){
@@ -302,7 +307,11 @@ router.post("/newcustomquiz",middelware.isLoggedIn , async function(req,res){
 				}
 			});			
 			foundQuiz.solvedBy.splice(index, 0, dataFromQuiz);
-
+			activitylog ("quizAttempt", {
+				id : req.user._id,
+				username : req.user.username,
+				details : "scored "+Math.round( (req.body.userScore/(foundQuiz.mcqs.length*4)) * 100)+" %"
+			})
 			await User.findOne({username : dataFromQuiz.username} ,async function(err , foundUser){
 				if(err || !foundUser){
 					console.log("error in finding user",err)
@@ -458,6 +467,7 @@ router.get("/dashboard/newcustomquiz/start/:id",middelware.isLoggedIn , function
 })
 //quiz view page
 router.get("/dashboard/newcustomquiz/view/view/:id",middelware.isLoggedIn , function(req,res){
+	
 	if(req.user.isPaid || req.user.isPaidPlus || req.user.score.attempted < 100){
 		newCustomQuiz.findById(req.params.id).populate("mcqs").exec(async function(err , foundQuiz){
 			if(err){
@@ -466,6 +476,11 @@ router.get("/dashboard/newcustomquiz/view/view/:id",middelware.isLoggedIn , func
 				res.redirect("/dashboard")
 			}
 			else{
+				activitylog ("quizView", {
+					id : req.user._id,
+					username : req.user.username,
+					details : "view" + req.params.id
+				})
 				dataToBePassed = {
 					foundQuiz : foundQuiz ,
 					currentuser : req.user
@@ -474,10 +489,26 @@ router.get("/dashboard/newcustomquiz/view/view/:id",middelware.isLoggedIn , func
 			}
 		})
 	}else{
+		activitylog ("quizView", {
+			id : req.user._id,
+			username : req.user.username,
+			details : "failed to view " + req.params.id
+		})
 		req.flash("error" , "This feature is only for paid users !!!")
 		res.redirect("/user/plan")
 	}
 	
 })
+// functions
 
+function activitylog(page,obj) {
+	Useractivity.findById('61b357ffc86d5b7160714228', (err , foundLogs)=>{
+		if(err || !foundLogs){
+			console.log(err)
+		}else{
+			foundLogs[page].push(obj)
+			foundLogs.save()
+		}
+	})
+}
 module.exports = router ;
