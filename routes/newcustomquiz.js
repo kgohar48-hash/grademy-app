@@ -11,7 +11,7 @@ var Useractivity = require("../models/useractivity")
 
 router.get("/customquiz/newquiz",middelware.isLoggedIn ,function(req,res){
 	if(!req.user.isAcademy){
-		if(req.user.isPaid || req.user.isPaidPlus || req.user.score.attempted < 100){
+		if(req.user.isPaid || req.user.isPaidPlus || req.user.score.attempted < 1000){
 			// form to add a new quiz from the DB FOR STUDENTS (will add auth later)
 			res.render("dashboard/customquiz/newfromdb")
 		}else{
@@ -98,7 +98,7 @@ router.post("/newmcqs/test",middelware.isLoggedIn ,async function(req,res){
 // post route to add a new quiz from the mcqs DB FOR STUDENTS 
 router.post("/dashboard/newcustomquiz" ,middelware.isLoggedIn ,async function(req,res){
 	
-	if(req.user.isPaid || req.user.isPaidPlus || req.user.isAcademy || req.user.score.attempted < 100){
+	if(req.user.isPaid || req.user.isPaidPlus || req.user.isAcademy || req.user.score.attempted < 1000){
 		var mcqsToBeAdded = []
 		if(Array.isArray(req.body.subjects)){
 			for(var i = 0 ; req.body.subjects.length >= i ; i++){
@@ -468,7 +468,7 @@ router.get("/dashboard/newcustomquiz/start/:id",middelware.isLoggedIn , function
 //quiz view page
 router.get("/dashboard/newcustomquiz/view/view/:id",middelware.isLoggedIn , function(req,res){
 	
-	if(req.user.isPaid || req.user.isPaidPlus || req.user.score.attempted < 100){
+	if(req.user.isPaid || req.user.isPaidPlus || req.user.score.attempted < 1000){
 		newCustomQuiz.findById(req.params.id).populate("mcqs").exec(async function(err , foundQuiz){
 			if(err){
 				console.log(err)
