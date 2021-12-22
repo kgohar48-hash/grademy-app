@@ -81,7 +81,6 @@ function init(){
             const selectedStar= e.target;
             const selectedRating = selectedStar.dataset["number"];
             ratingInput.value = selectedRating
-            console.log(ratingInput.value)
             for(var i = 0 ; ratingInput.value > i ; i++){
                 stars[i].style.color = "orange"
             }
@@ -90,7 +89,6 @@ function init(){
     for(var i = 0 ; data.academy.reviews.length >= i ; i++){
         if(data.academy.reviews.length == i ){
             // terminate
-            console.log(starRatings)
             document.getElementById('5-star').innerText = starRatings[4]
             document.getElementById('4-star').innerText = starRatings[3]
             document.getElementById('3-star').innerText = starRatings[2]
@@ -105,7 +103,6 @@ function init(){
             starRatings[data.academy.reviews[i].rating - 1]++
             ratingSum += data.academy.reviews[i].rating
             if(data.user != null && data.user.username == data.academy.reviews[i].author.username){
-                console.log("review given")
                 reviewed = true
             }
         }
@@ -134,7 +131,6 @@ function init(){
             e.target.classList.remove('btn-success')
             e.target.innerHTML = "Join+" 
             academyToBeUnjoined = e.target.dataset["number"]
-            console.log("unjoined : ", academyToBeUnjoined)
             var options = {
                 method : 'POST' ,
                 headers : {
@@ -148,7 +144,6 @@ function init(){
             e.target.classList.add('btn-success')
             e.target.innerHTML = "Joined"
             academyToBeJoined = e.target.dataset["number"]
-            console.log("joined : ", academyToBeJoined)
             var options = {
                 method : 'POST' ,
                 headers : {

@@ -105,7 +105,7 @@ router.get("/mcq/edit/:id", middelware.isLoggedIn,(req,res)=>{
         if(err || !foundMcq){
             console.log(err)
         }else{
-            if(foundMcq.postedBy == req.user.username){
+            if(foundMcq.postedBy == req.user.username || req.user.isAcademy){
                 res.render("dashboard/mcqs/edit", {mcq : foundMcq})
             }else{
                 req.flash("error", "The mcq you are trying to edit isn't owned by you !!!")
@@ -120,7 +120,7 @@ router.post("/mcq/edit/:id",middelware.isLoggedIn, middelware.isLoggedIn ,(req,r
         if(err || !foundMcq){
             console.log(err)
         }else{
-            if(foundMcq.postedBy == req.user.username){
+            if(foundMcq.postedBy == req.user.username || req.user.isAcademy){
                 foundMcq.question = req.body.mcq.question
                 foundMcq.choice = req.body.mcq.choice
                 foundMcq.answer.set(0 , req.body.mcq.answer)

@@ -19,6 +19,7 @@ client.get('https://www.grademy.org/data',async function(res) {
 var user       = document.getElementById("username").value
 var customQuiz = document.getElementById("customquizContainer")
 var postQuiz = document.getElementById("post-quiz")
+var createQuiz = document.getElementById("create-quiz")
 var titles = Array.from(document.getElementsByClassName("category-titles"));
 var quizzesDescription = document.getElementById("quiz-description")
 var createdOn = document.getElementById("createdOn")
@@ -30,17 +31,16 @@ function init(){
     titles.forEach(title => {
         title.addEventListener("click",e=>{
             selectCategory(e.target.innerText)
-            console.log(e.target.innerText)
         })
     });
 }
 
 async function selectCategory(titleText){
     for(var i = 0 ; data.academy.quizcategories.length >i ; i++){
-        console.log("i : ",i)
         if(data.academy.quizcategories[i].title == titleText){
             if(data.user.username == data.academy.owner.username){
                 postQuiz.href = "/academy/quiz/new/"+data.academy.quizcategories[i]._id
+                createQuiz.href = "/customquiz/new/section/"+data.academy.quizcategories[i]._id
             }
             titles[i].classList.add("btn-success")
             titles[i].classList.remove("btn-primary")
@@ -51,6 +51,7 @@ async function selectCategory(titleText){
             if(titles[i].classList.contains("btn-success")){
                 if(data.user.username == data.academy.owner.username){
                     postQuiz.href = ""
+                    createQuiz.href = ""
                 }
                 titles[i].classList.remove("btn-success")
                 titles[i].classList.add("btn-primary")
@@ -133,7 +134,6 @@ function clickedVideo(){
     var videoIcons = Array.from(document.getElementsByClassName("fa-youtube"));
     videoIcons.forEach(icon=>{
         icon.addEventListener('click',e=>{
-            console.log(e.target.dataset["number"])
             videoElement.src = "https://www.youtube.com/embed/"+e.target.dataset["number"]
         })
     })
