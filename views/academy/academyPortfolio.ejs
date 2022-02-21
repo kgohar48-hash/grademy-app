@@ -1,5 +1,6 @@
 <%- include("../partials/header")  %>
 <link rel="stylesheet" href="/css/academy-portfolio.css">
+<input id="academy-id" type="hidden" value="<%=academy._id%>">
 <div class="container mt-3">
     <div class="row">
         <div class="col-md-8" style="background-color: rgb(46, 46, 46); border-radius: 0.4em;">
@@ -143,13 +144,20 @@
                     </div>
                 </div>
             </div>
+            <%if(currentUser.username == academy.owner.username || currentUser.isAdmin){%>
+                <div class="card mt-3">
+                    <div class="card-header ">
+                        <a href="/academy/analytics/stats/<%=academy._id%>" class="btn btn-lg btn-success btn-block">Academy analytics</a>
+                    </div>
+                </div>
+            <%}%>
             <div class="card mt-3">
                 <div class="card-header ">
-                    <a href="/academy/section/<%=academy._id%>" class="btn btn-lg btn-success btn-block">Quizzes Section</a>
+                    <a class="btn btn-lg btn-success btn-block">Quizzes Section</a>
                 </div>
                 <div class="card-body">
                 <%academy.quizcategories.forEach(quizCategory=>{%>
-                    <a href="/academy/section/<%=academy._id%>" class="btn btn-lg btn-primary btn-block"><%=quizCategory.title%></a>
+                    <a href="/academy/section/<%=academy._id%>/<%=quizCategory._id%>" class="btn btn-lg btn-primary btn-block"><%=quizCategory.title%></a>
                 <%})%>
                 </div>
             </div>

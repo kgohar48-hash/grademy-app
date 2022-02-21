@@ -53,12 +53,14 @@ router.get('/mcqsinfoapi',(req,res)=>{
 // function calls
 var time = 0
 
+askingForInfo();
 checkTransactions()
 positionSorting();
-askingForInfo();
 setInterval(()=>{time++}, 100)
 setInterval(askingForInfo, 1000 * 60*60*2);
 setInterval(positionSorting, 1000 * 60*10);
+setInterval(checkTransactions, 1000 * 60*60*24);
+
 // function defination ====================================
 
 async function positionSorting(){ 
@@ -165,9 +167,8 @@ function askingForInfo() {
 // checking if promo or plan expired 
 
 async function checkTransactions() {
-	await Transaction.find({},(err , foundTransactions)=>{
+	await Transaction.find({}, async(err , foundTransactions)=>{
 		date = new Date()
-
 		if(err || !foundTransactions){
 			console.log(err)
 			return
@@ -175,14 +176,21 @@ async function checkTransactions() {
 			for(var i = 0 ; foundTransactions.length >= i ; i++){
 				if(foundTransactions.length == i){
 					// terminate
+					console.log(foundTransactions.length + " transactions")
+					return
 				}else{
-					if(foundTransactions[i].isPromo && (date.getDate() - new Date(foundTransactions[i].createdAt).getDate()) > 3 ) {
+					if(foundTransactions[i].isPromo && foundTransactions[i].varified  && (date.getDate() - new Date(foundTransactions[i].createdAt).getDate()) > 3 ) {
 						console.log("an expired promo found : "+ foundTransactions[i])
+						await Transaction.findByIdAndUpdate(foundTransactions[i]._id , {varified : false}, (err, foundTransaction)=>{
+							if( err || !foundTransaction){
+								console.log(err)
+							}else{
+
+							}
+						})
 					}
 				}
 			}
-			console.log(foundTransactions.length + " transactions")
-			return
 		}
 	})
 }

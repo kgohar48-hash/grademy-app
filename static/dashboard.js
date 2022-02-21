@@ -330,14 +330,12 @@ async function init(){
         currentuser.score.chemistry.history.push({x : currentuser.score.chemistry.attempted , y : currentuser.score.chemistry.score})
         currentuser.score.english.history.push({x : currentuser.score.english.attempted , y : currentuser.score.english.score})
     }
-    console.log("1")
     var myPositionObj = await myPositions();
     makeScoreDistributionChart(positionArr , 1600 , 50)
     settingScore(myPositionObj);
     var totalHistory = await fetchingHistory(currentuser.score.history , {});
 
     chartOfHistory(ctxTotalScore , totalHistory.labels , totalHistory.history, "Total Score History" , "Last 1000 mcqs")
-    console.log("1.2")
 
     if(currentuser.category=="MDCAT"){
         var biologyChapters =  await fetchingSubjectChapters( currentuser,'biology');
@@ -354,12 +352,10 @@ async function init(){
         var mathHistory = await fetchingHistory(currentuser.score.math.history , 'math')
         chartOfHistory(ctxMathScoreChart , mathHistory.labels , mathHistory.history, "Math Score History" , "Last 400 mcqs")
         //leaderboard math
-        console.log("1.3")
 
         await leaderboard (mathPositionArr , mathPositions , 400)
         await scoreDistributionfunction("Total Score Distribution",'Maintain it at : Math 40%, Phy 30%, Che 20%, Eng 10%', "Math" , "math",3,2);
     }
-    console.log("2")
 
     //physics charts
     var physicsChapters = await fetchingSubjectChapters(currentuser ,'physics');
@@ -372,7 +368,6 @@ async function init(){
     var chemistryHistory = await fetchingHistory(currentuser.score.chemistry.history)
     chartOfHistory(ctxChemistryScoreChart , chemistryHistory.labels , chemistryHistory.history, "Chemistry Score History" , "Last 400 mcqs")
     //English charts
-    console.log("3")
 
     var englishChapters = await fetchingSubjectChapters(currentuser ,'english');
     chartOfChapters(ctxEnglishChartOfChapters , englishChapters.labels  ,"English Chapters",englishChapters.skipped, englishChapters.correct , englishChapters.incorrect)
@@ -499,7 +494,6 @@ function fetchingSubjectChapters( currentuser,subject){
         var incorrect = []
         var skipped = []
         if(!currentuser.score[subject].chapters ){
-            console.log(subject+" : undefined")
             var obj = { 
                 correct,
                 incorrect,
@@ -763,7 +757,6 @@ function makeScoreDistributionChart(arr , totalScore, interval){
         if(scoreData.marksArray.length == j){
             for(var i = 0 ; arr.length >= i ; i++){
                 if(arr.length == i){
-                    console.log(scoreData)
                     allUserScoreDistributionChart(ctxAllUserScore ,"All users score summary" )
                 }else{
                     if(arr[i].userScore > 0){

@@ -1,4 +1,4 @@
-html, body, div, span, applet, object, iframe,
+html, body,  span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
 del, dfn, em, img, ins, kbd, q, s, samp,
@@ -15,7 +15,7 @@ time, mark, audio, video {
 	padding: 0;
 	border: 0;
 	font-size: 100%;
-	font: inherit;
+	/* font: inherit; */
 	vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
@@ -299,6 +299,10 @@ footer button{
   line-height: 10px;
   transition: all 0.3s ease;
 }
+.report_btn:hover{
+  background:rgb(228, 58, 16);
+  border:none;
+}
 footer .skip_btn:hover{
   background:yellow;
   border:none;
@@ -477,7 +481,7 @@ section .option_list .option .float_right{
   background: linear-gradient(to right, #bae25b, #85aa00); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   
 }
-.my_stats{
+.my_stats {
   display:flex;
   flex-direction: row;
   align-items: center;
@@ -490,7 +494,7 @@ section .option_list .option .float_right{
   margin-top: 1.5em;
   border-radius: 0.5em;
 }
-#myScore, #myRank, #myCorrect, #myIncorrect, #mySkipped{
+#myScore, #myRank, #myCorrect, #myIncorrect, #mySkipped, #avgScore{
   font-size: 3em;
   color: whitesmoke;
   font-weight: 700;
@@ -500,4 +504,25 @@ section .option_list .option .float_right{
   font-size: 1.5em;
   color: whitesmoke;
   font-weight: 400;
+}
+.subjects {
+  
+  border-top: 1px solid lightgrey;
+}
+/* Then style the iframe to fit in the container div with full height and width */
+.responsive-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+#video-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
 }

@@ -33,7 +33,6 @@ var HttpClient = function() {
   var client = new HttpClient();
       client.get('https://www.grademy.org/data',async function(res) {
         var loadedQuiz = JSON.parse(res)
-        console.log(loadedQuiz)
         questions = [{
             question : "<h1>How much fun the classes are ?</h1><p class='text-muted mt-4'>It is the measure of how fun, creative & engaging the video sessions of this instructor are : </p>",
             choice : ["1","2","3","4","5","6","7","8","9","10"],
@@ -75,7 +74,6 @@ var HttpClient = function() {
       submitButton.innerHTML = '<form action="/academy/dummy/'+academyId +'" method="POST"><input type="hidden" name="ownerId" value="'+userKey+'"><button  class="btn btn-primary btn-lg" id="submit">Submit</button></form>'
         submit = document.getElementById("submit");
       submiting()
-      console.log("test completed")      
     }else{
       //next question
       questionCounter++;

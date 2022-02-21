@@ -11,7 +11,7 @@ var HttpClient = function() {
     }
 }
 var client = new HttpClient();
-client.get('https://www.grademy.org/data',async function(res) {
+client.get('https://www.grademy.org/academy/api/'+document.getElementById("academy-id").value,async function(res) {
     data = JSON.parse(res)
     init()
 });

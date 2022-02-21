@@ -12,11 +12,12 @@ var HttpClient = function() {
     }
 }
 var client = new HttpClient();
-  client.get('https://www.grademy.org/data',async function(res) {
-      console.log(JSON.parse(res))
+  client.get('https://www.grademy.org/quiz/api/'+document.getElementById("quiz-id").value,async function(res) {
     quiz = JSON.parse(res).foundQuiz
     user = JSON.parse(res).currentuser
 
+var commentsDisplay = document.getElementById('comment-display')
+var commentCount = document.getElementById('comment-count')
 const quizBox = document.querySelector('.quiz_box');
 const quizTitle = quizBox.querySelector('.title');
 const timeLine = quizBox.querySelector('.time_line');
@@ -24,7 +25,7 @@ const queText = quizBox.querySelector('.que_text');
 const optionList = quizBox.querySelector('.option_list');
 const totalQue = quizBox.querySelector('.total_que');
 const nextButton = quizBox.querySelector('.next_btn');
-const finishButton = quizBox.querySelector('.finish_btn');
+const finishButton = quizBox.querySelector('.finish_btn')
 const toggler = quizBox.querySelector('.t_buttons');
 const tButtons = toggler.children;
 const options = optionList.children;
@@ -33,15 +34,20 @@ const myCorrect = document.getElementById('myCorrect')
 const myIncorrect = document.getElementById('myIncorrect')
 const mySkipped = document.getElementById('mySkipped')
 const myRank = document.getElementById('myRank')
+const avgScoreElement = document.getElementById('avgScore')
+const watchBtn = document.getElementById('watch-btn')
+const video = document.getElementById('video')
 
 var timeElement = document.getElementById("timefortest")
 skipped = 0
 correct = 0
 incorrect = 0
 position = 0
+currentQuestionId = ''
+commentDisplayHtml = ''
+questionIndex = 0 // made for comment fuction to know the index
 var currentIndex = 0;
 await findUserResponse()
-console.log(UserSolution)
 var userObject = {
     key: UserSolution.key,
     keyOfCorrectness: UserSolution.keyOfCorrectness,
@@ -71,6 +77,12 @@ function capitalizeFirstLetter(string) {
 // quizTitle.append(document.createElement('span').textContent = `${quiz.mcqs[0].chapter}`);
 
 function startQuiz() {
+    if(quiz.discussionVideoURL == ""){
+        watchBtn.style.display = 'none'
+    }else{
+        watchBtn.style.display = 'block'
+        video.src = "https://www.youtube.com/embed/"+quiz.discussionVideoURL
+    }
     createToggler();
     setMyStats()
     setleaderboard()
@@ -109,6 +121,38 @@ function displayQues(index) {
     for (i = 0; i < tButtons.length; i++) {
         i != index && tButtons[i].classList.remove('select');
     }
+    // update mcq id for comment
+    currentQuestionId = quiz.mcqs[index]._id
+    questionIndex = index
+    commentCount.innerText = ''
+    if(quiz.mcqs[index].comments.length != 0){
+        commentCount.innerText = quiz.mcqs[index].comments.length
+    }
+    // display comments
+    commentDisplayHtml = ''
+    quiz.mcqs[index].comments.reverse().forEach(comment => {
+        commentDisplayHtml += `<div class="row text-white">
+                                        <div class="col-1">
+                                            <img src="https://www.w3schools.com/howto/img_avatar.png" class="profile-icon " alt="Avatar">
+                                        </div>
+                                        <div class="col-9">
+                                            <div>
+                                                <h6 class="float-left mr-1">
+                                                    ${comment.author.username} :
+                                                </h6>
+                                            </div>
+                                            <div>
+                                                <p class="float-left">
+                                                    ${comment.text}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                        </div>
+                                    </div>
+                                    <hr style="border-top: 1px solid rgb(87, 87, 87); margin: 5px 10px;">`
+    })
+    commentsDisplay.innerHTML = commentDisplayHtml
 }
 
 function qCounter(index) {
@@ -123,7 +167,7 @@ nextButton.addEventListener('click', () => {
 })
 
 finishButton.addEventListener('click', () => {
-    window.location = "https://www.grademy.org/dashboard";
+    window.location = "https://www.grademy.org/dashboard/quiz/redirect/"+quiz._id;
 })
 
 function createToggler() {
@@ -162,17 +206,20 @@ function queTimer(index) {
     }
 }
 
-
-})
-
 async function findUserResponse() {
     return new Promise((resolve,reject)=>{
-        for(var i = 0 ; quiz.solvedBy.length > i ; i++){
-            if(user.username == quiz.solvedBy[i].username){
-                UserSolution =  quiz.solvedBy[i]
-                position = i + 1
-                console.log("found solution")
+        var scoreSum = 0
+        for(var i = 0 ; quiz.solvedBy.length >= i ; i++){
+            if(quiz.solvedBy.length == i){
+                avgScore = Math.round(scoreSum/i)
+                console.log("avg score : ",avgScore)
                 resolve()
+            }else{
+                scoreSum += quiz.solvedBy[i].userScore
+                if(user.username == quiz.solvedBy[i].username){
+                    UserSolution =  quiz.solvedBy[i]
+                    position = i + 1
+                }
             }
         }
     })
@@ -184,6 +231,7 @@ function setMyStats() {
     myCorrect.innerText = correct
     myIncorrect.innerText = incorrect
     mySkipped.innerText = skipped
+    avgScoreElement.innerText = avgScore
 }
 
 function setleaderboard() {
@@ -192,19 +240,51 @@ function setleaderboard() {
     for(var i = 0 ; quiz.solvedBy.length > i ; i ++){
         if(i>4 || quiz.solvedBy.length == i - 1){
             i = quiz.solvedBy.length
+            boardhtml += setLeaderboardPosition(position - 1,UserSolution.username,UserSolution.userScore)
             board.innerHTML = boardhtml
         }else{
-            boardhtml += `<div class="lboard_mem">
-            <div class="name_bar">
-              <p>${i+1}. <span id="1positionname">${quiz.solvedBy[i].username}</span> </p>
-              <div class="bar_wrap">
-                <div class="inner_bar" id="1positionprogressbar" style="width: 100%"></div>
-              </div>
-            </div>
-            <div class="points" >
-              <span id="1positionscore">${quiz.solvedBy[i].userScore}</span> points
-            </div>
-          </div>`
+            boardhtml += setLeaderboardPosition(i,quiz.solvedBy[i].username,quiz.solvedBy[i].userScore)
         }
     }
 }
+
+function setLeaderboardPosition(index,username,score){
+    return(`<div class="lboard_mem">
+    <div class="name_bar">
+      <p>${index+1}. <span id="1positionname">${username}</span> </p>
+      <div class="bar_wrap">
+        <div class="inner_bar" id="1positionprogressbar" style="width: ${(score/(quiz.mcqs.length*4))*100}%"></div>
+      </div>
+    </div>
+    <div class="points" >
+      <span id="1positionscore">${score}</span> points
+    </div>
+  </div>`)
+}
+// comment btn action
+document.getElementById('comment-btn').addEventListener("click" , function(){
+    const options = {
+      method : 'POST' ,
+      headers : {
+        'Content-type' : 'application/json'
+      },
+      body : JSON.stringify({
+          text : document.querySelector('.comment-text').value
+      })
+    }
+    fetch("https://www.grademy.org/mcq/"+currentQuestionId+"/comment" , options);
+    quiz.mcqs[questionIndex].comments.push({
+        author : {
+            username : user.username
+        },
+        text : document.querySelector('.comment-text').value
+    })
+    document.querySelector('.comment-text').value = ''
+    displayQues(questionIndex)
+})
+
+})
+
+
+
+

@@ -6,20 +6,27 @@
 		</h1>
 		<div style=" margin:25px auto ;">
 			<form action="/academy/quiz/<%=quiz._id%>/edit" method="POST">
-				<div class="form-group">
+				<div class="input-group mb-2">
+					<span class="input-group-text">Description</span>
 					<input class="form-control" type="text" name="quiz[description]" value="<%=quiz.description%>" >	
 				</div>
-				<div class="form-group">
+				<div class="input-group mb-2">
+					<span class="input-group-text">Pre-quiz lecture (url) </span>
 					<input class="form-control" type="text" name="quiz[lectureVideoURL]" value="<%=quiz.lectureVideoURL%>" >	
 				</div>
-				<div class="form-group">
+				<div class="input-group mb-2">
+					<span class="input-group-text">Post quiz discussion (url)</span>
 					<input class="form-control" type="text" name="quiz[discussionVideoURL]" value="<%=quiz.discussionVideoURL%>" >	
 				</div>
+				
 				<%for(var i = 0 ; i < quiz.mcqs.length ; i ++ ){%>
 					<div class="card mt-3" style="color: black;">
 						<div class="card-header">
 							Question # <%=i+1%>
+							<%if(quiz.mcqs[i].postedBy == currentUser.username){%>
 							<a href="/mcq/edit/<%=quiz.mcqs[i]._id%>" target="_blank" id="edit-btn" class="fas fa-edit btn btn-sm btn-warning float-right" ></a>
+							<%}%>
+							<a href="/customquiz/<%=quiz._id%>/remove/<%=quiz.mcqs[i]._id%>" id="remove-btn" class="fas fa-trash btn btn-sm btn-danger float-right mr-2" ></a>
 						</div>
 						<div class="card-body">
 							Question : <%=quiz.mcqs[i].question%>
@@ -39,11 +46,89 @@
 					</div>
 				<%}%>
 				<div class="form-group">
-					<button class="btn btn-lg btn-primary btn-block">
+					<button class="btn btn-lg btn-success btn-block">
 					submit
 					</button>
 				</div>
 			</form>	
+			<button class="btn btn-lg btn-primary btn-block" type="button" data-toggle="collapse" data-target="#addmcq" aria-expanded="false" aria-controls="addmcq">
+				Add an MCQ
+			</button>
+			<div class="collapse" id="addmcq">
+				<form  action="/customquiz/<%=quiz._id%>/post/mcq" method="POST">
+					<div class="card mt-3" style="background-color: rgb(56, 56, 56);">
+						<div class="card-header">
+							<div class="input-group mb-3 mt-4 mr-4 ml-4">
+								<div class="input-group-prepend">
+									<label class="input-group-text">Subject : </label>
+								</div> 
+								<select name="mcq[subject]" class="custom-select" required>                   
+									<option value="physics" selected>Physics</option>
+									<option value="biology" >Biology</option>
+									<option value="chemistry" >Chemistry</option>
+									<option value="english" >English</option>
+								</select>
+								<div class="input-group mt-2">
+									<span class="input-group-text">Chapter</span>
+									<textarea class="form-control" name="mcq[chapter]" aria-label="With textarea" style="text-transform: lowercase;" required></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="container">
+								<div class="row">
+									<div class="input-group">
+										<span class="input-group-text">Question</span>
+										<textarea class="form-control" name="mcq[question]" aria-label="With textarea" required></textarea>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6 mt-3">
+										<div class="input-group">
+											<span class="input-group-text">Choice A</span>
+											<textarea class="form-control" name="mcq[choice]"  aria-label="With textarea" required></textarea>
+										</div>
+									</div>
+									<div class="col-md-6 mt-3">
+										<div class="input-group">
+											<span class="input-group-text">Choice B</span>
+											<textarea class="form-control" name="mcq[choice]" aria-label="With textarea" required></textarea>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6 mt-3">
+										<div class="input-group">
+											<span class="input-group-text">Choice C</span>
+											<textarea class="form-control" name="mcq[choice]" aria-label="With textarea" required></textarea>
+										</div>
+									</div>
+									<div class="col-md-6 mt-3">
+										<div class="input-group">
+											<span class="input-group-text">Choice D</span>
+											<textarea class="form-control" name="mcq[choice]" aria-label="With textarea" required></textarea>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card-footer">
+							<div class="input-group mb-3 mt-4 mr-4 ml-4">
+								<div class="input-group-prepend">
+									<label class="input-group-text">Answer : </label>
+								</div> 
+								<select name="mcq[answer]" class="custom-select" id="addons" required>                   
+									<option selected value="1" >1</option>
+									<option selected value="2" >2</option>
+									<option selected value="3" >3</option>
+									<option selected value="4" >4</option>
+								</select>
+							</div>
+							<button class="btn btn-primary btn-lg btn-block">Add this mcq</button>
+						</div>
+					</div>
+				</form>
+			  </div>
 			<a href="/newsfeed" >Back</a>
 		</div>	
 	</div>

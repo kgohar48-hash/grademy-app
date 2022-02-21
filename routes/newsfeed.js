@@ -17,7 +17,6 @@ var imageFilter = function (req, file, cb) {
     if (!file.originalname.match(/\.(jpg|svg|jpeg|png|gif)$/i)) {
         return cb(new Error('Only image files are allowed!'), false);
 	}
-	console.log("ho")
     cb(null, true);
 };
 var upload = multer({ storage: storage, fileFilter: imageFilter})
@@ -79,16 +78,13 @@ router.get("/:id" , middelware.isLoggedIn, function(req,res){
 						user : foundUser
 					}
 					foundAcademy.cummunityposts.reverse()
-					res.render("posts/newsfeed" , {posts:foundAcademy.cummunityposts , user : foundUser })
+					res.render("posts/newsfeed" , {posts:foundAcademy.cummunityposts , user : foundUser , id : foundAcademy._id })
 				}
 			})
         }
     })
 })
-
 router.post("/", middelware.isLoggedIn, upload.single('image'), function(req, res) {
-	console.log(req.body)
-	console.log("file : ",req.file)
 	if(req.file){
 		cloudinary.uploader.upload(req.file.path, function(result) {
 			// add cloudinary url for the image to the campground object under image property
@@ -116,7 +112,6 @@ router.post("/", middelware.isLoggedIn, upload.single('image'), function(req, re
 			});
 		});
 	}else{
-		console.log("no image")
 		req.body.post.author = {
 			id: req.user._id,
 			username: req.user.username
@@ -177,7 +172,6 @@ router.post("/:id", middelware.isLoggedIn, upload.single('image'), function(req,
 					});
 				});
 			}else{
-				console.log("no image")
 				req.body.post.author = {
 					id: req.user._id,
 					username: req.user.username
@@ -257,7 +251,6 @@ router.get("/:id" , function(req,res){
 // a single user can vote 2 times
 // vote
 router.post('/vote/:id', middelware.isLoggedIn,(req,res)=>{
-	console.log("body : ",req.body)
 	Post.findById(req.params.id, (err , foundPost)=>{
 		if(err || !foundPost){
 			console.log(err)
@@ -266,16 +259,12 @@ router.post('/vote/:id', middelware.isLoggedIn,(req,res)=>{
 			for(var i = 0 ; foundPost.votedBy.length >= i ; i++){
 				if(foundPost.votedBy.length == i || hasVoted){
 					// terminate
-					console.log("i :",i)
 					i = foundPost.votedBy.length + 1
 					if(hasVoted){
-						console.log('already voted')
 					}else{
 						if(req.body.vote == 'up'){
 							foundPost.votes ++ ;
-							console.log("up")
 						}else{
-							console.log('down')
 							foundPost.votes -- ;
 						}
 						foundPost.votedBy.push({
@@ -295,7 +284,6 @@ router.post('/vote/:id', middelware.isLoggedIn,(req,res)=>{
 })
 // vote delete
 router.post('/unvote/:id', middelware.isLoggedIn,(req,res)=>{
-	console.log("body unvote: ",req.body)
 	Post.findById(req.params.id, (err , foundPost)=>{
 		if(err || !foundPost){
 			console.log(err)
@@ -305,14 +293,11 @@ router.post('/unvote/:id', middelware.isLoggedIn,(req,res)=>{
 				username : req.user.username
 			});
 			if (index > -1) {
-				console.log(foundPost.votedBy[index])
 				foundPost.votedBy.splice(index, 1);
 			}
 			if(req.body.vote == 'up'){
 				foundPost.votes -- ;
-				console.log("up")
 			}else{
-				console.log('down')
 				foundPost.votes ++ ;
 			}
 			foundPost.save()

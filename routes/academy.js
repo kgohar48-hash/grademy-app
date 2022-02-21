@@ -6,10 +6,11 @@ const express			= require("express"),
 	  User				= require("../models/user"),
 	  Mcq			 	= require("../models/mcq"),
       NewCustomQuiz		= require("../models/newCustomQuiz"),
-      Academy		= require("../models/academy"),
-      Review		= require("../models/review"),
+      Academy		    = require("../models/academy"),
+      Review		    = require("../models/review"),
       Quizcategory		= require("../models/quizcategory"),
-      middelware 		 = require("../middelware");
+      Transaction       = require("../models/transaction"),
+      middelware 		= require("../middelware");
 
       var multer = require('multer');
 
@@ -29,6 +30,7 @@ var upload = multer({ storage: storage, fileFilter: imageFilter})
 
 var cloudinary = require('cloudinary');
 const middelwareObj = require("../middelware");
+const academy = require("../models/academy");
 cloudinary.config({ 
   cloud_name: 'grademy', 
   api_key: '311168857733876', 
@@ -44,7 +46,6 @@ router.get("/academy",(req,res)=>{
             for(var i =0 ; foundAcademies.length >= i ; i++){
                 if(foundAcademies.length == i){
                     // terminate
-                    dataToBePassed = foundAcademies;
                     res.render("academy/index" , {academies : foundAcademies , joinedStatus : joinedStatus})
                 }else{
                     if(req.user){
@@ -82,7 +83,6 @@ router.post("/academy/new",middelware.isLoggedIn, upload.single('image'),functio
                 if(err){
                     console.log(err)
                 }else{
-                    console.log("academy made")
                     res.redirect("/academy")
                 }
             })
@@ -103,17 +103,6 @@ router.get("/academy/:id",(req,res)=>{
         if (err || !foundAcademy) {
             console.log(err);
         } else {
-            if(req.user != null){
-                dataToBePassed = {
-                    academy : foundAcademy,
-                    user : req.user
-                }
-            }else{
-                dataToBePassed = {
-                    academy : foundAcademy,
-                    user : null
-                }
-            }
             res.render("academy/academyPortfolio", { academy: foundAcademy });
         }
     })
@@ -141,7 +130,6 @@ router.post("/academy/:id/edit",middelwareObj.checkAcademyOwnership, upload.sing
                 if(err){
                     console.log(err)
                 }else{
-                    console.log("academy UPDATED")
                     res.redirect("/academy")
                 }
             })
@@ -177,7 +165,6 @@ router.post("/academy/:id/review",middelware.isLoggedIn,(req,res)=>{
 })
 // testing has to be done
 router.post("/academy/join",middelware.isLoggedIn,(req,res)=>{
-    console.log("join")
     User.findById(req.user._id,(err,foundUser)=>{
         if(err || !foundUser){
             console.log(err)
@@ -190,7 +177,6 @@ router.post("/academy/join",middelware.isLoggedIn,(req,res)=>{
                     foundAcademy.students.push(foundUser._id)
                     foundAcademy.save()
                     foundUser.save()
-                    console.log("academy joined")
                     res.redirect("/academy");
                 }
             })
@@ -199,14 +185,12 @@ router.post("/academy/join",middelware.isLoggedIn,(req,res)=>{
 })
 // testing has to be done
 router.post("/academy/leave",middelware.isLoggedIn,async (req,res)=>{
-    console.log("leave")
     await User.findById(req.user._id, async (err,foundUser)=>{
         if(err || !foundUser){
             console.log(err)
         }else{
             var userCounter = foundUser.myAcademies.length 
             for(var i = 0 ; userCounter>= i ; i++){
-                console.log("i : ",i)
                 if(userCounter == i){
                     // terminate
                     await Academy.findById(req.body.academyId , (err , foundAcademy)=>{
@@ -215,18 +199,14 @@ router.post("/academy/leave",middelware.isLoggedIn,async (req,res)=>{
                         }else{
                             var academyCounter = foundAcademy.students.length
                             for(var j = 0 ; academyCounter >= j ; j++){
-                                console.log("j : ",j)
                                 if(academyCounter == j){
                                     foundAcademy.save()
                                     foundUser.save()
-                                    console.log("academy leaved")
                                     res.redirect("/academy");
                                 }else{
                                     if(toString(foundUser._id)  == toString(foundAcademy.students[j])){
-                                        console.log("user found and leaving")
                                         foundAcademy.students.splice(j, 1);
                                         j = academyCounter - 1
-                                        console.log("done from academy side")
                                     }
                                 }
                             }
@@ -234,10 +214,8 @@ router.post("/academy/leave",middelware.isLoggedIn,async (req,res)=>{
                     })
                 }else{
                     if(toString(foundUser.myAcademies[i]) == toString(req.body.academyId)){
-                        console.log("academy found and leaving")
                         foundUser.myAcademies.splice(i, 1);
                         i = userCounter - 1
-                        console.log("done from user side")
                     }
                 }
             }
@@ -264,6 +242,8 @@ router.post("/academy/:id/section",middelwareObj.checkAcademyOwnership,async (re
                 }else{
                     foundAcademy.quizcategories.push(quizCategoryMade)
                     foundAcademy.save()
+                    quizCategoryMade.academy = foundAcademy._id
+                    quizCategoryMade.save()
                     res.redirect("/academy/"+foundAcademy._id)
                 }
             })
@@ -271,7 +251,8 @@ router.post("/academy/:id/section",middelwareObj.checkAcademyOwnership,async (re
     })
 })
 // academy quizzes
-router.get("/academy/section/:id",middelware.isLoggedIn,async (req,res)=>{
+router.get("/academy/section/:id/:section",middelware.isLoggedIn,async (req,res)=>{
+    // fix it here and in the quiz redirect as well
     req.session.section = req.originalUrl
     Academy.findById(req.params.id).populate({
         path : 'quizcategories',
@@ -284,11 +265,7 @@ router.get("/academy/section/:id",middelware.isLoggedIn,async (req,res)=>{
         if (err || !foundAcademy) {
             console.log(err);
         } else {
-            dataToBePassed = {
-                academy : foundAcademy,
-                user : req.user
-            }
-            res.render("academy/academyquizzes", { academy: foundAcademy });
+            res.render("academy/academyquizzes", { academy: foundAcademy, section : req.params.section });
         }
     })
 })
@@ -331,9 +308,6 @@ router.get("/academy/feedback/:id",middelware.isLoggedIn , (req,res)=>{
 })
 router.post("/academy/feedback/:id",middelware.isLoggedIn , (req,res)=>{
     // check if that students has already given a feedback
-    console.log("id : ",req.params.id)
-    console.log("body : ",req.body)
-    
     var feedbackGiven = false ;
     Academy.findById(req.params.id , (err , foundAcademy)=>{
         if(err || !foundAcademy){
@@ -357,15 +331,25 @@ router.post("/academy/feedback/:id",middelware.isLoggedIn , (req,res)=>{
                         foundAcademy.feedback.lecturesQuality.push(Number(req.body[4]))
                         foundAcademy.feedback.studentSatisfaction.push(Number(req.body[5]))
                         foundAcademy.save()
-                        console.log("done feedback")
                         return
                     }
                 }else{
                     if(foundAcademy.feedback.givenBy[i].id == req.user._id){
                         feedbackGiven = true
-                        console.log("already given feedback")
                     }
                 }
+            }
+        }
+    })
+})
+// academy analytics render
+router.get("/academy/analytics/stats/:id",(req,res)=>{
+    Academy.findById(req.params.id , (err,foundAcademy)=>{
+        if(err || !foundAcademy){
+            console.log(err)
+        }else{
+            if(req.user.username == foundAcademy.owner.username || req.user.isAdmin){
+                res.render("academy/analytics",{id : req.params.id})
             }
         }
     })
@@ -376,7 +360,6 @@ router.get("/academy/switch/toteacher",middelware.isLoggedIn,(req,res)=>{
         if(err || !foundUser){
             console.log(err)
         }else{
-            console.log("no problem till here")
 			req.flash("success" , foundUser.name +" you have switched to teaching account" )
             res.redirect("/academy")
         }
@@ -384,9 +367,87 @@ router.get("/academy/switch/toteacher",middelware.isLoggedIn,(req,res)=>{
 })
 // dummy route to redirect user after submitting feedbakc
 router.post("/academy/dummy/:id",middelware.isLoggedIn,(req,res)=>{
-    console.log("dummy route hit")
     dataToBePassed = req.body
     res.redirect("/academy/"+req.params.id)
 })
-
+// all academies data api
+router.get("/academies/api",(req,res)=>{
+    Academy.find({}).populate("reviews").exec((err , foundAcademies)=>{
+        if(err){
+            console.log(err)
+        }else{
+            res.json(foundAcademies)
+        }
+    })
+})
+// specific academy data api
+router.get("/academy/api/:id",(req,res)=>{
+    Academy.findById(req.params.id).populate("reviews").populate({
+        path : 'quizcategories',
+        model : 'Quizcategory',
+        populate : {
+            path : 'quizzes',
+            model : 'Newcustomquiz'
+        }
+    }).exec((err, foundAcademy) => {
+        if (err || !foundAcademy) {
+            console.log(err);
+        } else {
+            if(req.user != null){
+                res.json({
+                    academy : foundAcademy,
+                    user : req.user
+                })
+            }else{
+                res.json({
+                    academy : foundAcademy,
+                    user : null
+                })
+            }
+        }
+    })
+})
+// academy analytics api
+router.get("/academy/analytics/:id",(req,res)=>{
+    Academy.findById(req.params.id).populate({
+        path : 'quizcategories',
+        model : 'Quizcategory',
+        populate : {
+            path : 'quizzes',
+            model : 'Newcustomquiz'
+        }
+    }).exec((err, foundAcademy) => {
+        if (err || !foundAcademy) {
+            console.log(err);
+        } else {
+            if(req.user.username == foundAcademy.owner.username){
+                User.find({ref : foundAcademy.owner.username},(err , foundRefs)=>{
+                    if(err || !foundRefs){
+                        console.log(err)
+                    }else{
+                        User.findById(req.user._id).populate({
+                            path : 'transactions',
+                            model : "Transaction"
+                        }).exec((err , foundOwner)=>{
+                            if(err || !foundOwner){
+                                console.log(err)
+                            }else{
+                                res.json({
+                                    refs : {
+                                        createdAt : foundRefs.map((ref)=>{return ref.createdAt})
+                                    },
+                                    quizCategories : foundAcademy.quizcategories,
+                                    transactions : foundOwner.transactions
+                                })
+                            }
+                        })
+                    }
+                })
+            }else{
+                res.json({})
+            }
+            
+        }
+    })
+})
 module.exports = router ;

@@ -11,15 +11,18 @@
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
     <link rel="icon" type="image/png" sizes="32x32" href="https://res.cloudinary.com/grademy/image/upload/v1592985715/favicon-32x32_gb7rei.png">
 
-    <title>Grademt Quiz || <%=currentUser.category%></title>
+    <title><%=mcq.question%></title>
     <link rel="stylesheet" href="/css/quiz/app.css">
-    <link rel="stylesheet" href="/css/leaderboard.css">
-
     <script src="https://kit.fontawesome.com/05c9781d40.js" crossorigin="anonymous"></script>
+    <meta name="description" content="Click here👆to get an answer to your question ✍️ <%=mcq.question%>">
+    <meta property="og:description" content="Click here👆to get an answer to your question ✍️ <%=mcq.question%>">
+
+    <meta name="keywords" content="<%=mcq.subject%>,<%=mcq.chapter%>,mcq,solution,mdcat,entrytest mcqs">
+    <meta property="og:url" content="https://www.grademy.org/mcq/answer">
+    <link rel="canonical" href="https://www.grademy.org/mcq/answer">
 </head>
 
 <body>
-    <input id="quiz-id" type="hidden" value="<%=id%>">	
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <a class="navbar-brand" href="/">Grademy</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,8 +33,10 @@
                 <% if(!currentUser){ %>
                     <li class="nav-item">
                         <a class="nav-link" href="/academy">Academies</a>
+                        <input type="hidden" id="user" value="guest">
                     </li>
                 <%} else { %>
+                    <input type="hidden" id="user" value="<%=currentUser.username%>">
                     <li class="nav-item">
                         <a class="nav-link" href="/dashboard">Dashboard</a>
                     </li>
@@ -85,36 +90,26 @@
         </div>
         </div>
     </nav>
+    <input type="hidden" id="id" value="<%=mcq._id%>">
     <div class="container" style="color: black;">
-        <div class="quiz_box ">
-            <div class="collapse" id="watch-btn-collapse">
-                <div class="card card-body mt-3 mb-3">
-                    <div id="video-container">
-                        <iframe class="responsive-iframe" id="video" 
-                        src="https://www.youtube.com/embed/" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-                        </iframe> 
-                    </div>
-                </div>
-            </div>
-            <button class="btn btn-primary mb-2" id="watch-btn" type="button" data-toggle="collapse" data-target="#watch-btn-collapse" aria-expanded="false" aria-controls="watch-btn-collapse">
-                Watch test discussion <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-btn" viewBox="0 0 16 16">
-                    <path d="M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"/>
-                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
-                  </svg>
-            </button>
+        <div class="quiz_box">
             <div class="quiz">
                 <header>
-                    <div class="title"></div>
-                    
+                    <div class="title"><%=mcq.subject%> - <%=mcq.chapter%></div>
                     <div class="time_line"></div>
                 </header>
                 <section>
-                    <div class="que_text"></div>
-                    <div class="option_list"></div>
+                    <div class="que_text"><span><b>1</b>.  <%=mcq.question%></span></div>
+                    <div class="option_list">
+                        <div class="option" data-number="1"><span><%=mcq.choice[0]%></span><span class="float_right response"></span></div>
+                        <div class="option" data-number="2"><span><%=mcq.choice[1]%></span><span class="float_right response"></span></div>
+                        <div class="option" data-number="3"><span><%=mcq.choice[2]%></span><span class="float_right response"></span></div>
+                        <div class="option" data-number="4"><span><%=mcq.choice[3]%></span><span class="float_right response"></span></div>
+                    </div>
                 </section>
                 <div class="comment">
                     <a data-toggle="collapse" class="btn btn-primary btn-lg mt-3 mb-3 btn-block" href="#commentarea" role="button" aria-expanded="false" style="color: blanchedalmond;">
-                        Comment <span id="comment-count"></span>
+                        Discussion <span id="comment-count"></span>
                     </a>
                     <div class="collapse" id="commentarea">
                         <div class="card card-body" style="width: auto; height: auto; background: #414345  ;">
@@ -127,95 +122,16 @@
                                 </button>
                             </div>
                             <hr style="border-top: 1px solid rgb(87, 87, 87); margin: 5px 10px;">
-                            <div id="comment-display"></div>
-                        </div>
-                    </div>
-                </div>
-                <footer>
-                    <div class="total_que"></div>
-                    <div>
-                        <button class="finish_btn">Finish</button>
-                        <button class="next_btn">Next</button>
-                    </div>
-                </footer>
-            </div>
-            <div class="toggler">
-                <span>Jump to Question:</span>
-                <div class="t_buttons"></div>
-            </div>
-            <div class="my_stats">
-                    <span class="score-card gradient-deepblue">
-                      <div class="card-body">
-                        <span id="myScore">x</span>
-                        <h2 class="myScore-title">My score</h2>
-                          <div class="progress my-3" style="height:3px;">
-                              <div class="progress-bar" id="biologyScoreProgress"></div>
-                          </div>
-                      </div>
-                    </span>
-                    <span class="score-card gradient-ohhappiness">
-                      <div class="card-body">
-                        <span id="myRank">x</span>
-                        <h2 class="myScore-title">My rank</h2>
-                          <div class="progress my-3" style="height:3px;">
-                              <div class="progress-bar" id="biologyScoreProgress"></div>
-                          </div>
-                      </div>
-                    </span>
-                    <span class="score-card gradient-orange">
-                        <div class="card-body">
-                          <span id="myCorrect">x</span>
-                          <h2 class="myScore-title">Correct</h2>
-                            <div class="progress my-3" style="height:3px;">
-                                <div class="progress-bar" id="biologyScoreProgress"></div>
+                            <div id="comment-display">
                             </div>
                         </div>
-                    </span>
-                    <span class="score-card gradient-ibiza">
-                        <div class="card-body">
-                          <span id="myIncorrect">x</span>
-                          <h2 class="myScore-title">Incorrect</h2>
-                            <div class="progress my-3" style="height:3px;">
-                                <div class="progress-bar" id="biologyScoreProgress"></div>
-                            </div>
-                        </div>
-                    </span>
-                    <span class="score-card gradient-yellow">
-                    <div class="card-body">
-                        <span id="mySkipped">x</span>
-                        <h2 class="myScore-title">Skipped</h2>
-                        <div class="progress my-3" style="height:3px;">
-                            <div class="progress-bar" id="biologyScoreProgress"></div>
-                        </div>
                     </div>
-                    </span>
-                    <span class="score-card gradient-yellow">
-                        <div class="card-body">
-                            <span id="avgScore">x</span>
-                            <h2 class="myScore-title">Avg score</h2>
-                            <div class="progress my-3" style="height:3px;">
-                                <div class="progress-bar" id="biologyScoreProgress"></div>
-                            </div>
-                        </div>
-                    </span>
-            </div>
-            <div class="leaderboard">
-                <div class="card-body">
-                  <div class="lboard_wrap">
-                    <div class="lboard_item month" style="display: block;">
-                      <h3 class="mt-3" style="padding-top: 15px; font-size: 2.5em;">Leaderboard</h3>
-                      <div id="board">
-
-                      </div>
-                    </div>
-                  </div>
                 </div>
             </div>
         </div>
-        
     </div>
     
-    <script src="/static/quiz/view.js"></script>
+    <script src="/static/quiz/mcq.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" ></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>

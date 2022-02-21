@@ -9,6 +9,10 @@ var quizcategorySchema = new mongoose.Schema({
         } ,
         username : String
     },
+    academy : {
+        type : mongoose.Schema.Types.ObjectId ,
+        ref : "Academy"
+    },
     title : {type : String , default : "Quizzes"},
     description :  {type : String , default : "Quizzes"},
     quizzes : [

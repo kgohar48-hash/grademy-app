@@ -10,6 +10,29 @@ const express		 = require("express"),
 	var quizcategory  = require("../models/quizcategory")
 var Useractivity	=	require("../models/useractivity");
 const mcq = require("../models/mcq");
+
+// const qrcode = require('qrcode-terminal');
+
+// const { Client } = require('whatsapp-web.js');
+// const client = new Client();
+
+// client.on('qr', qr => {
+//     qrcode.generate(qr, {small: true});
+// });
+
+// client.on('ready', () => {
+//     console.log('Client is ready!');
+// });
+
+// client.on('message', message => {
+// 	if(message.body === '!ping') {
+// 		message.reply('pong');
+// 	}
+// });
+
+// client.initialize();
+
+
 // route to convert pool to mcqs DB 
 // router.get('/pooltomcqs/:subject',async function (req,res) {
 // 	var mcqsToDB = []
@@ -330,6 +353,30 @@ router.get("/mcqs/most/wrong",(req,res)=>{
 	// 		}
 	// 	}
 	// })
+})
+
+// count invites
+
+router.get("/users/invites",(req,res)=>{
+	User.find({},(err,allUsers)=>{
+		if(err){
+			res.send(err)
+		}else{
+			var invites = {}
+			for(var i = 0 ; i <= allUsers.length ; i++){
+				if(i == allUsers.length){
+					res.send(invites)
+				}else{
+					console.log(i)
+					if (typeof invites[allUsers[i].ref] == 'undefined') {
+						invites[allUsers[i].ref] = 1
+					}else{
+						invites[allUsers[i].ref] = invites[allUsers[i].ref] + 1
+					}
+				}
+			}
+		}
+	})
 })
 
 function add(accumulator, a) {

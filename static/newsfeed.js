@@ -45,7 +45,6 @@ var data ={}
 function init(){
     thumbsup.forEach(up => {
         up.addEventListener('click',e=>{
-            console.log("up : ",e.target.dataset["number"])
             var postId = e.target.dataset["number"]
             if(e.target.classList.contains("far")){
                 voteNumber.innerText++
@@ -80,7 +79,6 @@ function init(){
     
     thumbsdown.forEach(down => {
         down.addEventListener('click',e=>{
-            console.log("down : ",e.target.dataset["number"])
             var postId = e.target.dataset["number"]
             if(e.target.classList.contains("far")){
                 voteNumber.innerText--
@@ -120,12 +118,9 @@ function init(){
     
     }else{
         // academy
-        console.log("oy :",lastPoint)
-    
-        client.get('https://www.grademy.org/data',async function(res) {
+        client.get('https://www.grademy.org/academy/api/'+document.getElementById('id').value,async function(res) {
             data = JSON.parse(res)
-            console.log(data)
-            newsfeedTitle.innerText =  data.academy.academyName +" Cummunity !"
+            newsfeedTitle.innerText =  data.academy.academyName +" Community !"
             newsfeedTagline.innerText = data.academy.punchLine
             postForm.action = "/newsfeed/"+data.academy._id
         });
@@ -136,10 +131,9 @@ function init(){
         choice.addEventListener("click",e =>{
             var id = e.target.dataset["id"]
             var choiceSelected = e.target.dataset["number"]
-            client.get('https://www.grademy.org/mcq/send/'+id,async function(res) {
+            client.get('https://www.grademy.org/mcq/send/'+id+'/'+choiceSelected,async function(res) {
             mcqfetched = JSON.parse(res)
             totalAttempts = mcqfetched.userResponse.reduce((a, b) => a + b, 0)
-            console.log(mcqfetched)
             var choiceIndex = 0
             choices.forEach(option=>{
                 if(option.dataset["id"] == id){

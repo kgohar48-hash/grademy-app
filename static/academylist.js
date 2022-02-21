@@ -1,5 +1,5 @@
 
-fetch('https://www.grademy.org/data')
+fetch('https://www.grademy.org/academies/api')
 .then(response => response.json())
 .then(data => {
     var i = 0;
