@@ -145,13 +145,16 @@
                 </div>
             </div>
             <% if(!currentUser){ %>
-            <%if(currentUser.username == academy.owner.username || currentUser.isAdmin){%>
-                <div class="card mt-3">
-                    <div class="card-header ">
-                        <a href="/academy/analytics/stats/<%=academy._id%>" class="btn btn-lg btn-success btn-block">Academy analytics</a>
+           
+            <%}else{%>
+                <%if(currentUser.username == academy.owner.username || currentUser.isAdmin){%>
+                    <div class="card mt-3">
+                        <div class="card-header ">
+                            <a href="/academy/analytics/stats/<%=academy._id%>" class="btn btn-lg btn-success btn-block">Academy analytics</a>
+                        </div>
                     </div>
-                </div>
-            <%} }%>
+                <%}%>
+            <%}%>
             <div class="card mt-3">
                 <div class="card-header ">
                     <a class="btn btn-lg btn-success btn-block">Quizzes Section</a>
