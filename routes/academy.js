@@ -242,9 +242,9 @@ router.post("/academy/:id/section",middelwareObj.checkAcademyOwnership,async (re
                 }else{
                     foundAcademy.quizcategories.push(quizCategoryMade)
                     foundAcademy.save()
-                    quizCategoryMade.academy = foundAcademy._id
+                    quizCategoryMade.academy = foundAcademy
                     quizCategoryMade.save()
-                    res.redirect("/academy/"+foundAcademy._id)
+                    res.redirect("/academy/section/"+foundAcademy._id+"/"+quizCategoryMade._id)
                 }
             })
         }
@@ -357,11 +357,18 @@ router.get("/academy/analytics/stats/:id",(req,res)=>{
 })
 // switch student account into teaching account
 router.get("/academy/switch/toteacher",middelware.isLoggedIn,(req,res)=>{
-    User.findByIdAndUpdate(req.user._id, {isAcademy : true},(err, foundUser)=>{
+    User.findById(req.user._id,(err, foundUser)=>{
         if(err || !foundUser){
             console.log(err)
         }else{
-			req.flash("success" , foundUser.name +" you have switched to teaching account" )
+            if(foundUser.isAcademy){
+                foundUser.isAcademy = false
+                req.flash("success" , foundUser.name +" you have switched to student account" )
+            }else{
+                foundUser.isAcademy = true
+                req.flash("success" , foundUser.name +" you have switched to teaching account" )
+            }
+            foundUser.save()
             res.redirect("/academy")
         }
     })
