@@ -172,6 +172,7 @@ router.post("/newmcqs/test",middelware.isLoggedIn ,async function(req,res){
 // post route to add a new quiz from the mcqs DB FOR STUDENTS 
 router.post("/dashboard/newcustomquiz" ,middelware.isLoggedIn ,async function(req,res){
 	var mcqsToBeAdded = []
+	console.log("body : ",req.body)
 	if(Array.isArray(req.body.subjects)){
 		for(var i = 0; i<=req.body.subjects.length ; i++){
 			if( i == req.body.subjects.length ){
@@ -190,7 +191,7 @@ router.post("/dashboard/newcustomquiz" ,middelware.isLoggedIn ,async function(re
 			var correctMCQs = []
 			Mcq.find({subject, chapter } ,async (err,foundMcqs)=>{
 				if(err){
-					console.log(err)
+					console.log("here 3 :",err)
 				}else{
 					if(numberOfMcqs > foundMcqs.length){
 						numberOfMcqs = foundMcqs.length
@@ -238,7 +239,7 @@ router.post("/dashboard/newcustomquiz" ,middelware.isLoggedIn ,async function(re
 			madeBy : req.user.username
 		},(err,quiz)=>{
 			if(err){
-				console.log(err)
+				console.log("here 1 :",err)
 			}else{
 				if(typeof(req.body.sectionId) != 'undefined'){
 					quizcategory.findById(req.body.sectionId, (err, foundCategory)=>{
@@ -247,13 +248,13 @@ router.post("/dashboard/newcustomquiz" ,middelware.isLoggedIn ,async function(re
 						}else{
 							foundCategory.quizzes.push(quiz)
 							foundCategory.save()
-							res.redirect("/academy/section/"+foundCategory.owner.id+"/"+foundCategory._id)
+							res.redirect("/dashboard/quiz/redirect/"+quiz._id)
 						}
 					})
 				}else{
 					User.findById(req.user._id,(err,foundUser)=>{
 						if(err || !foundUser){
-							console.log(err)
+							console.log("here 2 :",err)
 						}else{
 							foundUser.myQuizzes.push(quiz)
 							foundUser.save()
