@@ -235,14 +235,13 @@ router.post("/academy/:id/section",middelwareObj.checkAcademyOwnership,async (re
         }else{
             quizCategoryMade.owner.username = req.user.username
             quizCategoryMade.owner.id = req.user
-            quizCategoryMade.save()
             Academy.findById(req.params.id,(err,foundAcademy)=>{
                 if(err || !foundAcademy){
                     console.log(err)
                 }else{
                     foundAcademy.quizcategories.push(quizCategoryMade)
-                    foundAcademy.save()
                     quizCategoryMade.academy = foundAcademy
+                    foundAcademy.save()
                     quizCategoryMade.save()
                     res.redirect("/academy/section/"+foundAcademy._id+"/"+quizCategoryMade._id)
                 }
