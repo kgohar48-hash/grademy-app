@@ -291,11 +291,12 @@ router.post("/academy/quiz/:id/edit",middelware.checkQuizOwnership,(req,res)=>{
             console.log(err)
         }else{
             if(req.user.username == foundQuiz.madeBy ){
-                foundQuiz.description = req.body.quiz.description
-                foundQuiz.lectureVideoURL = req.body.quiz.lectureVideoURL
-                foundQuiz.discussionVideoURL = req.body.quiz.discussionVideoURL
+                foundQuiz.description           = req.body.quiz.description
+                foundQuiz.lectureVideoURL       = req.body.quiz.lectureVideoURL
+                foundQuiz.discussionVideoURL    = req.body.quiz.discussionVideoURL
+                foundQuiz.shareWith             =req.body.quiz.shareWith
                 foundQuiz.save()
-                res.redirect("/academy")
+                res.redirect("/dashboard/quiz/redirect/"+foundQuiz._id)
             }else{
                 res.send("you are not authorized")
             }

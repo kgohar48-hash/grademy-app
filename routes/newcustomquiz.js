@@ -40,6 +40,8 @@ router.get("/customquiz/:quizid/remove/:mcqid",(req,res)=>{
 	newCustomQuiz.findById(req.params.quizid , (err , foundQuiz)=>{
 		if(err || !foundQuiz){
 			console.log(err)
+			req.flash("error" , "Some unkown error happened, please report this bug !!!")
+			res.redirect("/dashboard")
 		}else{
 			var mcqIndex = -1
 			for(var i = 0 ; i <= foundQuiz.mcqs.length ; i++){
@@ -82,10 +84,14 @@ router.post("/customquiz/:quizid/post/mcq",(req,res)=>{
 	Mcq.create(mcqCreate,(err, mcqMade)=>{
         if(err){
             console.log(err)
+			req.flash("error" , "Some unkown error happened, please report this bug !!!")
+			res.redirect("/dashboard")
         }else{
             newCustomQuiz.findById(req.params.quizid,(err , foundQuiz)=>{
 				if(err || !foundQuiz){
 					console.log(err)
+					req.flash("error" , "Some unkown error happened, please report this bug !!!")
+					res.redirect("/dashboard")
 				}else{
 					foundQuiz.mcqs.push(mcqMade)
 					for(var  j = 0 ; j <= foundQuiz.solvedBy.length ; j++){
@@ -267,6 +273,8 @@ router.get("/dashboard/newcustomquiz/:id" ,middelware.isLoggedIn , function(req,
 	}).exec((err,foundUser)=>{
 		if(err || !foundUser){
 			console.log(err)
+			req.flash("error" , "Some unkown error happened, please report this bug !!!")
+			res.redirect("/dashboard")
 		}else{
 			// global variable
 			quizzesToBeSend = foundUser.myQuizzes
@@ -288,6 +296,8 @@ router.post("/newcustomquiz",middelware.isLoggedIn , async function(req,res){
 	await newCustomQuiz.findById(req.body.quizId , async function(err,foundQuiz){
 		if(err){
 			console.log(err)
+			req.flash("error" , "Some unkown error happened, please report this bug !!!")
+			res.redirect("/dashboard")
 		}
 		else{
 			//saving this info into the customquiz.solvedBy & mcqs DB
@@ -442,33 +452,55 @@ router.post("/newcustomquiz",middelware.isLoggedIn , async function(req,res){
 })
 //extracting questions out of the custom quiz (start now button) & passing it to data API
 router.get("/dashboard/newcustomquiz/view/start/:id",middelware.isLoggedIn , function(req,res){
-	res.render("quiz/attempt",{id : req.params.id})
-})
-router.get("/dashboard/newcustomquiz/start/:id",middelware.isLoggedIn , function(req,res){
-	newCustomQuiz.findById(req.params.id).populate("mcqs").exec(function(err , foundQuiz){
-		if(err){
+	newCustomQuiz.findById(req.params.id , (err , foundQuiz)=>{
+		if(err || !foundQuiz){
 			console.log(err)
-		}
-		else{
-			dataToBePassed = {
-				foundQuiz : foundQuiz ,
-				currentuser : req.user
+			req.flash("error" , "Some unkown error happened, please report this bug !!!")
+			res.redirect("/dashboard")
+		}else{
+			if(req.user.isPaid || req.user.isPaidPlus || foundQuiz.shareWith == "free" || req.user.score.attempted < 200){
+				res.render("quiz/attempt",{id : req.params.id})
+			}else{
+				req.flash("error" , "This feature is only for paid users !!!")
+				res.redirect("/user/plan")
 			}
-			res.render("dashboard/quiz/quiz")
 		}
 	})
+})
+router.get("/dashboard/newcustomquiz/start/:id",middelware.isLoggedIn , function(req,res){
+	if(req.user.isPaid){
+		newCustomQuiz.findById(req.params.id).populate("mcqs").exec(function(err , foundQuiz){
+			if(err){
+				console.log(err)
+				req.flash("error" , "Some unkown error happened, please report this bug !!!")
+				res.redirect("/dashboard")
+			}
+			else{
+				dataToBePassed = {
+					foundQuiz : foundQuiz ,
+					currentuser : req.user
+				}
+				res.render("dashboard/quiz/quiz")
+			}
+		})
+	}else{
+		req.flash("error" , "This feature is only for paid users !!!")
+		res.redirect("/user/plan")
+	}
 })
 //quiz view page
 router.get("/dashboard/newcustomquiz/view/view/:id",middelware.isLoggedIn , function(req,res){
 	newCustomQuiz.findById(req.params.id,(err,foundQuiz)=>{
 		if(err || !foundQuiz){
 			console.log(err)
+			req.flash("error" , "Some unkown error happened, please report this bug !!!")
+			res.redirect("/dashboard")
 		}else{
 			if(foundQuiz.shareWith == "competitive"){
 				req.flash("error" , "This is a competitive test, you can review it when the competition in over !!!")
 				res.redirect("/dashboard/quiz/redirect/"+foundQuiz._id)
 			}else{
-				if(req.user.isPaid || req.user.isPaidPlus || req.user.score.attempted < 100){
+				if(req.user.isPaid || req.user.isPaidPlus || foundQuiz.shareWith == "free" || req.user.score.attempted < 100){
 					activitylog ("quizView", {
 						id : req.user._id,
 						username : req.user.username,
@@ -494,11 +526,13 @@ router.get("/dashboard/quiz/redirect/:id",(req,res)=>{
 	newCustomQuiz.findById(req.params.id,(err,foundQuiz)=>{
 		if(err || !foundQuiz){
 			console.log(err)
+			req.flash("error" , "Some unkown error happened, please report this bug !!!")
 			res.redirect("/dashboard")
 		}else{
 			Quizcategory.find({},(err,allQuizCategories)=>{
 				if(err || !allQuizCategories){
 					console.log(err)
+					req.flash("error" , "Some unkown error happened, please report this bug !!!")
 					res.redirect("/dashboard")
 				}else{
 					for(var i =0 ; i <= allQuizCategories.length ; i++){
@@ -536,11 +570,11 @@ router.get("/quiz/api/:id",middelware.isLoggedIn ,(req,res)=>{
 	}).exec(async(err , foundQuiz)=>{
 		if(err){
 			console.log(err)
-			req.flash("error" , "error occured : kindly report this bug")
+			req.flash("error" , "Some unkown error happened, please report this bug !!!")
 			res.redirect("/dashboard")
 		}
 		else{
-			if(req.user.ref == "kgohar48" && req.user.myQuizzes.length == 0 && foundQuiz.madeBy != req.user.username){
+			if(req.user.ref == "kgohar48" && req.user.myQuizzes.length == 0 && foundQuiz.madeBy != req.user.username && foundQuiz.shareWith != "free"){
 				// making ref the owner of the very first quiz a user attempts
 				await User.findById(req.user._id,(err,foundUser)=>{
 					if(err || !foundUser){
