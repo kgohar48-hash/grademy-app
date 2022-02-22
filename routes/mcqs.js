@@ -319,6 +319,8 @@ function createComment(newCommnet , id){
 				else{
 					foundMcq.comments.push(comment)
 					foundMcq.save()
+                    comment.mcq = foundMcq
+                    comment.save()
 				}
 			})
         }

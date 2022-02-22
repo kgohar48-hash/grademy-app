@@ -8,6 +8,7 @@ var Tid			= require("../models/tid")
 var Transaction	= require("../models/transaction")
 var Promo		= require("../models/promo");
 var Useractivity = require("../models/useractivity")
+var Plan		= require("../models/plan")
 
 const { model } = require("mongoose");
 //plan
@@ -108,36 +109,61 @@ router.get("/payment/paid/:plan/:duration",middelware.isLoggedIn ,async(req,res)
 					sufficientBalance = await balanceCheck(totalPrice,false,req)
 				}
 				if(sufficientBalance.payable){
-					User.findById(req.user._id ,async (err , foundUser)=>{
-						if(err || !foundUser){
+					Plan.create({
+						plan : plan,
+						duration : duration,
+						amountPaid : totalPrice
+					},(err , planCreated)=>{
+						if(err || !planCreated){
 							console.log(err)
-						}else{
-							await trasanctionCreate(totalPrice,plan+" plan purchased",true,false,Math.floor((Math.random() * 10000000000) + 1),"grademy",req.user.username)
-							if(plan == "premium"){
-								foundUser.isPaid = true
-							}else{
-								foundUser.isPaidPlus = true
-							}
-							foundUser.save()
-							// commission to the person who refered his user
-							if(sufficientBalance.amountOut == 0){
-								await User.findOne({username : foundUser.ref},async(err , foundRef)=>{
-									if(err || !foundRef){
-										if(err){
-											console.log(err)
-										}
-										if(!foundRef){
-											await trasanctionCreate((totalPrice*0.2).toFixed(0),`${foundUser.ref} invitee ${req.user.username} purchased ${req.params.plan} plan`,true,false,Math.floor((Math.random() * 10000000000) + 1),"gohar","grademy")
-										}
-									}else{
-										await trasanctionCreate((totalPrice*0.2).toFixed(0),`Your invitee ${req.user.username} purchased ${req.params.plan} plan`,true,false,Math.floor((Math.random() * 10000000000) + 1),foundRef.username,"grademy")
-									}
-								})
-							}
-							req.flash("success","Thanks for purchaing "+req.params.plan+" plan, best of luck!!!")
+							req.flash("error" , "Some unkown error happened, please report this bug !!!")
 							res.redirect("/dashboard")
+						}else{
+							User.findById(req.user._id ,async (err , foundUser)=>{
+								if(err || !foundUser){
+									console.log(err)
+								}else{
+									await trasanctionCreate(totalPrice,plan+" plan purchased",true,false,Math.floor((Math.random() * 10000000000) + 1),"grademy",req.user.username)
+									planCreated.user.id = foundUser
+									planCreated.user.username = foundUser.username
+									if(plan == "premium"){
+										foundUser.isPaid = true
+									}else{
+										foundUser.isPaidPlus = true
+									}
+									foundUser.save()
+									// commission to the person who refered his user
+									await User.findOne({username : foundUser.ref},async(err , foundRef)=>{
+										if(err || !foundRef){
+											if(err){
+												console.log(err)
+											}
+											if(!foundRef){
+												planCreated.refTransaction = await trasanctionCreate((totalPrice*0.2).toFixed(0),`${foundUser.ref} invitee ${req.user.username} purchased ${req.params.plan} plan`,true,false,Math.floor((Math.random() * 10000000000) + 1),"gohar","grademy")
+												planCreated.save()
+											}
+										}else{
+											if(sufficientBalance.amountOut == 0){
+												planCreated.refTransaction = await trasanctionCreate((totalPrice*0.2).toFixed(0),`Your invitee ${req.user.username} purchased ${req.params.plan} plan`,true,false,Math.floor((Math.random() * 10000000000) + 1),foundRef.username,"grademy")
+												planCreated.save()
+											}else{
+												if(foundRef.isAcademy || foundRef.isAdmin){
+													planCreated.refTransaction = await trasanctionCreate((totalPrice*0.2).toFixed(0),`Your invitee ${req.user.username} purchased ${req.params.plan} plan`,true,false,Math.floor((Math.random() * 10000000000) + 1),foundRef.username,"grademy")
+													planCreated.save()
+												}else{
+													planCreated.refTransaction = await trasanctionCreate((totalPrice*0.2).toFixed(0),`${foundUser.ref} invitee ${req.user.username} purchased ${req.params.plan} plan`,true,false,Math.floor((Math.random() * 10000000000) + 1),"gohar","grademy")
+													planCreated.save()
+												}
+											}
+										}
+									})
+									req.flash("success","Thanks for purchaing "+req.params.plan+" plan, best of luck!!!")
+									res.redirect("/dashboard")
+								}
+							})
 						}
 					})
+					
 				}else{
 					req.flash("error","You have insufficient balance, please recharge your account")
 					res.redirect("/user/plan")
@@ -153,7 +179,8 @@ router.get("/payment/paid/:plan/:duration",middelware.isLoggedIn ,async(req,res)
 	}
 })
 // route to add TID by admin
-router.get("/payment/tid/add",middelware.isLoggedIn, middelware.isAdmin, (req,res)=>{
+router.post("/payment/tid/add",middelware.isLoggedIn, middelware.isAdmin, (req,res)=>{
+	console.log(req.body)
 	Transaction.findOne({TID : req.body.tid},(err, foundTransaction)=>{
 		if(err || !foundTransaction){
 			if(err){
@@ -339,7 +366,7 @@ async function trasanctionCreate(amount,statement,varified,isPromo,TID,to,from) 
 								foundTo.transactions.push(transactionCreated)
 								foundFrom.save()
 								foundTo.save()
-								resolve()
+								resolve(transactionCreated)
 							}
 						})
 					}
