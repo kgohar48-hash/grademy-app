@@ -18,7 +18,6 @@ router.get("/customquiz/newquiz",middelware.isLoggedIn ,function(req,res){
 			req.flash("error" , "This feature is only for paid users !!!")
 			res.redirect("/user/plan")
 		}
-		
 	}else{
 		// render react form to add new quiz for academy and save mcqs to DB
 		res.render('react/mcqsForm/index')
@@ -28,6 +27,8 @@ router.get("/customquiz/newquiz",middelware.isLoggedIn ,function(req,res){
 router.get("/customquiz/new/section/:id",middelware.isLoggedIn, (req,res)=>{
 	if(req.user.isAcademy){
 		res.render("dashboard/customquiz/newfromdb", {sectionId : req.params.id})
+	}else{
+		res.send("invalid request")
 	}
 })
 router.get("/academy/quiz/new/:id",(req,res)=>{
@@ -171,99 +172,103 @@ router.post("/newmcqs/test",middelware.isLoggedIn ,async function(req,res){
 })
 // post route to add a new quiz from the mcqs DB FOR STUDENTS 
 router.post("/dashboard/newcustomquiz" ,middelware.isLoggedIn ,async function(req,res){
-	var mcqsToBeAdded = []
-	console.log("body : ",req.body)
-	if(Array.isArray(req.body.subjects)){
-		for(var i = 0; i<=req.body.subjects.length ; i++){
-			if( i == req.body.subjects.length ){
-				makeQuiz(mcqsToBeAdded,req.body)
-			}else{
-				mcqsToBeAdded.push(...await fetchMcqs(req.body.subjects[i],req.body.chapters[i],Number(req.body.numberOfMcqs[i])))
-			}
-		}
-	}else{
-		mcqsToBeAdded = await fetchMcqs(req.body.subjects,req.body.chapters,Number(req.body.numberOfMcqs))
-		makeQuiz(mcqsToBeAdded,req.body)
-	}
-	function fetchMcqs(subject,chapter,numberOfMcqs){
-		return new Promise((resolve, reject) => {
-			var MCQsFromThisChapter = []
-			var correctMCQs = []
-			Mcq.find({subject, chapter } ,async (err,foundMcqs)=>{
-				if(err){
-					console.log("here 3 :",err)
+	if(req.user.isPaid || req.user.isPaidPlus || req.user.score.attempted < 100 || req.user.isAcademy){
+		var mcqsToBeAdded = []
+		console.log("body : ",req.body)
+		if(Array.isArray(req.body.subjects)){
+			for(var i = 0; i<=req.body.subjects.length ; i++){
+				if( i == req.body.subjects.length ){
+					makeQuiz(mcqsToBeAdded,req.body)
 				}else{
-					if(numberOfMcqs > foundMcqs.length){
-						numberOfMcqs = foundMcqs.length
-					}
-					for (var j = 0; foundMcqs.length >= j; j++) {
-						if ( j == foundMcqs.length ) {
-							if(MCQsFromThisChapter.length == numberOfMcqs){
-								resolve(MCQsFromThisChapter) 
-							}else{
-								var diff = numberOfMcqs - MCQsFromThisChapter.length
-								for(var l = 0; l <= diff ; l++){
-									if(l == diff){
-										resolve(MCQsFromThisChapter) 
-									}else{
-										MCQsFromThisChapter.push(correctMCQs[l])
+					mcqsToBeAdded.push(...await fetchMcqs(req.body.subjects[i],req.body.chapters[i],Number(req.body.numberOfMcqs[i])))
+				}
+			}
+		}else{
+			mcqsToBeAdded = await fetchMcqs(req.body.subjects,req.body.chapters,Number(req.body.numberOfMcqs))
+			makeQuiz(mcqsToBeAdded,req.body)
+		}
+		function fetchMcqs(subject,chapter,numberOfMcqs){
+			return new Promise((resolve, reject) => {
+				var MCQsFromThisChapter = []
+				var correctMCQs = []
+				Mcq.find({subject, chapter } ,async (err,foundMcqs)=>{
+					if(err){
+						console.log("here 3 :",err)
+					}else{
+						if(numberOfMcqs > foundMcqs.length){
+							numberOfMcqs = foundMcqs.length
+						}
+						for (var j = 0; foundMcqs.length >= j; j++) {
+							if ( j == foundMcqs.length ) {
+								if(MCQsFromThisChapter.length == numberOfMcqs){
+									resolve(MCQsFromThisChapter) 
+								}else{
+									var diff = numberOfMcqs - MCQsFromThisChapter.length
+									for(var l = 0; l <= diff ; l++){
+										if(l == diff){
+											resolve(MCQsFromThisChapter) 
+										}else{
+											MCQsFromThisChapter.push(correctMCQs[l])
+										}
 									}
 								}
-							}
-						} else {
-							for (var k = 0 ; k <= req.user.correctMCQs.length ; k++){
-								if(k == req.user.correctMCQs.length && MCQsFromThisChapter.length < numberOfMcqs){
-									// terminate
-									MCQsFromThisChapter.push(foundMcqs[j])
-								}else{
-									if(j < foundMcqs.length - 1 && k < req.user.correctMCQs.length){
-										if(req.user.correctMCQs[k].id.toString() == foundMcqs[j]._id.toString()){
-											correctMCQs.push(foundMcqs[j])
-											j++
-											k=0
+							} else {
+								for (var k = 0 ; k <= req.user.correctMCQs.length ; k++){
+									if(k == req.user.correctMCQs.length && MCQsFromThisChapter.length < numberOfMcqs){
+										// terminate
+										MCQsFromThisChapter.push(foundMcqs[j])
+									}else{
+										if(j < foundMcqs.length - 1 && k < req.user.correctMCQs.length){
+											if(req.user.correctMCQs[k].id.toString() == foundMcqs[j]._id.toString()){
+												correctMCQs.push(foundMcqs[j])
+												j++
+												k=0
+											}
 										}
 									}
 								}
 							}
 						}
 					}
+				})
+			})
+		}
+		function makeQuiz(mcqs,body){
+			newCustomQuiz.create({
+				mcqs : mcqs,
+				shareWith : "public",
+				description : body.description,
+				madeBy : req.user.username
+			},(err,quiz)=>{
+				if(err){
+					console.log("here 1 :",err)
+				}else{
+					if(typeof(req.body.sectionId) != 'undefined'){
+						quizcategory.findById(req.body.sectionId, (err, foundCategory)=>{
+							if(err || !foundCategory){
+								console.log("error in finding category",err)
+							}else{
+								foundCategory.quizzes.push(quiz)
+								foundCategory.save()
+								res.redirect("/dashboard/quiz/redirect/"+quiz._id)
+							}
+						})
+					}else{
+						User.findById(req.user._id,(err,foundUser)=>{
+							if(err || !foundUser){
+								console.log("here 2 :",err)
+							}else{
+								foundUser.myQuizzes.push(quiz)
+								foundUser.save()
+								res.redirect("/dashboard/newcustomquiz/"+req.user.username)
+							}
+						})
+					}
 				}
 			})
-		})
-	}
-	function makeQuiz(mcqs,body){
-		newCustomQuiz.create({
-			mcqs : mcqs,
-			shareWith : "public",
-			description : body.description,
-			madeBy : req.user.username
-		},(err,quiz)=>{
-			if(err){
-				console.log("here 1 :",err)
-			}else{
-				if(typeof(req.body.sectionId) != 'undefined'){
-					quizcategory.findById(req.body.sectionId, (err, foundCategory)=>{
-						if(err || !foundCategory){
-							console.log("error in finding category",err)
-						}else{
-							foundCategory.quizzes.push(quiz)
-							foundCategory.save()
-							res.redirect("/dashboard/quiz/redirect/"+quiz._id)
-						}
-					})
-				}else{
-					User.findById(req.user._id,(err,foundUser)=>{
-						if(err || !foundUser){
-							console.log("here 2 :",err)
-						}else{
-							foundUser.myQuizzes.push(quiz)
-							foundUser.save()
-							res.redirect("/dashboard/newcustomquiz/"+req.user.username)
-						}
-					})
-				}
-			}
-		})
+		}
+	}else{
+		res.send("invalid request")
 	}
 })
 //custom quiz view page
@@ -459,7 +464,7 @@ router.get("/dashboard/newcustomquiz/view/start/:id",middelware.isLoggedIn , fun
 			req.flash("error" , "Some unkown error happened, please report this bug !!!")
 			res.redirect("/dashboard")
 		}else{
-			if(req.user.isPaid || req.user.isPaidPlus || foundQuiz.shareWith == "free" || req.user.score.attempted < 200){
+			if(req.user.isPaid || req.user.isPaidPlus || foundQuiz.shareWith != "public" || req.user.score.attempted < 200){
 				res.render("quiz/attempt",{id : req.params.id})
 			}else{
 				req.flash("error" , "This feature is only for paid users !!!")
