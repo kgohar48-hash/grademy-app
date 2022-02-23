@@ -181,11 +181,13 @@ async function checkTransactions() {
 				}else{
 					if(foundTransactions[i].isPromo && foundTransactions[i].varified  && (date.getDate() - new Date(foundTransactions[i].createdAt).getDate()) > 3 ) {
 						console.log("an expired promo found : "+ foundTransactions[i])
-						await Transaction.findByIdAndUpdate(foundTransactions[i]._id , {varified : false}, (err, foundTransaction)=>{
+						await Transaction.findById(foundTransactions[i]._id , (err, foundTransaction)=>{
 							if( err || !foundTransaction){
 								console.log(err)
 							}else{
-
+								foundTransaction.varified = false
+								foundTransaction.statement = foundTransaction.statement.replace('used', 'expired')
+								foundTransaction.save()
 							}
 						})
 					}
