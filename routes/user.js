@@ -465,14 +465,18 @@ router.get("/user/admin/data/api",middelware.isLoggedIn, (req,res)=>{
             if(err || !foundLog){
                 console.log(err)
             }else{
+                console.log("log found")
                 User.find({},(err,allUsers)=>{
                     if(err || !allUsers){
                         console.log(err)
                     }else{
+                        console.log("all users loaded")
                         NewCustomQuiz.find({},(err,allQuizzes)=>{
                             if(err || !allQuizzes){
                                 console.log(err)
                             }else{
+                                console.log("all quizzes loaded")
+
                                 res.json({
                                     useractivity : foundLog,
                                     users : allUsers,

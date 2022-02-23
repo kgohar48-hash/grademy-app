@@ -427,18 +427,21 @@ router.get("/academy/analytics/:id",(req,res)=>{
         if (err || !foundAcademy) {
             console.log(err);
         } else {
-            if(req.user.username == foundAcademy.owner.username){
+            console.log("academy found")
+            if(req.user.username == foundAcademy.owner.username || req.user.isAdmin){
                 User.find({ref : foundAcademy.owner.username},(err , foundRefs)=>{
                     if(err || !foundRefs){
                         console.log(err)
                     }else{
-                        User.findById(req.user._id).populate({
+                        console.log("invitee found")
+                        User.findOne({username : foundAcademy.owner.username}).populate({
                             path : 'transactions',
                             model : "Transaction"
                         }).exec((err , foundOwner)=>{
                             if(err || !foundOwner){
                                 console.log(err)
                             }else{
+                                console.log("transactions found")
                                 res.json({
                                     refs : {
                                         createdAt : foundRefs.map((ref)=>{return ref.createdAt})
