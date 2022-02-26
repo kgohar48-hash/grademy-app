@@ -2,6 +2,7 @@ chapterObj = {}
 fetch('https://www.grademy.org/mcqsattempted/'+document.getElementById("user-id").value)
 .then(response => response.json())
 .then(data => {
+    console.log(data)
     username = data.username
     allmcqs = [...data.incorrect,...data.correct,...data.skipped]
     var commentsDisplay = document.getElementById('comment-display')
@@ -181,23 +182,27 @@ fetch('https://www.grademy.org/mcqsattempted/'+document.getElementById("user-id"
         displayQues(questionIndex,mcqs)
     })
     function sortMCQs(mcqs){
+        console.log(mcqs.length)
         for(var i = 0 ; i <= mcqs.length ; i++){
             if(i == mcqs.length){
             }else{
-                if(typeof chapterObj[mcqs[i].id.subject] == 'undefined'){
-                    // if that subject doesn't exist
-                    chapterObj[mcqs[i].id.subject] = chapterObj[mcqs[i].id.subject] || {};
-                }
-                if(typeof chapterObj[mcqs[i].id.subject][mcqs[i].id.chapter] == 'undefined'){
-                    // if that chapter doesn't exist
-                    chapterObj[mcqs[i].id.subject][mcqs[i].id.chapter] = chapterObj[mcqs[i].id.subject][mcqs[i].id.chapter]|| {incorrect : [], correct : [], skipped : []};
-                }
-                if(userResponse[i] == mcqs[i].id.answer[0]){
-                    chapterObj[mcqs[i].id.subject][mcqs[i].id.chapter].correct.push(mcqs[i])
-                }else if(userResponse[i] == '0'){
-                    chapterObj[mcqs[i].id.subject][mcqs[i].id.chapter].skipped.push(mcqs[i])
+                if( !mcqs[i].id){
                 }else{
-                    chapterObj[mcqs[i].id.subject][mcqs[i].id.chapter].incorrect.push(mcqs[i])
+                    if( typeof chapterObj[mcqs[i].id.subject] == 'undefined'){
+                        // if that subject doesn't exist
+                        chapterObj[mcqs[i].id.subject] = chapterObj[mcqs[i].id.subject] || {};
+                    }
+                    if( typeof chapterObj[mcqs[i].id.subject][mcqs[i].id.chapter] == 'undefined'){
+                        // if that chapter doesn't exist
+                        chapterObj[mcqs[i].id.subject][mcqs[i].id.chapter] = chapterObj[mcqs[i].id.subject][mcqs[i].id.chapter]|| {incorrect : [], correct : [], skipped : []};
+                    }
+                    if( userResponse[i] == mcqs[i].id.answer[0]){
+                        chapterObj[mcqs[i].id.subject][mcqs[i].id.chapter].correct.push(mcqs[i])
+                    }else if( userResponse[i] == '0'){
+                        chapterObj[mcqs[i].id.subject][mcqs[i].id.chapter].skipped.push(mcqs[i])
+                    }else{
+                        chapterObj[mcqs[i].id.subject][mcqs[i].id.chapter].incorrect.push(mcqs[i])
+                    }
                 }
             }
         }
