@@ -461,6 +461,7 @@ router.post("/user/sms",middelware.isLoggedIn ,function(req,res){
 // api for admin only
 router.get("/user/admin/data/api",middelware.isLoggedIn, (req,res)=>{
     if(req.user.isAdmin){
+        console.log("stat route hit")
         Useractivity.findById("61b357ffc86d5b7160714228", (err,foundLog)=>{
             if(err || !foundLog){
                 console.log(err)
