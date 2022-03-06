@@ -56,9 +56,8 @@ var time = 0
 askingForInfo();
 checkTransactions()
 positionSorting();
-setInterval(()=>{time++}, 100)
-setInterval(askingForInfo, 1000 * 60*60*2);
-setInterval(positionSorting, 1000 * 60*10);
+// setInterval(()=>{time++}, 100)
+setInterval(positionSorting, 1000 * 60*60);
 setInterval(checkTransactions, 1000 * 60*60*24);
 
 // function defination ====================================
@@ -128,41 +127,43 @@ function getSubjectPosition(positionArray , user, subject){
 	eval(subject+"Position.splice(subjectIndex, 0, subjectDataOfUser)")
 }
 function mcqsInfoData(category) {
-	var info = {}
-	Mcq.find({category : category }, function (err,mcqsFound){
-		if(err){
-			console.log(err)
-		}else{
-			console.log("total mcqs "+category+" : "+ mcqsFound.length)
-			for(var i = 0 ; mcqsFound.length >= i ; i++){
-				
-				if( mcqsFound.length == i){
-					// termintae
-					mcqsInfo[category] = info 
-				}else{
-					if( typeof info[mcqsFound[i].subject] === 'undefined'){
-						info[mcqsFound[i].subject] = {}
-						if(typeof  info[mcqsFound[i].subject][mcqsFound[i].chapter] === 'undefined'){
-							info[mcqsFound[i].subject][mcqsFound[i].chapter] = 1
-						}else{
-							info[mcqsFound[i].subject][mcqsFound[i].chapter] = info[mcqsFound[i].subject][mcqsFound[i].chapter] + 1
-						}
+	return new Promise((resolve,reject)=>{
+		var info = {}
+		Mcq.find({category : category }, function (err,mcqsFound){
+			if(err){
+				console.log(err)
+			}else{
+				console.log("total mcqs "+category+" : "+ mcqsFound.length)
+				for(var i = 0 ; mcqsFound.length >= i ; i++){
+					if( mcqsFound.length == i){
+						// termintae
+						mcqsInfo[category] = info 
+						resolve()
 					}else{
-						if(typeof  info[mcqsFound[i].subject][mcqsFound[i].chapter] === 'undefined'){
-							info[mcqsFound[i].subject][mcqsFound[i].chapter] = 1
+						if( typeof info[mcqsFound[i].subject] === 'undefined'){
+							info[mcqsFound[i].subject] = {}
+							if(typeof  info[mcqsFound[i].subject][mcqsFound[i].chapter] === 'undefined'){
+								info[mcqsFound[i].subject][mcqsFound[i].chapter] = 1
+							}else{
+								info[mcqsFound[i].subject][mcqsFound[i].chapter] = info[mcqsFound[i].subject][mcqsFound[i].chapter] + 1
+							}
 						}else{
-							info[mcqsFound[i].subject][mcqsFound[i].chapter] = info[mcqsFound[i].subject][mcqsFound[i].chapter] + 1
+							if(typeof  info[mcqsFound[i].subject][mcqsFound[i].chapter] === 'undefined'){
+								info[mcqsFound[i].subject][mcqsFound[i].chapter] = 1
+							}else{
+								info[mcqsFound[i].subject][mcqsFound[i].chapter] = info[mcqsFound[i].subject][mcqsFound[i].chapter] + 1
+							}
 						}
 					}
 				}
 			}
-		}
+		})
 	})
 }
-function askingForInfo() {
-	mcqsInfoData('FUNG')
-	mcqsInfoData('GRE')
-	mcqsInfoData('MDCAT')
+async function askingForInfo() {
+	await mcqsInfoData('FUNG')
+	await mcqsInfoData('GRE')
+	await mcqsInfoData('MDCAT')
 }
 // checking if promo or plan expired 
 
