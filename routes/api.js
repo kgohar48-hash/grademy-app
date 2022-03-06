@@ -56,7 +56,7 @@ var time = 0
 askingForInfo();
 checkTransactions()
 positionSorting();
-// setInterval(()=>{time++}, 100)
+setInterval(()=>{time++}, 100)
 setInterval(positionSorting, 1000 * 60*60);
 setInterval(checkTransactions, 1000 * 60*60*24);
 
