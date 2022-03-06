@@ -50,10 +50,10 @@ router.get("/payment/plan/:plan/:duration" ,middelware.isLoggedIn ,async functio
 				}
 				if(duration == 1){
 					totalPrice = base
-					sufficientBalance = await balanceCheck(totalPrice,false,req)
+					sufficientBalance = await balanceCheck(totalPrice,false,req.user,res)
 				}else{
 					totalPrice = (base - base*save*duration/3)*duration
-					sufficientBalance = await balanceCheck(totalPrice,false,req)
+					sufficientBalance = await balanceCheck(totalPrice,false,req.user,res)
 				}
 				if(sufficientBalance.payable){
 					Feedback.find({},function(err,allFeedbacks){
@@ -103,10 +103,10 @@ router.get("/payment/paid/:plan/:duration",middelware.isLoggedIn ,async(req,res)
 				}
 				if(duration == 1){
 					totalPrice = base
-					sufficientBalance = await balanceCheck(totalPrice,false,req)
+					sufficientBalance = await balanceCheck(totalPrice,false,req.user,res)
 				}else{
 					totalPrice = (base - base*save*duration/3)*duration
-					sufficientBalance = await balanceCheck(totalPrice,false,req)
+					sufficientBalance = await balanceCheck(totalPrice,false,req.user,res)
 				}
 				if(sufficientBalance.payable){
 					Plan.create({
@@ -391,11 +391,11 @@ function activitylog(page,obj) {
 	})
 }
 // checking balance
-async function balanceCheck(totalBill,payment,req,res) {
+async function balanceCheck(totalBill,payment,user,res) {
 	return new Promise(async(resolve, reject)=>{
 		var amountIn = 0
 		var amountOut = 0
-		User.findById(req.user._id).populate({
+		User.findById(user._id).populate({
 			path : 'transactions',
 			model : "Transaction"
 		}).exec(async(err, foundUser)=>{
@@ -436,11 +436,11 @@ async function balanceCheck(totalBill,payment,req,res) {
 						})
 					}
 					// non promo amount to user
-					if(!foundUser.transactions[i].isPromo && foundUser.transactions[i].varified && foundUser.transactions[i].to.username == req.user.username){
+					if(!foundUser.transactions[i].isPromo && foundUser.transactions[i].varified && foundUser.transactions[i].to.username == user.username){
 						amountIn += foundUser.transactions[i].amount
 					}
 					// non promo amount from user
-					if(!foundUser.transactions[i].isPromo && foundUser.transactions[i].varified && foundUser.transactions[i].from.username == req.user.username){
+					if(!foundUser.transactions[i].isPromo && foundUser.transactions[i].varified && foundUser.transactions[i].from.username == user.username){
 						amountOut += foundUser.transactions[i].amount
 					}
 				}
