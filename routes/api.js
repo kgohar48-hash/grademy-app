@@ -56,20 +56,13 @@ var time = 0
 askingForInfo();
 checkTransactions()
 positionSorting();
-setInterval(()=>{time++}, 100)
+// setInterval(()=>{time++}, 100)
 setInterval(positionSorting, 1000 * 60*60);
 setInterval(checkTransactions, 1000 * 60*60*24);
 
 // function defination ====================================
 
 async function positionSorting(){ 
-	now = new Date();
-	millisTill10 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 1, 0, 0) - now;
-	if (millisTill10 < 0) {
-		millisTill10 += 86400000; // it's after 10am, try 10am tomorrow.
-	}
-	setTimeout(checkTransactions, millisTill10);
-	time = 0
 	console.log("position sorting started : ", time)
 	await User.find({},function(err,allUsers){
 		if(err){

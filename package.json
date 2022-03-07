@@ -35,9 +35,7 @@
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^6.0.1",
-    "qrcode-terminal": "^0.12.0",
-    "randomstring": "^1.1.5",
-    "whatsapp-web.js": "^1.15.6"
+    "randomstring": "^1.1.5"
   },
   "devDependencies": {
     "https-localhost": "^4.6.4"

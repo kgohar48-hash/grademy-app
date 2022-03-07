@@ -460,4 +460,44 @@ router.get("/academy/analytics/:id",(req,res)=>{
         }
     })
 })
+// quiz attempt data for academy
+router.get("/academy/quizcategory/attempt/:id",(req,res)=>{
+	quizcategory.findById(req.params.id).populate({
+		path : 'quizzes',
+		model : 'Newcustomquiz'
+	}).exec(async(err, foundCategory)=>{
+		if(err || !foundCategory){
+			console.log(err)
+		}else{
+			dateData = []
+			console.log("yo")
+			for(var i = 0 ; i <= foundCategory.quizzes.length ; i++){
+				if(i == foundCategory.quizzes.length){
+					res.send(dateData)
+				}else{
+					console.log("quiz complete")
+
+					await fetchQuizDates(foundCategory.quizzes[i])
+				}
+			}
+		}
+	})
+})
+
+function fetchQuizDates(quiz) {
+	return new Promise((resolve,reject)=>{
+		if(quiz.solvedBy.length != 0){
+			for(var j = 0; j <= quiz.solvedBy.length; j++){
+				if(j == quiz.solvedBy.length){
+					resolve()
+				}else{
+					console.log(dateData.length)
+					dateData.push(quiz.solvedBy[j].date)
+				}
+			}
+		}else{
+			resolve()
+		}
+	})
+}
 module.exports = router ;
