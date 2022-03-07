@@ -1,5 +1,5 @@
 attemtpdata = {}
-fetch('http://localhost:8000/user/admin/data/api')
+fetch('https://www.grademy.org/user/admin/data/api')
 .then(response => response.json())
 .then(data => {
     // variables

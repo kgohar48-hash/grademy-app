@@ -12,7 +12,7 @@ var HttpClient = function() {
     }
 }
 var client = new HttpClient();
-  client.get('http://localhost:8000/quiz/api/'+document.getElementById("quiz-id").value,async function(res) {
+  client.get('https://www.grademy.org/quiz/api/'+document.getElementById("quiz-id").value,async function(res) {
     data = JSON.parse(res).foundQuiz
     user = JSON.parse(res).currentuser
 
@@ -225,7 +225,7 @@ finish.addEventListener('click', () => {
 })
 
 reviewButton.addEventListener('click', () => {
-    window.location = "http://localhost:8000/dashboard/newcustomquiz/view/view/"+data._id
+    window.location = "https://www.grademy.org/dashboard/newcustomquiz/view/view/"+data._id
     // inset link to review page
 })
 
@@ -264,7 +264,7 @@ function endQuiz() {
         },
         body : JSON.stringify(userObject)
         }
-        fetch("http://localhost:8000/newcustomquiz" , options);
+        fetch("https://www.grademy.org/newcustomquiz" , options);
     
 }
 })

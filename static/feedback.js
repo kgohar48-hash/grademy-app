@@ -31,7 +31,7 @@ var HttpClient = function() {
   // http://localhost:3000/data
   //Questions fetch APi
   var client = new HttpClient();
-      client.get('http://localhost:8000/data',async function(res) {
+      client.get('https://www.grademy.org/data',async function(res) {
         var loadedQuiz = JSON.parse(res)
         questions = [{
             question : "<h1>How much fun the classes are ?</h1><p class='text-muted mt-4'>It is the measure of how fun, creative & engaging the video sessions of this instructor are : </p>",
@@ -131,6 +131,6 @@ var HttpClient = function() {
         },
         body : JSON.stringify(submitQuiz)
       }
-      fetch("http://localhost:8000/academy/feedback/"+academyId , options);
+      fetch("https://www.grademy.org/academy/feedback/"+academyId , options);
     })
   }

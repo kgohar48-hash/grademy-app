@@ -394,7 +394,7 @@ async function init(){
 function fetchingcurrentuser(){
     return new Promise((resolve,reject)=>{
         var client = new HttpClient();
-        client.get('http://localhost:8000/currentuser', function(res) {
+        client.get('https://www.grademy.org/currentuser', function(res) {
             var loadedData = JSON.parse(res)
             
             currentuser = loadedData.user;

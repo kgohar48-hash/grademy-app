@@ -12,7 +12,7 @@ var HttpClient = function() {
     }
 }
 var client = new HttpClient();
-  client.get('http://localhost:8000/quiz/api/'+document.getElementById("quiz-id").value,async function(res) {
+  client.get('https://www.grademy.org/quiz/api/'+document.getElementById("quiz-id").value,async function(res) {
     quiz = JSON.parse(res).foundQuiz
     user = JSON.parse(res).currentuser
 
@@ -158,7 +158,7 @@ nextButton.addEventListener('click', () => {
 })
 
 finishButton.addEventListener('click', () => {
-    window.location = "http://localhost:8000/dashboard";
+    window.location = "https://www.grademy.org/dashboard";
 })
 
 function createToggler() {
@@ -250,7 +250,7 @@ document.getElementById('comment-btn').addEventListener("click" , function(){
           text : document.querySelector('.comment-text').value
       })
     }
-    fetch("http://localhost:8000/mcq/"+currentQuestionId+"/comment" , options);
+    fetch("https://www.grademy.org/mcq/"+currentQuestionId+"/comment" , options);
     quiz.mcqs[questionIndex].comments.push({
         author : {
             username : user.username

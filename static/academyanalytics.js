@@ -1,4 +1,4 @@
-fetch('http://localhost:8000/academy/analytics/'+document.getElementById('id').value)
+fetch('https://www.grademy.org/academy/analytics/'+document.getElementById('id').value)
 .then(response => response.json())
 .then(data => {
     // data sorting

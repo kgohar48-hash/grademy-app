@@ -1,4 +1,4 @@
-fetch('http://localhost:8000/mcq/ask/'+document.getElementById('id').value)
+fetch('https://www.grademy.org/mcq/ask/'+document.getElementById('id').value)
 .then(response => response.json())
 .then(data => {
     console.log(data)
@@ -69,7 +69,7 @@ fetch('http://localhost:8000/mcq/ask/'+document.getElementById('id').value)
             username : username
         })
         }
-        fetch("http://localhost:8000/mcq/"+data._id.toString()+"/comment" , options);
+        fetch("https://www.grademy.org/mcq/"+data._id.toString()+"/comment" , options);
         data.comments.push({
             author : {
                 username : username 
