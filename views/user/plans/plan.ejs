@@ -23,7 +23,7 @@
           </div>
         </div>
       </div>
-      <a class="btn btn-primary btn-lg btn-block mt-3 mb-3" >Subscription Plans</a>
+      <a class="btn btn-primary btn-lg btn-block mt-3 mb-3" >Pricing Plans</a>
       <table>
         <thead>
           <tr>
@@ -36,9 +36,9 @@
         <tbody>
           <tr>
             <td>Test attempt</td>
-            <td><span class="tick">upto 200 </span><sub>MCQs</sub></td>
-            <td><span class="tick">unlimited</span></td>
-            <td><span class="tick">unlimited</span></td>
+            <td><span class="tick">&#10004;</span></td>
+            <td><span class="tick">&#10004;</span></td>
+            <td><span class="tick">&#10004;</span></td>
           </tr>
           <tr>
             <td>Recorded lectures</td>
@@ -72,9 +72,15 @@
           </tr>
           <tr>
             <td>View attempted quiz</td>
-            <td><span class="tick">upto 100 </span><sub>MCQs</sub></td>
-            <td><span class="tick">unlimited</span></td>
-            <td><span class="tick">unlimited</span></td>
+            <td><span class="cross">&#10008;</span></td>
+            <td><span class="tick">&#10004;</span></td>
+            <td><span class="tick">&#10004;</span></td>
+          </tr>
+          <tr>
+            <td>Live sessions</td>
+            <td><span class="cross">&#10008;</span></td>
+            <td><span class="tick">&#10004;</span></td>
+            <td><span class="tick">&#10004;</span></td>
           </tr>
           <tr>
             <td>Grademy quiz SMS alert</td>
@@ -83,30 +89,24 @@
             <td><span class="tick">&#10004;</span></td>
           </tr>
           <tr>
-            <td>Live sessions</td>
+            <td>Counselling session requests</td>
+            <td><span class="cross">&#10008;</span></td>
+            <td class="tick">1 session<sub>/month</sub></td>
+            <td class="tick">4 sessions<sub>/month</sub></td>
+          </tr>
+          <tr>
+            <td>Subjective test checking</td>
             <td><span class="cross">&#10008;</span></td>
             <td><span class="cross">&#10008;</span></td>
             <td><span class="tick">&#10004;</span></td>
           </tr>
           <tr>
-            <td>Personal Mentor</td>
-            <td><span class="cross">&#10008;</span></td>
-            <td><span class="cross">&#10008;</span></td>
-            <td><span class="tick">&#10004;</span></td>
-          </tr>
-          <!-- <tr>
-            <td>Subjective test checking</td>
-            <td><span class="cross">&#10008;</span></td>
-            <td><span class="cross">&#10008;</span></td>
-            <td><span class="tick">&#10004;</span></td>
-          </tr> -->
-          <!-- <tr>
             <td>24/7 access to teacher</td>
             <td><span class="cross">&#10008;</span></td>
             <td><span class="cross">&#10008;</span></td>
             <td><span class="tick">&#10004;</span></td>
-          </tr> -->
-          <!-- <tr>
+          </tr>
+          <tr>
             <td>Pricing</td>
             <td  ><span class="txt-top">&#8360;</span><span style="color: chartreuse;" class="txt-l">0</span><sub>/month</sub></td>
             <td  ><span class="txt-top">&#8360;</span><span style="color: chartreuse;" class="txt-l">1000</span><sub>/month</sub></td>
@@ -126,65 +126,11 @@
                 <td  ></td>
                 <td  ><a class="btn btn-success" href="#">Refund</a></td>
             <%}}%>
-          </tr> -->
+          </tr>
         </tbody>
       </table>
-      <div class="pricing">
-        <a class="btn btn-primary btn-lg btn-block mt-3 mb-3" >Subscription Pricing</a>
-        <div class="row mb-3">
-          <div class="col-md-6 mb-3">
-            <button class="pricing-btn mb-2 btn-success" data-number="premium">Premium</button>
-          </div>
-          <div class="col-md-6 mb-3">
-            <button class="pricing-btn mb-2" data-number="premiumplus">Premium<sup>+Plus</sup><sub>( limited slots )</sub></button>
-          </div>
-        </div>
-        <div class="pricing-details row">
-          <div class="col-md-4">
-            <div class="pricing-container container1">
-              <div class="inner_container">
-                <div class="title mt-2 " id="t-price-1">Total Rs.2000</div>
-                <div class="main_number " id="t-month-1">1</div>
-                <div class="container_text">
-                  <div class="container_text1 " id="t-save-1"></div>
-                  <div class="container_text2 " id="t-per-month-1">Rs.2000/mo</div>
-                </div>
-              </div>
-              <a id="payment-btn1" href="/payment/plan/premium/1"><span>Upgrade</span></a>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="pricing-container container2 active">
-              <div class="inner_container">
-                <div class="title mt-2 " id="t-price-3">Total Rs.4800</div>
-                <div class="main_number " id="t-month-3">3</div>
-                <div class="container_text">
-                  <div class="container_text1 " id="t-save-3">SAVE 20%</div>
-                  <div class="container_text2 " id="t-per-month-3">Rs.1600/mo</div>
-                </div>
-              </div>
-              <a id="payment-btn3" href="/payment/plan/premium/3"><span>Upgrade</span></a>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="pricing-container container3 float-left">
-              <div class="inner_container">
-                <div class="title mt-2 " id="t-price-6">Total Rs.7200</div>
-                <div class="main_number " id="t-month-6">6</div>
-                <div class="container_text">
-                  <div class="container_text1 " id="t-save-6">SAVE 40%</div>
-                  <div class="container_text2 " id="t-per-month-6">Rs.1200/mo</div>
-                </div>
-              </div>
-              <a id="payment-btn6" href="/payment/plan/premium/6"><span>Upgrade</span></a>
-            </div>
-          </div>
-          <div class="outer-container">
-          </div>
-        </div>
-      </div>
-      <div class="account">
-        <h3 class="">Transaction History</h3>
+      <div class="account mt-4">
+        <h3 class="mt-4">Transaction History</h3>
         <hr style="border-top: 1px solid rgb(87, 87, 87); margin: 5px 10px;">
         <div id="transactions-container">
 
@@ -229,7 +175,7 @@
         <ul>
           <li>
             <h6>
-              Under the Grademy associate program if any of your invitee buys a plan for the first time on platform, you will recieve a 20% commission.
+              Under the Grademy associate program if any of your invitee buys a plan for the first time on platform, you will recieve a 50% commission.
             </h6>
           </li>
           <li>

@@ -6,11 +6,10 @@ const express			= require("express"),
 	  User				= require("../models/user"),
 	  Mcq			 	= require("../models/mcq"),
       NewCustomQuiz		= require("../models/newCustomQuiz"),
-      Academy		    = require("../models/academy"),
-      Review		    = require("../models/review"),
+      Academy		= require("../models/academy"),
+      Review		= require("../models/review"),
       Quizcategory		= require("../models/quizcategory"),
-      Transaction       = require("../models/transaction"),
-      middelware 		= require("../middelware");
+      middelware 		 = require("../middelware");
 
       var multer = require('multer');
 
@@ -30,7 +29,6 @@ var upload = multer({ storage: storage, fileFilter: imageFilter})
 
 var cloudinary = require('cloudinary');
 const middelwareObj = require("../middelware");
-const academy = require("../models/academy");
 cloudinary.config({ 
   cloud_name: 'grademy', 
   api_key: '311168857733876', 
@@ -83,6 +81,7 @@ router.post("/academy/new",middelware.isLoggedIn, upload.single('image'),functio
                 if(err){
                     console.log(err)
                 }else{
+                    console.log("academy made")
                     res.redirect("/academy")
                 }
             })
@@ -130,6 +129,7 @@ router.post("/academy/:id/edit",middelwareObj.checkAcademyOwnership, upload.sing
                 if(err){
                     console.log(err)
                 }else{
+                    console.log("academy UPDATED")
                     res.redirect("/academy")
                 }
             })
@@ -165,6 +165,7 @@ router.post("/academy/:id/review",middelware.isLoggedIn,(req,res)=>{
 })
 // testing has to be done
 router.post("/academy/join",middelware.isLoggedIn,(req,res)=>{
+    console.log("join")
     User.findById(req.user._id,(err,foundUser)=>{
         if(err || !foundUser){
             console.log(err)
@@ -177,6 +178,7 @@ router.post("/academy/join",middelware.isLoggedIn,(req,res)=>{
                     foundAcademy.students.push(foundUser._id)
                     foundAcademy.save()
                     foundUser.save()
+                    console.log("academy joined")
                     res.redirect("/academy");
                 }
             })
@@ -185,12 +187,14 @@ router.post("/academy/join",middelware.isLoggedIn,(req,res)=>{
 })
 // testing has to be done
 router.post("/academy/leave",middelware.isLoggedIn,async (req,res)=>{
+    console.log("leave")
     await User.findById(req.user._id, async (err,foundUser)=>{
         if(err || !foundUser){
             console.log(err)
         }else{
             var userCounter = foundUser.myAcademies.length 
             for(var i = 0 ; userCounter>= i ; i++){
+                console.log("i : ",i)
                 if(userCounter == i){
                     // terminate
                     await Academy.findById(req.body.academyId , (err , foundAcademy)=>{
@@ -199,14 +203,18 @@ router.post("/academy/leave",middelware.isLoggedIn,async (req,res)=>{
                         }else{
                             var academyCounter = foundAcademy.students.length
                             for(var j = 0 ; academyCounter >= j ; j++){
+                                console.log("j : ",j)
                                 if(academyCounter == j){
                                     foundAcademy.save()
                                     foundUser.save()
+                                    console.log("academy leaved")
                                     res.redirect("/academy");
                                 }else{
                                     if(toString(foundUser._id)  == toString(foundAcademy.students[j])){
+                                        console.log("user found and leaving")
                                         foundAcademy.students.splice(j, 1);
                                         j = academyCounter - 1
+                                        console.log("done from academy side")
                                     }
                                 }
                             }
@@ -214,8 +222,10 @@ router.post("/academy/leave",middelware.isLoggedIn,async (req,res)=>{
                     })
                 }else{
                     if(toString(foundUser.myAcademies[i]) == toString(req.body.academyId)){
+                        console.log("academy found and leaving")
                         foundUser.myAcademies.splice(i, 1);
                         i = userCounter - 1
+                        console.log("done from user side")
                     }
                 }
             }
@@ -235,23 +245,21 @@ router.post("/academy/:id/section",middelwareObj.checkAcademyOwnership,async (re
         }else{
             quizCategoryMade.owner.username = req.user.username
             quizCategoryMade.owner.id = req.user
+            quizCategoryMade.save()
             Academy.findById(req.params.id,(err,foundAcademy)=>{
                 if(err || !foundAcademy){
                     console.log(err)
                 }else{
                     foundAcademy.quizcategories.push(quizCategoryMade)
-                    quizCategoryMade.academy = foundAcademy
                     foundAcademy.save()
-                    quizCategoryMade.save()
-                    res.redirect("/academy/section/"+foundAcademy._id+"/"+quizCategoryMade._id)
+                    res.redirect("/academy/"+foundAcademy._id)
                 }
             })
         }
     })
 })
 // academy quizzes
-router.get("/academy/section/:id/:section",middelware.isLoggedIn,async (req,res)=>{
-    // fix it here and in the quiz redirect as well
+router.get("/academy/section/:id",middelware.isLoggedIn,async (req,res)=>{
     req.session.section = req.originalUrl
     Academy.findById(req.params.id).populate({
         path : 'quizcategories',
@@ -264,7 +272,7 @@ router.get("/academy/section/:id/:section",middelware.isLoggedIn,async (req,res)
         if (err || !foundAcademy) {
             console.log(err);
         } else {
-            res.render("academy/academyquizzes", { academy: foundAcademy, section : req.params.section });
+            res.render("academy/academyquizzes", { academy: foundAcademy });
         }
     })
 })
@@ -290,12 +298,11 @@ router.post("/academy/quiz/:id/edit",middelware.checkQuizOwnership,(req,res)=>{
             console.log(err)
         }else{
             if(req.user.username == foundQuiz.madeBy ){
-                foundQuiz.description           = req.body.quiz.description
-                foundQuiz.lectureVideoURL       = req.body.quiz.lectureVideoURL
-                foundQuiz.discussionVideoURL    = req.body.quiz.discussionVideoURL
-                foundQuiz.shareWith             =req.body.quiz.shareWith
+                foundQuiz.description = req.body.quiz.description
+                foundQuiz.lectureVideoURL = req.body.quiz.lectureVideoURL
+                foundQuiz.discussionVideoURL = req.body.quiz.discussionVideoURL
                 foundQuiz.save()
-                res.redirect("/dashboard/quiz/redirect/"+foundQuiz._id)
+                res.redirect("/academy")
             }else{
                 res.send("you are not authorized")
             }
@@ -308,6 +315,9 @@ router.get("/academy/feedback/:id",middelware.isLoggedIn , (req,res)=>{
 })
 router.post("/academy/feedback/:id",middelware.isLoggedIn , (req,res)=>{
     // check if that students has already given a feedback
+    console.log("id : ",req.params.id)
+    console.log("body : ",req.body)
+    
     var feedbackGiven = false ;
     Academy.findById(req.params.id , (err , foundAcademy)=>{
         if(err || !foundAcademy){
@@ -331,49 +341,34 @@ router.post("/academy/feedback/:id",middelware.isLoggedIn , (req,res)=>{
                         foundAcademy.feedback.lecturesQuality.push(Number(req.body[4]))
                         foundAcademy.feedback.studentSatisfaction.push(Number(req.body[5]))
                         foundAcademy.save()
+                        console.log("done feedback")
                         return
                     }
                 }else{
                     if(foundAcademy.feedback.givenBy[i].id == req.user._id){
                         feedbackGiven = true
+                        console.log("already given feedback")
                     }
                 }
             }
         }
     })
 })
-// academy analytics render
-router.get("/academy/analytics/stats/:id",(req,res)=>{
-    Academy.findById(req.params.id , (err,foundAcademy)=>{
-        if(err || !foundAcademy){
-            console.log(err)
-        }else{
-            if(req.user.username == foundAcademy.owner.username || req.user.isAdmin){
-                res.render("academy/analytics",{id : req.params.id})
-            }
-        }
-    })
-})
 // switch student account into teaching account
 router.get("/academy/switch/toteacher",middelware.isLoggedIn,(req,res)=>{
-    User.findById(req.user._id,(err, foundUser)=>{
+    User.findByIdAndUpdate(req.user._id, {isAcademy : true},(err, foundUser)=>{
         if(err || !foundUser){
             console.log(err)
         }else{
-            if(foundUser.isAcademy){
-                foundUser.isAcademy = false
-                req.flash("success" , foundUser.name +" you have switched to student account" )
-            }else{
-                foundUser.isAcademy = true
-                req.flash("success" , foundUser.name +" you have switched to teaching account" )
-            }
-            foundUser.save()
+            console.log("no problem till here")
+			req.flash("success" , foundUser.name +" you have switched to teaching account" )
             res.redirect("/academy")
         }
     })
 })
 // dummy route to redirect user after submitting feedbakc
 router.post("/academy/dummy/:id",middelware.isLoggedIn,(req,res)=>{
+    console.log("dummy route hit")
     dataToBePassed = req.body
     res.redirect("/academy/"+req.params.id)
 })
@@ -414,90 +409,4 @@ router.get("/academy/api/:id",(req,res)=>{
         }
     })
 })
-// academy analytics api
-router.get("/academy/analytics/:id",(req,res)=>{
-    Academy.findById(req.params.id).populate({
-        path : 'quizcategories',
-        model : 'Quizcategory',
-        populate : {
-            path : 'quizzes',
-            model : 'Newcustomquiz'
-        }
-    }).exec((err, foundAcademy) => {
-        if (err || !foundAcademy) {
-            console.log(err);
-        } else {
-            console.log("academy found")
-            if(req.user.username == foundAcademy.owner.username || req.user.isAdmin){
-                User.find({ref : foundAcademy.owner.username},(err , foundRefs)=>{
-                    if(err || !foundRefs){
-                        console.log(err)
-                    }else{
-                        console.log("invitee found")
-                        User.findOne({username : foundAcademy.owner.username}).populate({
-                            path : 'transactions',
-                            model : "Transaction"
-                        }).exec((err , foundOwner)=>{
-                            if(err || !foundOwner){
-                                console.log(err)
-                            }else{
-                                console.log("transactions found")
-                                res.json({
-                                    refs : {
-                                        createdAt : foundRefs.map((ref)=>{return ref.createdAt})
-                                    },
-                                    quizCategories : foundAcademy.quizcategories,
-                                    transactions : foundOwner.transactions
-                                })
-                            }
-                        })
-                    }
-                })
-            }else{
-                res.json({})
-            }
-            
-        }
-    })
-})
-// quiz attempt data for academy
-router.get("/academy/quizcategory/attempt/:id",(req,res)=>{
-	quizcategory.findById(req.params.id).populate({
-		path : 'quizzes',
-		model : 'Newcustomquiz'
-	}).exec(async(err, foundCategory)=>{
-		if(err || !foundCategory){
-			console.log(err)
-		}else{
-			dateData = []
-			console.log("yo")
-			for(var i = 0 ; i <= foundCategory.quizzes.length ; i++){
-				if(i == foundCategory.quizzes.length){
-					res.send(dateData)
-				}else{
-					console.log("quiz complete")
-
-					await fetchQuizDates(foundCategory.quizzes[i])
-				}
-			}
-		}
-	})
-})
-
-function fetchQuizDates(quiz) {
-	return new Promise((resolve,reject)=>{
-		if(quiz.solvedBy.length != 0){
-			for(var j = 0; j <= quiz.solvedBy.length; j++){
-				if(j == quiz.solvedBy.length){
-					resolve()
-				}else{
-					console.log(dateData.length)
-					dateData.push(quiz.solvedBy[j].date)
-				}
-			}
-		}else{
-			resolve()
-		}
-	})
-}
 module.exports = router ;

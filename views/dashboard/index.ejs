@@ -103,9 +103,9 @@
                     <h4>Grademy Position : <span id="position" class="float-right" ></span></h4>
                     <h4>Mcqs solved : <span id="attempts" class="float-right" ></span></h4>
                     <h4>My score : <span id="myscore" class="float-right" ></span></h4>
-                    <h4><a class="btn btn-success" href="/dashboard/mcqs/correctMCQs/<%=currentUser._id%>">Correct </a> <span id="mycorrect" class="float-right" ><%=currentUser.correctMCQs.length%></span></h4>
+                    <h4><a class="btn btn-success" href="/dashboard/mcqs/correct/<%=currentUser._id%>">Correct </a> <span id="mycorrect" class="float-right" ><%=currentUser.correct.length%></span></h4>
                     <h4><a class="btn btn-success" href="/dashboard/mcqs/incorrect/<%=currentUser._id%>">Incorrect </a> <span id="myincorrect" class="float-right" ><%=currentUser.incorrect.length%></span></h4>
-                    <h4><a class="btn btn-success" href="/dashboard/mcqs/skippedMCQs/<%=currentUser._id%>">Skipped </a> <span id="myskipped" class="float-right" ><%=currentUser.skippedMCQs.length%></span></h4>
+                    <h4><a class="btn btn-success" href="/dashboard/mcqs/skipped/<%=currentUser._id%>">Skipped </a> <span id="myskipped" class="float-right" ><%=currentUser.skipped.length%></span></h4>
                   </div>
                 </div>
               </div>

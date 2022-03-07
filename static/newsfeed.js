@@ -131,7 +131,7 @@ function init(){
         choice.addEventListener("click",e =>{
             var id = e.target.dataset["id"]
             var choiceSelected = e.target.dataset["number"]
-            client.get('http://localhost:8000/mcq/send/'+id+'/'+choiceSelected,async function(res) {
+            client.get('http://localhost:8000/mcq/send/'+id,async function(res) {
             mcqfetched = JSON.parse(res)
             totalAttempts = mcqfetched.userResponse.reduce((a, b) => a + b, 0)
             var choiceIndex = 0

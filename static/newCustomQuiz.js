@@ -33,7 +33,7 @@ document.getElementById("add").addEventListener("click",()=>{
     index = document.getElementById("addons").value
     arr = []
     for(var i = 1 ; i <= index;i++){
-        string1 =  '<div class="form-inline"><div class="input-group mb-3 mr-4"><div class="input-group-prepend"><label class="input-group-text">Subject</label></div><select name="subjects" class="custom-select" id="subjectname'+ i.toString() +'" required><option selected value="" >Choose...</option></select></div><div class="input-group mb-3 mr-4"><div class="input-group-prepend"><label class="input-group-text">Chapter</label></div><select name="chapters" class="custom-select" id="chaptername'+ i.toString() +'" required><option selected value="" >Choose...</option></select></div><div class="input-group mb-3"><div class="input-group-prepend"><label class="input-group-text">Number of Mcqs</label></div><select name="numberOfMcqs" class="custom-select" id="numberofmcqs'+ i.toString() +'" required><option selected value="" >Choose...</option></select></div></div>'
+        string1 =  '<div class="form-inline"><div class="input-group mb-3 mr-4"><div class="input-group-prepend"><label class="input-group-text">Subject</label></div><select name="subjects" class="custom-select" id="subjectname'+ i.toString() +'" required><option selected value="a" >Choose...</option></select></div><div class="input-group mb-3 mr-4"><div class="input-group-prepend"><label class="input-group-text">Chapter</label></div><select name="chapters" class="custom-select" id="chaptername'+ i.toString() +'" required><option selected value="a" >Choose...</option></select></div><div class="input-group mb-3"><div class="input-group-prepend"><label class="input-group-text">Number of Mcqs</label></div><select name="numberOfMcqs" class="custom-select" id="numberofmcqs'+ i.toString() +'" required><option selected value="a" >Choose...</option></select></div></div>'
         arr.push(string1)
     }
     var sum = arr.reduce(function(a, b){
@@ -50,9 +50,9 @@ document.getElementById("add").addEventListener("click",()=>{
     
 function displayoptions1(index){
     document.getElementById("subjectname"+index).addEventListener("click" , ()=>{
-        document.getElementById("numberofmcqs"+index) .innerHTML = '<option selected value="" >Choose...</option>'
-        document.getElementById("chaptername" +index).innerHTML = '<option selected value="" >Choose...</option>'
-        if(document.getElementById("subjectname"+index).value == ""){
+        document.getElementById("numberofmcqs"+index) .innerHTML = '<option selected value="a" >Choose...</option>'
+        document.getElementById("chaptername" +index).innerHTML = '<option selected value="a" >Choose...</option>'
+        if(document.getElementById("subjectname"+index).value == "a"){
             if(document.getElementById("category").value == "MDCAT"){
                 document.getElementById("subjectname"+index).innerHTML = '<option value="biology" >Biology</option><option value="chemistry" >Chemistry</option><option value="physics" >Physics</option><option value="english" >English</option>'
             }
@@ -60,8 +60,8 @@ function displayoptions1(index){
                 document.getElementById("subjectname"+index).innerHTML = '<option value="math" >Math</option><option value="chemistry" >Chemistry</option><option value="physics" >Physics</option><option value="english" >English</option>'
             }
             document.getElementById("chaptername" +index).addEventListener("click" , ()=>{
-                document.getElementById("numberofmcqs"+index) .innerHTML = '<option selected value="" >Choose...</option>'
-                if(document.getElementById("chaptername" +index).value == ""){
+                document.getElementById("numberofmcqs"+index) .innerHTML = '<option selected value="a" >Choose...</option>'
+                if(document.getElementById("chaptername" +index).value == "a"){
                     arr2 = [];
                     for(cn=0 ; cn < dataArray[document.getElementById("subjectname"+index).value].length; cn++){
                         chapternamehtml = '<option value="'+ dataArray[document.getElementById("subjectname"+index).value][cn].name +'">'+ dataArray[document.getElementById("subjectname"+index).value][cn].name +'</option>'
@@ -72,7 +72,7 @@ function displayoptions1(index){
                             }, );
                             document.getElementById("chaptername" +index).innerHTML = sum ;
                             document.getElementById("numberofmcqs"+index) .addEventListener("click" , ()=>{
-                                if(document.getElementById("numberofmcqs"+index).value == ""){
+                                if(document.getElementById("numberofmcqs"+index).value == "a"){
                                     arr3 = []
                                     chapterIndex = checkChapterIndex(document.getElementById("chaptername" +index).value , document.getElementById("subjectname" +index).value )
                                     numberOfMcqs = Number(dataArray[document.getElementById("subjectname"+index).value][chapterIndex].mcqs)

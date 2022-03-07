@@ -19,9 +19,10 @@ var client = new HttpClient();
 const startButton = document.querySelector('.start_button');
 const infoBox = document.querySelector('.info_box');
 const quizBox = document.querySelector('.quiz_box');
-const descriptionText = infoBox.querySelector('.description');
+const quizSub = infoBox.querySelector('.sub');
+const quizChap = infoBox.querySelector('.chap');
 const num = infoBox.querySelector('.num');
-const exitButton = document.getElementById('exit')
+const exitButton = infoBox.querySelector('.quit');
 const continueButton = infoBox.querySelector('.start');
 const quizTitle = quizBox.querySelector('.title');
 const tMin = quizBox.querySelector('.timer_min');
@@ -43,8 +44,7 @@ const cNum = resultBox.querySelector('.correct_text b');
 const iNum = resultBox.querySelector('.incorrect_text b');
 const sNum = resultBox.querySelector('.skip_text b');
 const reviewButton = resultBox.querySelector('.review');
-const quitButton = document.getElementById('quit')
-const endMessage = document.getElementById('end-message')
+const quitButton = resultBox.querySelector('.quit');
 
 var timeElement = document.getElementById("timefortest")
 skipped = 0
@@ -76,19 +76,15 @@ startButton.addEventListener('click', () => {
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 };
-descriptionText.textContent = capitalizeFirstLetter(data.description);
+quizSub.textContent = capitalizeFirstLetter(data.mcqs[0].subject);
+quizChap.textContent = data.mcqs[0].chapter;
 num.textContent = data.mcqs.length;
 timeElement.innerText = data.mcqs.length
-if(data.shareWith == "competitive"){
-    endMessage.innerText = "This is a competitive test, you can't review your test until the competition ends"
-    reviewButton.classList.toggle('hide')
-}
+
 
 exitButton.addEventListener('click', () => {
-    window.location = "http://localhost:8000/dashboard/quiz/redirect/"+data._id;
-})
-quitButton.addEventListener('click', () => {
-    window.location = "http://localhost:8000/dashboard/quiz/redirect/"+data._id;
+    infoBox.classList.toggle('hide');
+    startButton.classList.toggle('hide')
 })
 
 continueButton.addEventListener('click', () => {

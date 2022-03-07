@@ -23,6 +23,7 @@ app.listen (  process.env.PORT , process.env.IP	,async function(){
 		userRouter			= require("./routes/user"),
 		apiRouter			= require("./routes/api"),
 		paymentRouter		= require("./routes/payment"),
+		testRouter			= require("./routes/test"),
 		academyRouter		= require("./routes/academy"),
 		botRouter			= require("./routes/bot");
 	
@@ -36,6 +37,7 @@ app.listen (  process.env.PORT , process.env.IP	,async function(){
 	app.use(newCustomQuizRouter);
 	app.use(botRouter);
 	app.use(apiRouter);
+	app.use(testRouter);
 	app.use(paymentRouter);
 	app.use(academyRouter);
 })

@@ -16,7 +16,6 @@ client.get('http://localhost:8000/academy/api/'+document.getElementById("academy
     init()
 });
 
-var sectionId = document.getElementById("section-id")
 var user       = document.getElementById("username").value
 var customQuiz = document.getElementById("customquizContainer")
 var postQuiz = document.getElementById("post-quiz")
@@ -28,7 +27,7 @@ var videoElement = document.getElementById('video')
 var data ;
 
 function init(){
-    selectCategory(findTitle(sectionId.value))
+    selectCategory(titles[0].innerText)
     titles.forEach(title => {
         title.addEventListener("click",e=>{
             selectCategory(e.target.innerText)
@@ -128,14 +127,6 @@ async function showCards(quizzes){
         });
     } catch (err) {
         console.log(err);
-    }
-}
-
-function findTitle(id){
-    for(var i = 0 ; data.academy.quizcategories.length > i ; i++){
-        if(data.academy.quizcategories[i]._id.toString() == id.toString()){
-            return data.academy.quizcategories[i].title
-        }
     }
 }
 

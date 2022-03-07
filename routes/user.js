@@ -3,9 +3,8 @@ var express			 = require("express"),
     User			 = require("../models/user"),
     Counselling      = require("../models/counselling"),
     Feedback         = require("../models/feedback"),
-    Useractivity     = require("../models/useractivity"),
-    Promo            = require("../models/promo"),
-    NewCustomQuiz    = require("../models/newCustomQuiz");
+    Promo            = require("../models/promo");
+
 
 const https = require('https');
 var middelware = require("../middelware");
@@ -188,7 +187,9 @@ router.post("/user/status",middelware.isLoggedIn, function(req,res){
                     var numberofusers = 0 
                     for(var i = 0 ; i < allUsers.length;i++){
                         if(allUsers[i].score.attempted > req.body.numberofmcqs){
+                            console.log(allUsers[i].username)
                             numberofusers++
+                            console.log("username : ",allUsers[i].username)
                         }
                         if(i == allUsers.length - 1){
                             req.flash("success" , "User solved mcqs more than "+req.body.numberofmcqs+" are : "+numberofusers)
@@ -210,29 +211,35 @@ router.post("/user/status",middelware.isLoggedIn, function(req,res){
                     res.redirect("/user/controls")
                 }
                 if(foundUser){
+                    console.log("found : "+foundUser.name)
                     if(req.body.invites){
+                        console.log("invites")
                         req.flash("success" , foundUser.username+" has "+foundUser.invitations+" invites")
                         res.redirect("/user/controls")
                     }
                     if(req.body.verification){
+                        console.log("verification")
                         foundUser.isVerified = true ;
                         foundUser.save()
                         req.flash("success" , foundUser.username+" has been verified")
                         res.redirect("/user/controls")
                     }
                     if(req.body.paid){
+                        console.log("paid")
                         foundUser.isPaid = true ;
                         foundUser.save()
                         req.flash("success" , foundUser.username+" has been Paid")
                         res.redirect("/user/controls")
                     }
                     if(req.body.moderator){
+                        console.log("moderator")
                         foundUser.isModerator = true ;
                         foundUser.save()
                         req.flash("success" , foundUser.username+" has been made moderator")
                         res.redirect("/user/controls")
                     }
                     if(req.body.academy){
+                        console.log("academy")
                         foundUser.isAcademy = true ;
                         foundUser.save()
                         req.flash("success" , foundUser.username+" has been made academy")
@@ -264,8 +271,11 @@ router.post("/user/promouse" , middelware.isLoggedIn ,function(req,res){
                     res.redirect("/payment")
                 }
                 if(foundpromo){
+                    console.log("code found")
                     if(foundpromo.status && foundpromo.usedBy.length < foundpromo.usageLimit){
+                        console.log("code active")
                         if(foundpromo.usedBy.length == 0){
+                            console.log("code used 1st time")
                             var credit = foundpromo.value -  user.invitations
                             user.invitations = user.invitations + foundpromo.value ;
                             user.save()
@@ -277,11 +287,13 @@ router.post("/user/promouse" , middelware.isLoggedIn ,function(req,res){
                         }else{
                             for(i=0 ; i <foundpromo.usedBy.length; i++ ) {
                                 if(foundpromo.usedBy[i].username==user.username){
+                                    console.log("code already used")
                                     req.flash("error" , "You have already used this promo")
                                     res.redirect("/payment")
                                     return
                                 }else{
                                     if(i == foundpromo.usedBy.length -1 ){
+                                        console.log("code apllied")
                                         var credit = foundpromo.value -  user.invitations
                                         user.invitations = user.invitations + foundpromo.value ;
                                         user.save()
@@ -323,6 +335,9 @@ router.post("/user/addacademy",middelware.isLoggedIn,function(req,res){
                         res.redirect("/dashboard")
                     }else{
                         foundAcademy.students.push(foundUser.username)
+                        console.log("user found")
+                        console.log(req.user._id)
+                        console.log(typeof req.user._id)
                         foundUser.myAcademy = req.user._id
                         foundAcademy.save()
                         foundUser.save()
@@ -384,6 +399,7 @@ router.post("/user/sms",middelware.isLoggedIn ,function(req,res){
                             var message = 'Hi '+user.username+' ! %0A'+req.body.smstext
                             var smstopaidusers = "https://lifetimesms.com/json?api_token=6861b73945fe2633b599a7ae9aec2c9001fc6a2817&api_secret=secretapikeyforkgohargrademy&to="+ user.phone +"&from=GRADEMY&message="+message
                             await sendsms (smstopaidusers)
+                            console.log(message)
                         }
                     });
                 }
@@ -452,48 +468,10 @@ router.post("/user/sms",middelware.isLoggedIn ,function(req,res){
                 }
             })
         }
+        console.log(req.body)
         res.redirect("/user/controls")
     }else{
         res.send("you are not autherized")
-    }
-})
-
-// api for admin only
-router.get("/user/admin/data/api",middelware.isLoggedIn, (req,res)=>{
-    if(req.user.isAdmin){
-        console.log("stat route hit")
-        Useractivity.findById("61b357ffc86d5b7160714228", (err,foundLog)=>{
-            if(err || !foundLog){
-                console.log(err)
-            }else{
-                console.log("log found")
-                User.find({},(err,allUsers)=>{
-                    if(err || !allUsers){
-                        console.log(err)
-                    }else{
-                        console.log("all users loaded")
-                        NewCustomQuiz.find({},(err,allQuizzes)=>{
-                            if(err || !allQuizzes){
-                                console.log(err)
-                            }else{
-                                console.log("all quizzes loaded")
-
-                                res.json({
-                                    useractivity : foundLog,
-                                    users : allUsers,
-                                    quizzes : {
-                                        createdAt : allQuizzes.map((quiz)=>{return quiz.createdAt}),
-                                        solvedBy : allQuizzes.map((quiz)=>{return quiz.solvedBy})
-                                    }
-                                })
-                            }
-                        })
-                    }
-                })
-            }
-        })
-    }else{
-        res.json("error")
     }
 })
 
