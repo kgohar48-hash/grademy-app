@@ -71,7 +71,7 @@ async function init(){
 function fetchingData (){
     return new Promise((resolve,reject)=>{
         var client = new HttpClient();
-        client.get('https://www.grademy.org/data',async function(res) {
+        client.get('http://localhost:8000/data',async function(res) {
             quiz = JSON.parse(res) 
             console.log(quiz)
             getKeyOfCorrectness()

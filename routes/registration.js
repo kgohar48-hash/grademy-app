@@ -1,6 +1,6 @@
 const express			 = require("express"),
 	router 			 = express.Router(),
-	// randomstring	 = require("randomstring"),
+	randomstring	 = require("randomstring"),
 	passport     	 = require ("passport"),
 	User			 = require("../models/user"),
 	middelware 		 = require("../middelware");

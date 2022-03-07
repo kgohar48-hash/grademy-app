@@ -19,16 +19,7 @@ var mcqSchema = new mongoose.Schema ({
     ],
     solution : {type: String , default : ""},
     solutionVideo : {type: String , default : ""},
-    correctTime : [],
-    solvedBy : [{
-        id : {
-            type : mongoose.Schema.Types.ObjectId ,
-            ref : "User"
-        },
-        username : String,
-        attempted : [],
-        date : {type: Date, default: Date.now}
-    }],
+    avgCorrectTime : {type: Number , default : 10},
     createdAt: {type: Date, default: Date.now}
 })
 // work on tags

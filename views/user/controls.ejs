@@ -1,6 +1,4 @@
 <%- include("../partials/header")  %>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-
 <link rel="stylesheet" href="/css/customquiz.css">
 
 <div class="container">
@@ -12,19 +10,10 @@
                     <h2> Users : <%=totalUsers%></h2>
                     <h2> Unverified : <%=totalUsers - totalVerified%></h2>
                     <h2> Paid : <%=totalPaid%></h2>
-                    <h2 > Billing visits : <span id="totalBillingVisits">loading ...</span></h2>
-                    <h2 > Payment visits : <span id="totalPaymentVisitsElement">loading ...</span></h2>
-                    <h2 > Login redirects : <span id="totalLoginredirects">loading ...</span></h2>
-
-                    
                 </div>
                 <div class="col-md-6">
                     <h2 > MDCAT : <%=totalMDCAT%></h2>
                     <h2 > FUNG : <%=totalFUNG%></h2>
-                    <h2 > Attempts : <span id="totalQuizAttemptsElement">loading ...</span></h2>
-                    <h2 > Quizzes : <span id="totalQuizzes">loading ...</span></h2>
-                    <h2 > Quiz views : <span id="totalQuizViews">loading ...</span></h2>
-                    
                 </div>
             </div>
         </div>
@@ -140,33 +129,6 @@
             </form>
         </div>
     </div>
-    <div class="card mt-3 mb-3" style="width: auto; height: auto;  cursor:auto;">
-        <div class="chartsection">
-            <div class="signupChart">
-                <canvas id="signupChart" class="chart"  width="1000" height="300"></canvas>                    
-            </div>
-            <div class="quizAttemptChart">
-                <canvas id="quizAttemptChart" class="chart"  width="1000" height="300"></canvas>                    
-            </div>
-            <div class="quizMakeChart">
-                <canvas id="quizMakeChart" class="chart"  width="1000" height="300"></canvas>                    
-            </div>
-            <div class="quizViewChart">
-                <canvas id="quizViewChart" class="chart"  width="1000" height="300"></canvas>                    
-            </div>
-            <div class="billingChart">
-                <canvas id="billingChart" class="chart"  width="1000" height="300"></canvas>                    
-            </div>
-            <div class="paymentChart">
-                <canvas id="paymentChart" class="chart"  width="1000" height="300"></canvas>                    
-            </div>
-            <div class="loginChart">
-                <canvas id="loginChart" class="chart"  width="1000" height="300"></canvas>                    
-            </div>
-        </div>
-    </div>
 </div>
-
-<script src="../../static/admin.js"></script>
 
 <%- include("../partials/footer")  %>

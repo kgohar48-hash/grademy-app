@@ -1,12 +1,5 @@
 var customQuiz = document.getElementById("customquizContainer")
 var user       = document.getElementById("username").value
-var dataobj = {
-    mcqsAttempts : 0,
-    quizAttempts : 0,
-    quizAttempts2 : 0,
-    mcqsAttempts2 : 0
-}
-var d = new Date()
 var HttpClient = function() {
     this.get = function(aUrl, aCallback) {
         var anHttpRequest = new XMLHttpRequest();
@@ -26,7 +19,6 @@ async function init(){
     footer.style.display = 'none'
     await fetchingCustumQuizzes();
     await showCards();
-    fetchMCQsattempts()
     setTimeout(function () {
         footer.style.display = 'block'
         document.getElementById("loader").style.display = "none";
@@ -38,7 +30,7 @@ async function fetchingCustumQuizzes(){
     try {
         return new Promise((resolve, reject) => {
             var client = new HttpClient();
-            client.get('https://www.grademy.org/quizlistapi', function (res) {
+            client.get('http://localhost:8000/quizlistapi', function (res) {
                 var quizz = JSON.parse(res);
                 quizzes = quizz.reverse()
                 resolve();
@@ -99,77 +91,6 @@ async function showCards(){
             });
             customQuiz.innerHTML = str;
             resolve();
-        });
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-async function fetchMCQsattempts(){
-    for(var i = 0; i <= quizzes.length ; i++){
-        if(i == quizzes.length){
-            // all quizzes done
-        }else{
-            await eachQuiz(quizzes[i])
-            dataobj.quizAttempts2 += quizzes[i].solvedBy.length
-        }
-    }
-}
-
-async function eachQuiz(quiz){
-    try {
-        return new Promise(async (resolve, reject) => {
-            if(quiz.madeBy == user){
-                for(var j = 0 ; j <= quiz.solvedBy.length ; j++){
-                    if(j == quiz.solvedBy.length){
-                        // all attempts done
-                        resolve()
-                    }else{
-                        await eachQuizAttempt(quiz.solvedBy[j],quiz)
-                    }
-                }
-            }else{
-                resolve()
-            }
-        });
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-function eachQuizAttempt(solvedBy,quiz){
-    try {
-        return new Promise((resolve, reject) => {
-            if(solvedBy.username != quiz.madeBy && typeof solvedBy.date != "undefined"){
-                attemptdate = new Date(solvedBy.date)
-                // if(attemptdate.getMonth() == 0 && attemptdate.getDate() == 28){
-                //     console.log(attemptdate.getMonth() +"/"+attemptdate.getDate())
-                // }
-                if(d.getMonth() == attemptdate.getMonth()){
-                    solvedBy.timeForEachMcq.forEach(time => {
-                        if(time > 10){
-                            dataobj.mcqsAttempts++
-                        }
-                    });
-                    dataobj.quizAttempts++
-                    dataobj.mcqsAttempts2 += quiz.mcqs.length
-                    resolve()
-                }else if(d.getMonth() == 1 + attemptdate.getMonth() && d.getDate() <= attemptdate.getDate()){
-                    solvedBy.timeForEachMcq.forEach(time => {
-                        if(time > 10){
-                            dataobj.mcqsAttempts++
-                        }
-                    });
-                    dataobj.quizAttempts++
-                    dataobj.mcqsAttempts2 += quiz.mcqs.length
-                    resolve()
-                }else{
-                    resolve()
-                }
-                
-            }else{
-                resolve()
-            }
         });
     } catch (err) {
         console.log(err);

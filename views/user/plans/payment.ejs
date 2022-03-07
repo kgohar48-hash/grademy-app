@@ -8,23 +8,23 @@
         </div>
         <%- include("../../partials/flash")  %>
         <div class="card-body">
-          <input type="hidden" value="<%=plan%>" id="plan">
             <div class="invoice-card" style="color: black; ">
                 <div class="invoice-title">
                   <div id="main-title">
                     <h4 style="color: black; font-weight: 700;">PLAN INVOICE</h4>
-                    <span class="light">#89 292</span>
+                    <span>#89 292</span>
                   </div>
-                  <p>Name       : <%=currentUser.name%></p>
-                  <p>Session    : <%=currentUser.category%></p>
-                  <p>Plan       : <span class="plan-name"></span></p>
-                  <p>Duration   : <span id="duration"><%=duration%></span> month</p>
+                  <p>Name : <%=currentUser.name%></p>
+                  <p>Session : <%=currentUser.category%></p>
+                  <p>Plan : <%=plan%></p>
                   <p>Expires on : <span id="expire-date"></span></p>
+
                 </div>
+                
                 <div class="invoice-details">
                   <table class="invoice-table">
                     <thead>
-                      <tr class="light">
+                      <tr>
                         <td>PRODUCT</td>
                         <td>UNIT</td>
                         <td>PRICE</td>
@@ -33,25 +33,33 @@
                     
                     <tbody>
                       <tr class="row-data">
-                        <td><span class="plan-name"></span> Plan</td>
-                        <td ><%=duration%> month</td>
-                          <td><span id="total-amount"></span>.Rs</td>
+                        <td><%=plan%> Plan<span></span></td>
+                        <td >1</td>
+                        <%if(plan == "Premium"){%>
+                          <td>1000</td>
+                        <%}else{%>
+                          <td>1500</td>
+                        <%}%>
                       </tr>
                       <tr class="row-data">
                         <td>Discount<span></span></td>
-                        <td><span id="discount-percent">0</span>%</td>
-                        <td><span id="discount-amount">0</span>.Rs</td>
+                        <td>0</td>
+                        <td>0</td>
                       </tr>
                       <tr class="calc-row">
                         <td colspan="2">Total</td>
-                          <td style="color: chartreuse;"><span id="total-bill">1000</span>.Rs</td>
+                        <%if(plan == "Premium"){%>
+                          <td style="color: chartreuse;"><%=1000%>.Rs</td>
+                          <%}else{%>
+                            <td style="color: chartreuse;"><%=1500%>.Rs</td>
+                          <%}%>
                       </tr>
                     </tbody>
                   </table>
                 </div>
                 <div class="invoice-footer">
-                    <a  class="btn btn-primary mr-2 pat-btn" href="/payment/paid/<%=plan%>/<%=duration%>">
-                        Upgrade Now
+                    <a  class="btn btn-primary mr-2" href="/payment/paid/<%=plan%>">
+                        Pay Now
                     </a>
                 </div>
               </div>
@@ -68,5 +76,9 @@
         </div> 
     </div>
 </div>
-<script src="/static/payment.js"></script>
+<script>
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December","January"];
+  const date = new Date();
+  document.getElementById("expire-date").innerText = months[date.getMonth()+1]+"/"+date.getUTCDate()+"/"+date.getFullYear()
+</script>
 <%- include("../../partials/footer")  %>

@@ -1,5 +1,5 @@
 
-fetch('https://www.grademy.org/academies/api')
+fetch('http://localhost:8000/academies/api')
 .then(response => response.json())
 .then(data => {
     var i = 0;
@@ -39,7 +39,7 @@ joinBtns.forEach(btn => {
                 },
                 body : JSON.stringify({academyId : academyToBeUnjoined})
                 }
-            fetch("https://www.grademy.org/academy/leave" , options);
+            fetch("http://localhost:8000/academy/leave" , options);
         }else{
             e.target.classList.remove('btn-primary')
             e.target.classList.add('btn-success')
@@ -52,7 +52,7 @@ joinBtns.forEach(btn => {
                 },
                 body : JSON.stringify({academyId : academyToBeJoined})
             }
-            fetch("https://www.grademy.org/academy/join" , options);
+            fetch("http://localhost:8000/academy/join" , options);
         }
     })
 });
@@ -60,7 +60,7 @@ joinBtns.forEach(btn => {
 academyCard.forEach(card => {
     card.addEventListener("click" , e=>{
         if(typeof(e.target.dataset["id"]) != "undefined"){
-            window.location = "https://www.grademy.org/academy/"+e.target.dataset["id"]
+            window.location = "http://localhost:8000/academy/"+e.target.dataset["id"]
         }
     })
 });
