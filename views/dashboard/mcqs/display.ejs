@@ -1,64 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Grademy - Mcqs</title>
-    <link rel="icon" type="image/png" sizes="32x32" href="https://res.cloudinary.com/grademy/image/upload/v1592985715/favicon-32x32_gb7rei.png">
-    <link rel="stylesheet"  type="text/css" href="/css/app.css" />
-    <link rel="stylesheet"  type="text/css" href="/css/game.css" />
-    <link rel="stylesheet" href="/css/leaderboard.css">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet"  href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" >
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" ></script>
+    <link rel="stylesheet" href="/css/main.css" >
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://res.cloudinary.com/grademy/image/upload/v1592985715/favicon-32x32_gb7rei.png">
+
+    <title>Grademt MCQs || <%=correctness%></title>
+    <link rel="stylesheet" href="/css/quiz/app.css">
+    <link rel="stylesheet" href="/css/leaderboard.css">
+
+    <script src="https://kit.fontawesome.com/05c9781d40.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <input id="user-id" type="hidden" value="<%=id%>">	
+    <input id="correctness" type="hidden" value="<%=correctness%>">	
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <a class="navbar-brand" href="/">Grademy</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <% if(!currentUser){ %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/academy">Academies</a>
+                    </li>
+                <%} else { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/newsfeed">Newsfeed</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/academy">Academies</a>
+                    </li>
+                    <%if(currentUser.isAdmin){%>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin">Admin</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/counselling">Counselling</a>
+                    </li>
+                <%}%>
+                <li class="nav-item">
+                    <a class="nav-link " href="/user/plan">Billing</a>
+                </li>
+                <%if(currentUser.isModerator){%>
+                    <li class="nav-item">
+                        <a class="nav-link " href="/sorting">Sort</a>
+                    </li>
+                <%}%>
+                <%if(currentUser.isAdmin){%>
+                        <li class="nav-item">
+                            <a class="nav-link " href="/user/controls">Controls </a>
+                        </li>
+                <%}%>
+                        
+                <% } %>
+            </ul>
+            
+            <div >
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class=" navbar-nav ">
+                        <% if(!currentUser){ %>
+                            <li class="nav-item"> <a href="/login" class="nav-link">Login</a></li>
+                            <li class="nav-item"><a href="/signup" class="nav-link">Sign Up</a></li>
+                        <%} else { %>
+                            <button type="button" class="icon-button mt-1 mr-4">
+                                <span class="material-icons nav-link">notifications</span>
+                                <span class="icon-button__badge">2</span>
+                            </button>
+                            <li class="nav-item"><a href="#" class="nav-link"> <%=currentUser.username%> </a></li>
+                            <li class="nav-item"><a href="/logout" class="nav-link">Logout</a></li>
+                        <% } %>
+                    </ul>
+                </div>
+        </div>
+        </div>
+    </nav>
+    <div class="container" style="color: black;"> 
+        <div class="quiz_box ">
+            <div class="quiz">
+                <header>
+                    <div class="title"></div>
+                    
+                    <div class="time_line"></div>
+                </header>
+                <section>
+                    <div class="que_text"></div>
+                    <div class="option_list"></div>
+                </section>
+                <div class="comment">
+                    <a data-toggle="collapse" class="btn btn-primary btn-lg mt-3 mb-3 btn-block" href="#commentarea" role="button" aria-expanded="false" style="color: blanchedalmond;">
+                        Comment <span id="comment-count"></span>
+                    </a>
+                    <div class="collapse" id="commentarea">
+                        <div class="card card-body" style="width: auto; height: auto; background: #414345  ;">
+                            <div class="form-group">
+                                <textarea  rows="2" class="form-control comment-text" name="text" placeholder="Write a comment..." ></textarea>	
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-lg btn-primary btn-block" id="comment-btn" >
+                                Post
+                                </button>
+                            </div>
+                            <hr style="border-top: 1px solid rgb(87, 87, 87); margin: 5px 10px;">
+                            <div id="comment-display"></div>
+                        </div>
+                    </div>
+                </div>
+                <footer>
+                    <div class="total_que"></div>
+                    <div>
+                        <button class="finish_btn">Finish</button>
+                        <button class="next_btn">Next</button>
+                    </div>
+                </footer>
+            </div>
+            <div class="toggler">
+                <span>Jump to Question:</span>
+                <div class="t_buttons"></div>
+            </div>
+            <div class="subjects" id="subject-area">
+            </div>
+        </div>
+        
+    </div>
+    
+    <script src="/static/mcqsdisplay.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" ></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" ></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>    
-  </head>
-  <body>
-    <input type="hidden" id="category" value="<%=category%>">
-    <input type="hidden" id="id" value="<%=id%>">
-    <div id="mySidepanel" class="sidepanel">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-      <div id="sidebar-container"></div>
-    </div>
-    <span style="font-size: large;" class="badge badge-pill badge-success mt-3"><div id="subject">Subject</div><span style="font-size: large;" class="badge badge-pill badge-primary"><div id="chapter">Chapter</div></span></span>
-    <div class="container1">
-      <div id="game" class="justify-center flex-column">
-        <div id="hud">
-          <div id="hud-item">
-            <p id="progressText" class="hud-prefix">
-              Question
-            </p>
-            <div id="progressBar" >
-              <div id="progressBarFull" ></div>
-            </div>
-          </div>
-          <div id="hud-item">
-            <div id="app" class="timer mb-4"></div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <h2 id="questionText">What is the answer to this questions?</h2>
-            <canvas id="questionCorrectness" class="chart" width="400" height="250"></canvas>
-            <h4 id="avg-time" style="color: rgb(56, 58, 58); font-size: 2em; text-align: center;" >Time<sub>avg</sub> : <span id="avgTime" style="color: chartreuse;"></span> sec</h4>
-            <h4 id="my-time" style="color: rgb(56, 58, 58); font-size: 2em; text-align: center;" >My time : <span id="myTime" style="color: chartreuse;"></span> sec</h4>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</body>
 
-          </div>
-          <div class="col-md-6">
-            <button class="btn btn-success btn-lg" id="previousButton">previous</button>
-            <button class="btn btn-success btn-lg" id="nextButton">Next</button>
-            <a href="javascript:history.back()" class="btn btn-primary btn-lg" id="backButton" style="display: none;">Go Back</a>
-            <button class="btn btn-lg btn-success float-right" style="width: fit-content;" onclick="openNav()">☰ </button> 
-            <div id="choices-container">
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <script src="/static/mcqsdisplay.js"></script>  
-  </body>
 </html>

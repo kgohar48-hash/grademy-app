@@ -15,6 +15,10 @@ var commentSchema =  mongoose.Schema({
             ref : "Comment"
         }
     ],
+    mcq : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "Mcq"
+    },
     votes : {type : Number, default : 0},
     votedBy : [
         {

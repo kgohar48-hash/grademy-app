@@ -28,10 +28,10 @@ router.get("/currentuser",middelware.isLoggedIn , function(req,res){
 	res.json(positionsData)
 })
 //API to pass data to template's javascript file
-// router.get("/data" , function(req,res){
-// 	var data = dataToBePassed ;
-// 	res.json(data)
-// })
+router.get("/data" , function(req,res){
+	var data = dataToBePassed ;
+	res.json(data)
+})
 //customquiz api to send list of quizzes
 router.get("/quizlistapi",function(req,res){
 	// got this object from newCustomQuiz router
@@ -53,22 +53,16 @@ router.get('/mcqsinfoapi',(req,res)=>{
 // function calls
 var time = 0
 
+askingForInfo();
 checkTransactions()
 positionSorting();
-askingForInfo();
-setInterval(()=>{time++}, 100)
-setInterval(askingForInfo, 1000 * 60*60*2);
-setInterval(positionSorting, 1000 * 60*10);
+// setInterval(()=>{time++}, 100)
+setInterval(positionSorting, 1000 * 60*60);
+setInterval(checkTransactions, 1000 * 60*60*24);
+
 // function defination ====================================
 
 async function positionSorting(){ 
-	now = new Date();
-	millisTill10 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 1, 0, 0) - now;
-	if (millisTill10 < 0) {
-		millisTill10 += 86400000; // it's after 10am, try 10am tomorrow.
-	}
-	setTimeout(checkTransactions, millisTill10);
-	time = 0
 	console.log("position sorting started : ", time)
 	await User.find({},function(err,allUsers){
 		if(err){
@@ -126,48 +120,49 @@ function getSubjectPosition(positionArray , user, subject){
 	eval(subject+"Position.splice(subjectIndex, 0, subjectDataOfUser)")
 }
 function mcqsInfoData(category) {
-	var info = {}
-	Mcq.find({category : category }, function (err,mcqsFound){
-		if(err){
-			console.log(err)
-		}else{
-			console.log("total mcqs "+category+" : "+ mcqsFound.length)
-			for(var i = 0 ; mcqsFound.length >= i ; i++){
-				
-				if( mcqsFound.length == i){
-					// termintae
-					mcqsInfo[category] = info 
-				}else{
-					if( typeof info[mcqsFound[i].subject] === 'undefined'){
-						info[mcqsFound[i].subject] = {}
-						if(typeof  info[mcqsFound[i].subject][mcqsFound[i].chapter] === 'undefined'){
-							info[mcqsFound[i].subject][mcqsFound[i].chapter] = 1
-						}else{
-							info[mcqsFound[i].subject][mcqsFound[i].chapter] = info[mcqsFound[i].subject][mcqsFound[i].chapter] + 1
-						}
+	return new Promise((resolve,reject)=>{
+		var info = {}
+		Mcq.find({category : category }, function (err,mcqsFound){
+			if(err){
+				console.log(err)
+			}else{
+				console.log("total mcqs "+category+" : "+ mcqsFound.length)
+				for(var i = 0 ; mcqsFound.length >= i ; i++){
+					if( mcqsFound.length == i){
+						// termintae
+						mcqsInfo[category] = info 
+						resolve()
 					}else{
-						if(typeof  info[mcqsFound[i].subject][mcqsFound[i].chapter] === 'undefined'){
-							info[mcqsFound[i].subject][mcqsFound[i].chapter] = 1
+						if( typeof info[mcqsFound[i].subject] === 'undefined'){
+							info[mcqsFound[i].subject] = {}
+							if(typeof  info[mcqsFound[i].subject][mcqsFound[i].chapter] === 'undefined'){
+								info[mcqsFound[i].subject][mcqsFound[i].chapter] = 1
+							}else{
+								info[mcqsFound[i].subject][mcqsFound[i].chapter] = info[mcqsFound[i].subject][mcqsFound[i].chapter] + 1
+							}
 						}else{
-							info[mcqsFound[i].subject][mcqsFound[i].chapter] = info[mcqsFound[i].subject][mcqsFound[i].chapter] + 1
+							if(typeof  info[mcqsFound[i].subject][mcqsFound[i].chapter] === 'undefined'){
+								info[mcqsFound[i].subject][mcqsFound[i].chapter] = 1
+							}else{
+								info[mcqsFound[i].subject][mcqsFound[i].chapter] = info[mcqsFound[i].subject][mcqsFound[i].chapter] + 1
+							}
 						}
 					}
 				}
 			}
-		}
+		})
 	})
 }
-function askingForInfo() {
-	mcqsInfoData('FUNG')
-	mcqsInfoData('GRE')
-	mcqsInfoData('MDCAT')
+async function askingForInfo() {
+	await mcqsInfoData('FUNG')
+	await mcqsInfoData('GRE')
+	await mcqsInfoData('MDCAT')
 }
 // checking if promo or plan expired 
 
 async function checkTransactions() {
-	await Transaction.find({},(err , foundTransactions)=>{
+	await Transaction.find({}, async(err , foundTransactions)=>{
 		date = new Date()
-
 		if(err || !foundTransactions){
 			console.log(err)
 			return
@@ -175,14 +170,23 @@ async function checkTransactions() {
 			for(var i = 0 ; foundTransactions.length >= i ; i++){
 				if(foundTransactions.length == i){
 					// terminate
+					console.log(foundTransactions.length + " transactions")
+					return
 				}else{
-					if(foundTransactions[i].isPromo && (date.getDate() - new Date(foundTransactions[i].createdAt).getDate()) > 3 ) {
+					if(foundTransactions[i].isPromo && foundTransactions[i].varified  && (date.getDate() - new Date(foundTransactions[i].createdAt).getDate()) > 3 ) {
 						console.log("an expired promo found : "+ foundTransactions[i])
+						await Transaction.findById(foundTransactions[i]._id , (err, foundTransaction)=>{
+							if( err || !foundTransaction){
+								console.log(err)
+							}else{
+								foundTransaction.varified = false
+								foundTransaction.statement = foundTransaction.statement.replace('used', 'expired')
+								foundTransaction.save()
+							}
+						})
 					}
 				}
 			}
-			console.log(foundTransactions.length + " transactions")
-			return
 		}
 	})
 }

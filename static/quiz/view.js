@@ -25,7 +25,7 @@ const queText = quizBox.querySelector('.que_text');
 const optionList = quizBox.querySelector('.option_list');
 const totalQue = quizBox.querySelector('.total_que');
 const nextButton = quizBox.querySelector('.next_btn');
-const finishButton = quizBox.querySelector('.finish_btn');
+const finishButton = quizBox.querySelector('.finish_btn')
 const toggler = quizBox.querySelector('.t_buttons');
 const tButtons = toggler.children;
 const options = optionList.children;
@@ -34,6 +34,9 @@ const myCorrect = document.getElementById('myCorrect')
 const myIncorrect = document.getElementById('myIncorrect')
 const mySkipped = document.getElementById('mySkipped')
 const myRank = document.getElementById('myRank')
+const avgScoreElement = document.getElementById('avgScore')
+const watchBtn = document.getElementById('watch-btn')
+const video = document.getElementById('video')
 
 var timeElement = document.getElementById("timefortest")
 skipped = 0
@@ -74,6 +77,12 @@ function capitalizeFirstLetter(string) {
 // quizTitle.append(document.createElement('span').textContent = `${quiz.mcqs[0].chapter}`);
 
 function startQuiz() {
+    if(quiz.discussionVideoURL == ""){
+        watchBtn.style.display = 'none'
+    }else{
+        watchBtn.style.display = 'block'
+        video.src = "https://www.youtube.com/embed/"+quiz.discussionVideoURL
+    }
     createToggler();
     setMyStats()
     setleaderboard()
@@ -158,7 +167,7 @@ nextButton.addEventListener('click', () => {
 })
 
 finishButton.addEventListener('click', () => {
-    window.location = "http://localhost:8000/dashboard";
+    window.location = "http://localhost:8000/dashboard/quiz/redirect/"+quiz._id;
 })
 
 function createToggler() {
@@ -199,11 +208,18 @@ function queTimer(index) {
 
 async function findUserResponse() {
     return new Promise((resolve,reject)=>{
-        for(var i = 0 ; quiz.solvedBy.length > i ; i++){
-            if(user.username == quiz.solvedBy[i].username){
-                UserSolution =  quiz.solvedBy[i]
-                position = i + 1
+        var scoreSum = 0
+        for(var i = 0 ; quiz.solvedBy.length >= i ; i++){
+            if(quiz.solvedBy.length == i){
+                avgScore = Math.round(scoreSum/i)
+                console.log("avg score : ",avgScore)
                 resolve()
+            }else{
+                scoreSum += quiz.solvedBy[i].userScore
+                if(user.username == quiz.solvedBy[i].username){
+                    UserSolution =  quiz.solvedBy[i]
+                    position = i + 1
+                }
             }
         }
     })
@@ -215,6 +231,7 @@ function setMyStats() {
     myCorrect.innerText = correct
     myIncorrect.innerText = incorrect
     mySkipped.innerText = skipped
+    avgScoreElement.innerText = avgScore
 }
 
 function setleaderboard() {
@@ -223,21 +240,26 @@ function setleaderboard() {
     for(var i = 0 ; quiz.solvedBy.length > i ; i ++){
         if(i>4 || quiz.solvedBy.length == i - 1){
             i = quiz.solvedBy.length
+            boardhtml += setLeaderboardPosition(position - 1,UserSolution.username,UserSolution.userScore)
             board.innerHTML = boardhtml
         }else{
-            boardhtml += `<div class="lboard_mem">
-            <div class="name_bar">
-              <p>${i+1}. <span id="1positionname">${quiz.solvedBy[i].username}</span> </p>
-              <div class="bar_wrap">
-                <div class="inner_bar" id="1positionprogressbar" style="width: 100%"></div>
-              </div>
-            </div>
-            <div class="points" >
-              <span id="1positionscore">${quiz.solvedBy[i].userScore}</span> points
-            </div>
-          </div>`
+            boardhtml += setLeaderboardPosition(i,quiz.solvedBy[i].username,quiz.solvedBy[i].userScore)
         }
     }
+}
+
+function setLeaderboardPosition(index,username,score){
+    return(`<div class="lboard_mem">
+    <div class="name_bar">
+      <p>${index+1}. <span id="1positionname">${username}</span> </p>
+      <div class="bar_wrap">
+        <div class="inner_bar" id="1positionprogressbar" style="width: ${(score/(quiz.mcqs.length*4))*100}%"></div>
+      </div>
+    </div>
+    <div class="points" >
+      <span id="1positionscore">${score}</span> points
+    </div>
+  </div>`)
 }
 // comment btn action
 document.getElementById('comment-btn').addEventListener("click" , function(){
@@ -262,5 +284,7 @@ document.getElementById('comment-btn').addEventListener("click" , function(){
 })
 
 })
+
+
 
 

@@ -51,6 +51,25 @@ var currentBalance  = document.getElementById("current-balance")
 var balanceIn       = document.getElementById("balance-in")
 var balanceOut      = document.getElementById("balance-out")
 var inviteLinkInput = document.getElementById("invite-link")
+var pricingBtns     = Array.from(document.getElementsByClassName("pricing-btn"));
+var totalPrice1     = document.getElementById("t-price-1")
+var totalPrice3     = document.getElementById("t-price-3")
+var totalPrice6     = document.getElementById("t-price-6")
+var totalMonth1    = document.getElementById("t-month-1")
+var totalMonth3    = document.getElementById("t-month-3")
+var totalMonth6    = document.getElementById("t-month-6")
+var totalSave1     = document.getElementById("t-save-1")
+var totalSave3     = document.getElementById("t-save-3")
+var totalSave6     = document.getElementById("t-save-6")
+var perMonth1     = document.getElementById("t-per-month-1")
+var perMonth3     = document.getElementById("t-per-month-3")
+var perMonth6     = document.getElementById("t-per-month-6")
+var paymentBtn1     = document.getElementById("payment-btn1")
+var paymentBtn3     = document.getElementById("payment-btn3")
+var paymentBtn6     = document.getElementById("payment-btn6")
+
+
+
 var currentBalanceAmount = 0
 var balanceInAmount = 0
 var balanceOutAmount = 0
@@ -76,7 +95,47 @@ function copyInviteLink(){
 function copyBtnOnMounse() {
     var tooltipp = document.getElementById("myTooltipp");
     tooltipp.innerHTML = "Copy to clipboard";
-  }
+}
+
+pricingBtns.forEach(btn => {
+    btn.addEventListener("click", e => {
+        save = 0.20
+        plan = e.target.dataset["number"]
+        console.log(plan)
+        if(plan == "premium"){
+            base = 2000
+            pricingBtns[1].classList.remove("btn-success")
+            pricingBtns[0].classList.add("btn-success")
+        }else{
+            base = 3500
+            pricingBtns[0].classList.remove("btn-success")
+            pricingBtns[1].classList.add("btn-success")
+            plan = "premiumplus"
+        }
+        totalPrice1.innerText       = "Total Rs."+base 
+        totalPrice3.innerText       = "Total Rs."+(base - base*save)*3
+        totalPrice6.innerText       = "Total Rs."+(base - base*save*2)*6
+        totalMonth1.innerText       = "1"
+        totalMonth3.innerText       = "3"
+        totalMonth6.innerText       = "6"
+        totalSave1.innerText        = ""
+        totalSave3.innerText        = "SAVE "+(save*100)+"%"
+        totalSave6.innerText        = "SAVE "+(save*200)+"%"
+        perMonth1.innerText         = "Rs."+(base)+"/mo"
+        perMonth3.innerText         = "Rs."+(base - base*save)+"/mo"
+        perMonth6.innerText         = "Rs."+(base - base*save*2)+"/mo"
+        paymentBtn1.href            = "/payment/plan/"+plan+"/1"
+        paymentBtn3.href            = "/payment/plan/"+plan+"/3"
+        paymentBtn6.href            = "/payment/plan/"+plan+"/6"
+        console.log(paymentBtn3.href)
+    });
+  });
+
+// pricing details animation
+$(".pricing-container").click(function(){
+    $(".pricing-container").removeClass("active");
+    $(this).addClass("active");
+});
 
 
 
