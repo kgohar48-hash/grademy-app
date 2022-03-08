@@ -499,14 +499,14 @@ async function trasanctionCreate(amount,statement,varified,isPromo,TID,to,from) 
 	})
 }
 function activitylog(page,obj) {
-	// Useractivity.findById('61b357ffc86d5b7160714228', (err , foundLogs)=>{
-	// 	if(err || !foundLogs){
-	// 		console.log(err)
-	// 	}else{
-	// 		foundLogs[page].push(obj)
-	// 		foundLogs.save()
-	// 	}
-	// })
+	Useractivity.findById('61b357ffc86d5b7160714228', (err , foundLogs)=>{
+		if(err || !foundLogs){
+			console.log(err)
+		}else{
+			foundLogs[page].push(obj)
+			foundLogs.save()
+		}
+	})
 	return
 }
 
