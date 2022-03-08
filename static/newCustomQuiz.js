@@ -4,30 +4,150 @@ var arr2 = [];
 var arr3=[];
 var dataArray = {}
 var subjectData = []
-
-var HttpClient = function() {
-  this.get = function(aUrl, aCallback) {
-      var anHttpRequest = new XMLHttpRequest();
-      anHttpRequest.onreadystatechange = function() { 
-          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-              aCallback(anHttpRequest.responseText);
+var mcqsInfo = {
+    "FUNG": {
+      "physics": {
+        "MEASUREMENT": 31,
+        "Vectors and Equilibrium": 108,
+        "Motion and Force": 202,
+        "Work and Energy": 172,
+        "Circular Motion": 225,
+        "Fluid Dynamics": 93,
+        "Oscillations": 112,
+        "Waves": 213,
+        "Physical Optics": 92,
+        "Optical Instruments": 94,
+        "Heat & Thermodynamic": 30,
+        "Electrostatics": 274,
+        " Current Electricity": 221,
+        "Electromagnetism": 271,
+        "Electromagnetic Induction": 238,
+        "Alternating Current": 214,
+        "Physics of Solid": 218,
+        " Electronics": 238,
+        " Dawn of Modern Physics": 274,
+        "Atomic Spectra": 220,
+        " Nuclear Physic": 351,
+        "Motion": 47,
+        "CENTER OF MASS AND LINEAR MOMENTUM": 40,
+        "test": 3,
+        "Heat & Thermodynamics": 185,
+        "PMC MDCAT 2021": 120,
+        "Measurement": 37
+      },
+      "chemistry": {
+        "Basic Concepts": 150,
+        "Experimental techniques in chemistry": 59,
+        "Gases": 108,
+        " Liquids and Solids": 80,
+        "Atomic structure": 128,
+        "Chemical Bonding": 126,
+        "Thermochemistry": 69,
+        "Chemical Equilibrium": 78,
+        "Solutions": 87,
+        "Electrochemistry": 86,
+        "Reaction Kinetics": 63,
+        "Periodic Classification of Elements and Periodicity ": 67,
+        "S-Block Elements": 61,
+        " Group IIIA & IVA Elements ": 68,
+        "IV-A and VI-A Elements": 77,
+        "The Halogens and The Noble Gases": 78,
+        "Transition Elements": 75,
+        "Fundamental Principles of Organic Chemistry": 64,
+        "Aliphatic Hydrocarbons": 72,
+        "Aromatic Hydrocarbons": 67,
+        "Alkyl Halides ": 71,
+        "Alcohols, Phenols and Ethers": 83,
+        "Aldehydes and Ketones ": 75,
+        "Carboxylic Acid": 94,
+        "Macromolecules": 88,
+        "Common Chemical Industries in Pakistan": 71,
+        "Environmental Chemistry": 79,
+        "postedbyacademy": 11
+      },
+      "english": {
+        "Sentence Completion": 44,
+        "Choose Correct Sentence": 90,
+        "Spot The Error": 54,
+        "VOCABULARY": 90,
+        "Adverb": 30,
+        "Article": 30,
+        "First half syllabus": 30,
+        "PARALLELISM, NARRATION": 28,
+        "PREPOSITION": 30,
+        "Test Pronoun": 30,
+        "sentence completion": 8,
+        "spot the error": 32,
+        "synonyms": 41,
+        "test": 1
+      },
+      "math": {
+        "Number System": 37,
+        "Set, Functions and Groups": 36,
+        "Matrics and Determinants": 29,
+        "Quadratic Equations": 30,
+        " Partial Fractions": 25,
+        "Sequences and Series": 30,
+        "Permutation, Combination & Probability ": 39,
+        " Mathematical Induction and binomial theorem ": 32,
+        "Trigonometry": 35,
+        "Functions and Limits": 17,
+        "Differentiation": 19,
+        "Integration": 11,
+        "Analytic Geometry ": 39,
+        " Linear Inequalities and Linear Programming": 28,
+        "Conic section": 32,
+        "Vectors": 25,
+        "test": 2
+      },
+      "biology": {
+        "Introduction": 250,
+        "Biological Molecules": 194,
+        "Enzymes": 73,
+        "The Cell": 141,
+        "Variety of Life": 121,
+        "Kingdom Prokaryotae(Monera)": 107,
+        "The Kingdom Protista": 99,
+        "Fungi": 139,
+        "Kingdom Plantae": 158,
+        "Kingdom Animalia": 201,
+        "Bioenergetics": 182,
+        "Nutrition": 175,
+        "Gaseous Exchange": 159,
+        "Transport": 252,
+        "Homeostasis": 171,
+        "Support and Movements": 340,
+        "Coordination and Control": 165,
+        "Reproduction": 178,
+        "Growth and Development": 126,
+        "Chromosomes And DNA": 100,
+        "Cell Cycle": 97,
+        "Variation And Genetics": 292,
+        "Biotechnology": 133,
+        "Evolution": 86,
+        "Ecosystem": 82,
+        "Some Major Ecosystems": 96,
+        "Man And His Environment": 210
       }
-
-      anHttpRequest.open( "GET", aUrl, true );            
-      anHttpRequest.send( null );
-  }
+    },
+    "MDCAT": {
+      "physics": {
+        "3": 1,
+        "6": 1,
+        "Electromagnetism": 1,
+        "test": 1
+      },
+      "biology": {
+        "Cell structure and function": 40
+      }
+    }
 }
-// api calls
-var client = new HttpClient();
-client.get('https://www.grademy.org/mcqsinfoapi',async function(res) {
-  var mcqsInfo = JSON.parse(res)
-  dataArray.biology =  dataExtraction(mcqsInfo.FUNG.biology || mcqsInfo.MDCAT.biology)
-  dataArray.math =  dataExtraction(mcqsInfo.FUNG.math)
-  dataArray.physics =  dataExtraction(mcqsInfo.FUNG.physics)
-  dataArray.chemistry =  dataExtraction(mcqsInfo.FUNG.chemistry)
-  dataArray.english =  dataExtraction(mcqsInfo.FUNG.english)
 
-});
+dataArray.biology =  dataExtraction(mcqsInfo.FUNG.biology || mcqsInfo.MDCAT.biology)
+dataArray.math =  dataExtraction(mcqsInfo.FUNG.math)
+dataArray.physics =  dataExtraction(mcqsInfo.FUNG.physics)
+dataArray.chemistry =  dataExtraction(mcqsInfo.FUNG.chemistry)
+dataArray.english =  dataExtraction(mcqsInfo.FUNG.english)
 
 document.getElementById("add").addEventListener("click",()=>{
     index = document.getElementById("addons").value
