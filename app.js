@@ -23,8 +23,7 @@ app.listen (  process.env.PORT , process.env.IP	,async function(){
 		userRouter			= require("./routes/user"),
 		apiRouter			= require("./routes/api"),
 		paymentRouter		= require("./routes/payment"),
-		academyRouter		= require("./routes/academy"),
-		botRouter			= require("./routes/bot");
+		academyRouter		= require("./routes/academy");
 	
 	//Routes config
 	app.use("/newsfeed",newsfeedRoutes);
@@ -34,7 +33,6 @@ app.listen (  process.env.PORT , process.env.IP	,async function(){
 	app.use(userRouter);
 	app.use(mcqsRouter);
 	app.use(newCustomQuizRouter);
-	app.use(botRouter);
 	app.use(apiRouter);
 	app.use(paymentRouter);
 	app.use(academyRouter);
@@ -55,10 +53,6 @@ app.use(flash())
 // ===============================
 
 app.use(require("cookie-session")({
-	cookie:{
-		secure: true,
-		maxAge:60000
-	},
 	secret : "this could be anything!....." ,
 	resave : false ,
 	saveUninitialized : false 
@@ -75,12 +69,6 @@ app.use(function(req, res, next){
 	res.locals.success = req.flash("success")
 	next() ;
 }) ;
-app.use(function(req,res,next){
-	if(!req.session){
-		return next(new Error('Oh no')) //handle error
-	}
-	next() //otherwise continue
-});
 
 // starting functions
 function connectingToDB(){

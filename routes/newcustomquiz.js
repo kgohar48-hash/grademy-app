@@ -317,11 +317,11 @@ router.post("/newcustomquiz",middelware.isLoggedIn , async function(req,res){
 				}
 			});			
 			foundQuiz.solvedBy.splice(index, 0, dataFromQuiz);
-			activitylog ("quizAttempt", {
-				id : req.user._id,
-				username : req.user.username,
-				details : "scored "+Math.round( (req.body.userScore/(foundQuiz.mcqs.length*4)) * 100)+" % : "+foundQuiz._id
-			})
+			// activitylog ("quizAttempt", {
+			// 	id : req.user._id,
+			// 	username : req.user.username,
+			// 	details : "scored "+Math.round( (req.body.userScore/(foundQuiz.mcqs.length*4)) * 100)+" % : "+foundQuiz._id
+			// })
 			await User.findOne({username : dataFromQuiz.username} ,async function(err , foundUser){
 				if(err || !foundUser){
 					console.log("error in finding user",err)
@@ -507,18 +507,18 @@ router.get("/dashboard/newcustomquiz/view/view/:id",middelware.isLoggedIn , func
 				res.redirect("/dashboard/quiz/redirect/"+foundQuiz._id)
 			}else{
 				if(req.user.isPaid || req.user.isPaidPlus || foundQuiz.shareWith == "free" || req.user.score.attempted < 100){
-					activitylog ("quizView", {
-						id : req.user._id,
-						username : req.user.username,
-						details : "viewed " + req.params.id
-					})
+					// activitylog ("quizView", {
+					// 	id : req.user._id,
+					// 	username : req.user.username,
+					// 	details : "viewed " + req.params.id
+					// })
 					res.render("quiz/view",{id : req.params.id})
 				}else{
-					activitylog ("quizView", {
-						id : req.user._id,
-						username : req.user.username,
-						details : "failed to view " + req.params.id
-					})
+					// activitylog ("quizView", {
+					// 	id : req.user._id,
+					// 	username : req.user.username,
+					// 	details : "failed to view " + req.params.id
+					// })
 					req.flash("error" , "This feature is only for paid users !!!")
 					res.redirect("/user/plan")
 				}
@@ -600,13 +600,13 @@ router.get("/quiz/api/:id",middelware.isLoggedIn ,(req,res)=>{
 })
 // functions
 function activitylog(page,obj) {
-	Useractivity.findById('61b357ffc86d5b7160714228', (err , foundLogs)=>{
-		if(err || !foundLogs){
-			console.log(err)
-		}else{
-			foundLogs[page].push(obj)
-			foundLogs.save()
-		}
-	})
+	// Useractivity.findById('61b357ffc86d5b7160714228', (err , foundLogs)=>{
+	// 	if(err || !foundLogs){
+	// 		console.log(err)
+	// 	}else{
+	// 		foundLogs[page].push(obj)
+	// 		foundLogs.save()
+	// 	}
+	// })
 }
 module.exports = router ;

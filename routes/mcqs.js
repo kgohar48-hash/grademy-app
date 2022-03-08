@@ -187,7 +187,27 @@ router.post("/mcq/:id/comment",(req,res)=>{
         }
         createComment(newCommnet , req.params.id)
     }
-    
+    // functions to add comment to a mcq
+    function createComment(newCommnet , id){
+        Mcq.findById(id,(err,foundMcq)=>{
+            if(err || !foundMcq){
+                console.log(err)
+                res.redirect("/")
+            }else{
+                Comment.create(newCommnet , function (err , comment){
+                    if(err || !comment){
+                        console.log(err)
+                    }
+                    else{
+                        foundMcq.comments.push(comment)
+                        foundMcq.save()
+                        comment.mcq = foundMcq
+                        comment.save()
+                    }
+                })
+            }
+        })
+    }
 })
 // mcqs web page for each mcq
 router.get("/mcq/answer/:id",(req,res)=>{
@@ -305,25 +325,5 @@ router.get("/mcqs/attempts/:username", middelware.isLoggedIn,(req,res)=>{
         }
     })
 })
-// functions to add comment to a mcq
-function createComment(newCommnet , id){
-    Mcq.findById(id,(err,foundMcq)=>{
-        if(err || !foundMcq){
-            console.log(err)
-            res.redirect("/")
-        }else{
-            Comment.create(newCommnet , function (err , comment){
-				if(err || !comment){
-					console.log(err)
-				}
-				else{
-					foundMcq.comments.push(comment)
-					foundMcq.save()
-                    comment.mcq = foundMcq
-                    comment.save()
-				}
-			})
-        }
-    })
-}
+
 module.exports = router ;

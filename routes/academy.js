@@ -1,11 +1,10 @@
-const newCustomQuiz = require("../models/newCustomQuiz");
 const { model } = require("../models/user");
 
 const express			= require("express"),
 	  router			= express.Router(),
 	  User				= require("../models/user"),
 	  Mcq			 	= require("../models/mcq"),
-      NewCustomQuiz		= require("../models/newCustomQuiz"),
+      newCustomQuiz		= require("../models/newCustomQuiz"),
       Academy		    = require("../models/academy"),
       Review		    = require("../models/review"),
       Quizcategory		= require("../models/quizcategory"),
@@ -13,6 +12,7 @@ const express			= require("express"),
       middelware 		= require("../middelware");
 
       var multer = require('multer');
+      var cloudinary = require('cloudinary');
 
 var storage = multer.diskStorage({
   filename: function(req, file, callback) {
@@ -28,9 +28,6 @@ var imageFilter = function (req, file, cb) {
 };
 var upload = multer({ storage: storage, fileFilter: imageFilter})
 
-var cloudinary = require('cloudinary');
-const middelwareObj = require("../middelware");
-const academy = require("../models/academy");
 cloudinary.config({ 
   cloud_name: 'grademy', 
   api_key: '311168857733876', 
@@ -83,7 +80,7 @@ router.post("/academy/new",middelware.isLoggedIn, upload.single('image'),functio
                 if(err){
                     console.log(err)
                 }else{
-                    res.redirect("/academy")
+                    res.redirect("/academy/"+academyMade._id)
                 }
             })
         })   
@@ -108,7 +105,7 @@ router.get("/academy/:id",(req,res)=>{
     })
 })
 // edit academy
-router.get("/academy/:id/edit",middelwareObj.checkAcademyOwnership ,(req,res)=>{
+router.get("/academy/:id/edit",middelware.checkAcademyOwnership ,(req,res)=>{
     Academy.findById(req.params.id ,(err, foundAcademy) => {
         if (err || !foundAcademy) {
             console.log(err);
@@ -117,7 +114,7 @@ router.get("/academy/:id/edit",middelwareObj.checkAcademyOwnership ,(req,res)=>{
         }
     })
 })
-router.post("/academy/:id/edit",middelwareObj.checkAcademyOwnership, upload.single('image'),function(req,res){
+router.post("/academy/:id/edit",middelware.checkAcademyOwnership, upload.single('image'),function(req,res){
     if(req.user.isAcademy){
         cloudinary.uploader.upload(req.file.path, function(result) {
 			req.body.academy.coverPicture = result.secure_url;
@@ -224,7 +221,7 @@ router.post("/academy/leave",middelware.isLoggedIn,async (req,res)=>{
 })
 // new quiz section
 // add a middlewear to check ownership
-router.post("/academy/:id/section",middelwareObj.checkAcademyOwnership,async (req,res)=>{
+router.post("/academy/:id/section",middelware.checkAcademyOwnership,async (req,res)=>{
     var newQuizCategory = {
         title : req.body.title,
         description : req.body.description

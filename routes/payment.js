@@ -85,6 +85,65 @@ router.get("/payment/plan/:plan/:duration" ,middelware.isLoggedIn ,async functio
 			res.redirect("/user/plan")
 		}
 	}
+	// checking balance
+	async function balanceCheck(totalBill,payment,user) {
+		return new Promise(async(resolve, reject)=>{
+			var amountIn = 0
+			var amountOut = 0
+			User.findById(user._id).populate({
+				path : 'transactions',
+				model : "Transaction"
+			}).exec(async(err, foundUser)=>{
+			if(err || !foundUser){
+				console.log(err)
+			}else{
+				for(var i =0 ;foundUser.transactions.length >= i ; i++){
+					if(foundUser.transactions.length == i){
+						// terminate
+						if(totalBill <= amountIn - amountOut){
+							resolve({
+								payable : true,
+								amountIn : amountIn,
+								amountOut : amountOut,
+								net : amountIn - amountOut
+							})
+						}else{
+							resolve({
+								payable : false,
+								amountIn : amountIn,
+								amountOut : amountOut,
+								net : amountIn - amountOut
+							})
+						}
+					}else{
+						// finding valid promos
+						if(foundUser.transactions[i].isPromo && foundUser.transactions[i].varified){
+							await Transaction.findById(foundUser.transactions[i] , (err,foundTransaction)=>{
+								if(err || !foundTransaction){
+									res.send(err)
+								}else{
+									amountIn += foundTransaction.amount
+									if(payment){
+										foundTransaction.isPromo = false
+										foundTransaction.save()
+									}
+								}
+							})
+						}
+						// non promo amount to user
+						if(!foundUser.transactions[i].isPromo && foundUser.transactions[i].varified && foundUser.transactions[i].to.username == user.username){
+							amountIn += foundUser.transactions[i].amount
+						}
+						// non promo amount from user
+						if(!foundUser.transactions[i].isPromo && foundUser.transactions[i].varified && foundUser.transactions[i].from.username == user.username){
+							amountOut += foundUser.transactions[i].amount
+						}
+					}
+				}
+			}
+			})
+		})
+	}
 })
 // receive payment route
 router.get("/payment/paid/:plan/:duration",middelware.isLoggedIn ,async(req,res)=>{
@@ -176,6 +235,65 @@ router.get("/payment/paid/:plan/:duration",middelware.isLoggedIn ,async(req,res)
 			req.flash("error",`invalid duration request`)
 			res.redirect("/user/plan")
 		}
+	}
+	// checking balance
+	async function balanceCheck(totalBill,payment,user) {
+		return new Promise(async(resolve, reject)=>{
+			var amountIn = 0
+			var amountOut = 0
+			User.findById(user._id).populate({
+				path : 'transactions',
+				model : "Transaction"
+			}).exec(async(err, foundUser)=>{
+			if(err || !foundUser){
+				console.log(err)
+			}else{
+				for(var i =0 ;foundUser.transactions.length >= i ; i++){
+					if(foundUser.transactions.length == i){
+						// terminate
+						if(totalBill <= amountIn - amountOut){
+							resolve({
+								payable : true,
+								amountIn : amountIn,
+								amountOut : amountOut,
+								net : amountIn - amountOut
+							})
+						}else{
+							resolve({
+								payable : false,
+								amountIn : amountIn,
+								amountOut : amountOut,
+								net : amountIn - amountOut
+							})
+						}
+					}else{
+						// finding valid promos
+						if(foundUser.transactions[i].isPromo && foundUser.transactions[i].varified){
+							await Transaction.findById(foundUser.transactions[i] , (err,foundTransaction)=>{
+								if(err || !foundTransaction){
+									res.send(err)
+								}else{
+									amountIn += foundTransaction.amount
+									if(payment){
+										foundTransaction.isPromo = false
+										foundTransaction.save()
+									}
+								}
+							})
+						}
+						// non promo amount to user
+						if(!foundUser.transactions[i].isPromo && foundUser.transactions[i].varified && foundUser.transactions[i].to.username == user.username){
+							amountIn += foundUser.transactions[i].amount
+						}
+						// non promo amount from user
+						if(!foundUser.transactions[i].isPromo && foundUser.transactions[i].varified && foundUser.transactions[i].from.username == user.username){
+							amountOut += foundUser.transactions[i].amount
+						}
+					}
+				}
+			}
+			})
+		})
 	}
 })
 // route to add TID by admin
@@ -381,73 +499,15 @@ async function trasanctionCreate(amount,statement,varified,isPromo,TID,to,from) 
 	})
 }
 function activitylog(page,obj) {
-	Useractivity.findById('61b357ffc86d5b7160714228', (err , foundLogs)=>{
-		if(err || !foundLogs){
-			console.log(err)
-		}else{
-			foundLogs[page].push(obj)
-			foundLogs.save()
-		}
-	})
-}
-// checking balance
-async function balanceCheck(totalBill,payment,user,res) {
-	return new Promise(async(resolve, reject)=>{
-		var amountIn = 0
-		var amountOut = 0
-		User.findById(user._id).populate({
-			path : 'transactions',
-			model : "Transaction"
-		}).exec(async(err, foundUser)=>{
-		if(err || !foundUser){
-			console.log(err)
-		}else{
-			for(var i =0 ;foundUser.transactions.length >= i ; i++){
-				if(foundUser.transactions.length == i){
-					// terminate
-					if(totalBill <= amountIn - amountOut){
-						resolve({
-							payable : true,
-							amountIn : amountIn,
-							amountOut : amountOut,
-							net : amountIn - amountOut
-						})
-					}else{
-						resolve({
-							payable : false,
-							amountIn : amountIn,
-							amountOut : amountOut,
-							net : amountIn - amountOut
-						})
-					}
-				}else{
-					// finding valid promos
-					if(foundUser.transactions[i].isPromo && foundUser.transactions[i].varified){
-						await Transaction.findById(foundUser.transactions[i] , (err,foundTransaction)=>{
-							if(err || !foundTransaction){
-								res.send(err)
-							}else{
-								amountIn += foundTransaction.amount
-								if(payment){
-									foundTransaction.isPromo = false
-									foundTransaction.save()
-								}
-							}
-						})
-					}
-					// non promo amount to user
-					if(!foundUser.transactions[i].isPromo && foundUser.transactions[i].varified && foundUser.transactions[i].to.username == user.username){
-						amountIn += foundUser.transactions[i].amount
-					}
-					// non promo amount from user
-					if(!foundUser.transactions[i].isPromo && foundUser.transactions[i].varified && foundUser.transactions[i].from.username == user.username){
-						amountOut += foundUser.transactions[i].amount
-					}
-				}
-			}
-		}
-		})
-	})
+	// Useractivity.findById('61b357ffc86d5b7160714228', (err , foundLogs)=>{
+	// 	if(err || !foundLogs){
+	// 		console.log(err)
+	// 	}else{
+	// 		foundLogs[page].push(obj)
+	// 		foundLogs.save()
+	// 	}
+	// })
+	return
 }
 
 

@@ -5,6 +5,7 @@ var User    = require("../models/user");
 var Academy = require("../models/academy")
 var middelware = require("../middelware");
 var multer = require('multer');
+var cloudinary = require('cloudinary');
 
 
 var storage = multer.diskStorage({
@@ -21,7 +22,6 @@ var imageFilter = function (req, file, cb) {
 };
 var upload = multer({ storage: storage, fileFilter: imageFilter})
 
-var cloudinary = require('cloudinary');
 cloudinary.config({ 
   cloud_name: 'grademy', 
   api_key: '311168857733876', 

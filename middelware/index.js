@@ -98,10 +98,10 @@ middelwareObj.isLoggedIn = function(req,res,next){
 		return next() ; 
 	}
 	else {
-		activitylog ("login", {
-			username : "not logged in",
-			details : "came from "+req.originalUrl
-		})
+		// activitylog ("login", {
+		// 	username : "not logged in",
+		// 	details : "came from "+req.originalUrl
+		// })
 		// req.session.returnTo = req.originalUrl; 
 		req.flash("error" , "Please login first!")
 		res.redirect("/login") 
