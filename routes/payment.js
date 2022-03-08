@@ -8,6 +8,7 @@ var Tid			= require("../models/tid")
 var Transaction	= require("../models/transaction")
 var Promo		= require("../models/promo");
 var Useractivity = require("../models/useractivity")
+var Plan		= require("../models/plan")
 
 const { model } = require("mongoose");
 //plan
@@ -33,119 +34,153 @@ router.get("/user/plan",middelware.isLoggedIn,function(req,res){
     
 })
 //payment route
-router.get("/payment/plan/:plan" ,middelware.isLoggedIn , function(req,res){
+router.get("/payment/plan/:plan/:duration" ,middelware.isLoggedIn ,async function(req,res){
+	var duration = Number(req.params.duration)
+	var plan	= req.params.plan
 	if(req.user.isPaid || req.user.isPaidPlus){
-		req.flash("error",`You have already purchased ${req.params.plan} plan`)
+		req.flash("error",`You have already purchased ${plan} plan`)
 		res.redirect("/user/plan")
 	}else{
-		activitylog ("payment", {
-			id : req.user._id,
-			username : req.user.username,
-			details : "visited payment page"
-		})
-		Feedback.find({},function(err,allFeedbacks){
-			if(err){
-				console.log(err)
-				res.redirect("/dashboard")
-			}else{
-				var feedbackToSend = []
-				var num = allFeedbacks.length - 1
-				for(var i = 0 ; 10 >= i ; i++){
-					if(i == 10 || i >= num){
-						res.render("user/plans/payment" , {feedbacks : feedbackToSend, plan : req.params.plan })
-						return
-					}else{
-						feedbackToSend.push(allFeedbacks[num - i ])
-					}
+		if(duration == 1 || duration == 3 || duration == 6){
+			if(plan == "premium" || plan == "premiumplus"){
+				var base = 2000
+				var save = 0.2
+				if(req.params.plan != "premium"){
+					base = 3500
 				}
+				if(duration == 1){
+					totalPrice = base
+					sufficientBalance = await balanceCheck(totalPrice,false,req.user,res)
+				}else{
+					totalPrice = (base - base*save*duration/3)*duration
+					sufficientBalance = await balanceCheck(totalPrice,false,req.user,res)
+				}
+				if(sufficientBalance.payable){
+					Feedback.find({},function(err,allFeedbacks){
+						if(err){
+							console.log(err)
+						}else{
+							var feedbackToSend = []
+							var num = allFeedbacks.length - 1
+							for(var i = 0 ; 10 >= i ; i++){				
+								if(i == 10 || i >= num){
+									res.render("user/plans/payment" , {feedbacks : feedbackToSend, plan : plan, duration : Number(req.params.duration), totalBill : totalPrice})
+									return
+								}else{
+									feedbackToSend.push(allFeedbacks[num - i ])
+								}
+							}
+						}
+					})
+				}else{
+					req.flash("error","You have insufficient balance, please recharge your account")
+					res.redirect("/user/plan")
+				}
+			}else{
+				req.flash("error",`invalid plan request`)
+				res.redirect("/user/plan")
 			}
-		})
+		}else{
+			req.flash("error",`invalid duration request`)
+			res.redirect("/user/plan")
+		}
 	}
 })
 // receive payment route
-router.get("/payment/paid/:plan",middelware.isLoggedIn ,(req,res)=>{
-	var amountIn = 0
-	var amountOut = 0
-	if(req.params.plan == "Premium"){
-		var totalBill = 1000
+router.get("/payment/paid/:plan/:duration",middelware.isLoggedIn ,async(req,res)=>{
+	var duration = Number(req.params.duration)
+	var plan	= req.params.plan
+	if(req.user.isPaid || req.user.isPaidPlus){
+		req.flash("error",`You have already purchased ${plan} plan`)
+		res.redirect("/user/plan")
 	}else{
-		var totalBill = 1500
-	}
-	User.findById(req.user._id).populate({
-		path : 'transactions',
-		model : "Transaction"
-	}).exec(async(err, foundUser)=>{
-		if(err || !foundUser){
-			console.log(err)
-			req.flash("error","Something went wrong !! please contact admin at +92 313 0157543")
-			res.redirect("/payment/plan/"+req.params.plan)
-		}else{
-			for(var i =0 ;foundUser.transactions.length >= i ; i++){
-				if(foundUser.transactions.length == i){
-					// terminate
-					if(totalBill <= amountIn - amountOut){
-						await trasanctionCreate(totalBill,req.params.plan+" plan purchased",true,false,Math.floor((Math.random() * 10000000000) + 1),"grademy",req.user.username)
-						if(req.params.plan == "Premium"){
-							foundUser.isPaid = true
+		if(duration == 1 || duration == 3 || duration == 6){
+			if(plan == "premium" || plan == "premiumplus"){
+				var base = 2000
+				var save = 0.2
+				if(req.params.plan != "premium"){
+					base = 3500
+				}
+				if(duration == 1){
+					totalPrice = base
+					sufficientBalance = await balanceCheck(totalPrice,false,req.user,res)
+				}else{
+					totalPrice = (base - base*save*duration/3)*duration
+					sufficientBalance = await balanceCheck(totalPrice,false,req.user,res)
+				}
+				if(sufficientBalance.payable){
+					Plan.create({
+						plan : plan,
+						duration : duration,
+						amountPaid : totalPrice
+					},(err , planCreated)=>{
+						if(err || !planCreated){
+							console.log(err)
+							req.flash("error" , "Some unkown error happened, please report this bug !!!")
+							res.redirect("/dashboard")
 						}else{
-							foundUser.isPaidPlus = true
-						}
-						foundUser.save()
-						// commission to the person who refered his user
-						if(amountOut == 0){
-							await User.findOne({username : foundUser.ref},async(err , foundRef)=>{
-								if(err || !foundRef){
-									if(err){
-										console.log(err)
-									}
-									if(!foundRef){
-										await trasanctionCreate((totalBill*0.5).toFixed(0),`${foundUser.ref} invitee ${req.user.username} purchased ${req.params.plan} plan`,true,false,Math.floor((Math.random() * 10000000000) + 1),"gohar","grademy")
-									}
+							User.findById(req.user._id ,async (err , foundUser)=>{
+								if(err || !foundUser){
+									console.log(err)
 								}else{
-									await trasanctionCreate((totalBill*0.5).toFixed(0),`Your invitee ${req.user.username} purchased ${req.params.plan} plan`,true,false,Math.floor((Math.random() * 10000000000) + 1),foundRef.username,"grademy")
+									await trasanctionCreate(totalPrice,plan+" plan purchased",true,false,Math.floor((Math.random() * 10000000000) + 1),"grademy",req.user.username)
+									planCreated.user.id = foundUser
+									planCreated.user.username = foundUser.username
+									if(plan == "premium"){
+										foundUser.isPaid = true
+									}else{
+										foundUser.isPaidPlus = true
+									}
+									foundUser.save()
+									// commission to the person who refered his user
+									await User.findOne({username : foundUser.ref},async(err , foundRef)=>{
+										if(err || !foundRef){
+											if(err){
+												console.log(err)
+											}
+											if(!foundRef){
+												planCreated.refTransaction = await trasanctionCreate((totalPrice*0.2).toFixed(0),`${foundUser.ref} invitee ${req.user.username} purchased ${req.params.plan} plan`,true,false,Math.floor((Math.random() * 10000000000) + 1),"gohar","grademy")
+												planCreated.save()
+											}
+										}else{
+											if(sufficientBalance.amountOut == 0){
+												planCreated.refTransaction = await trasanctionCreate((totalPrice*0.2).toFixed(0),`Your invitee ${req.user.username} purchased ${req.params.plan} plan`,true,false,Math.floor((Math.random() * 10000000000) + 1),foundRef.username,"grademy")
+												planCreated.save()
+											}else{
+												if(foundRef.isAcademy || foundRef.isAdmin){
+													planCreated.refTransaction = await trasanctionCreate((totalPrice*0.2).toFixed(0),`Your invitee ${req.user.username} purchased ${req.params.plan} plan`,true,false,Math.floor((Math.random() * 10000000000) + 1),foundRef.username,"grademy")
+													planCreated.save()
+												}else{
+													planCreated.refTransaction = await trasanctionCreate((totalPrice*0.2).toFixed(0),`${foundUser.ref} invitee ${req.user.username} purchased ${req.params.plan} plan`,true,false,Math.floor((Math.random() * 10000000000) + 1),"gohar","grademy")
+													planCreated.save()
+												}
+											}
+										}
+									})
+									req.flash("success","Thanks for purchaing "+req.params.plan+" plan, best of luck!!!")
+									res.redirect("/dashboard")
 								}
 							})
 						}
-						activitylog ("payment", {
-							id : req.user._id,
-							username : req.user.username,
-							details : "success payment attempt"
-						})
-						req.flash("success","Thanks for purchaing "+req.params.plan+" plan, best of luck!!!")
-						res.redirect("/dashboard")
-					}else{
-						activitylog ("payment", {
-							id : req.user._id,
-							username : req.user.username,
-							details : "failed payment attempt"
-						})
-						req.flash("error","You have insufficient balance")
-						res.redirect("/user/plan")
-					}
+					})
+					
 				}else{
-					if(foundUser.transactions[i].isPromo && foundUser.transactions[i].varified){
-						await Transaction.findById(foundUser.transactions[i] , (err,foundTransaction)=>{
-							if(err || !foundTransaction){
-								res.send(err)
-							}else{
-								foundTransaction.isPromo = false
-								amountIn += foundTransaction.amount
-								foundTransaction.save()
-							}
-						})
-					}
-					if(!foundUser.transactions[i].isPromo && foundUser.transactions[i].varified && foundUser.transactions[i].to.username == req.user.username){
-						amountIn += foundUser.transactions[i].amount
-					}
-					if(!foundUser.transactions[i].isPromo && foundUser.transactions[i].varified && foundUser.transactions[i].from.username == req.user.username){
-						amountOut += foundUser.transactions[i].amount
-					}
+					req.flash("error","You have insufficient balance, please recharge your account")
+					res.redirect("/user/plan")
 				}
+			}else{
+				req.flash("error",`invalid plan request`)
+				res.redirect("/user/plan")
 			}
+		}else{
+			req.flash("error",`invalid duration request`)
+			res.redirect("/user/plan")
 		}
-})})
+	}
+})
 // route to add TID by admin
 router.post("/payment/tid/add",middelware.isLoggedIn, middelware.isAdmin, (req,res)=>{
+	console.log(req.body)
 	Transaction.findOne({TID : req.body.tid},(err, foundTransaction)=>{
 		if(err || !foundTransaction){
 			if(err){
@@ -244,7 +279,6 @@ router.post("/payment/promo/use",(req,res)=>{
 		}else{
 			if(foundPromo.usageLimit > foundPromo.usedBy.length && foundPromo.active){
 				if(foundPromo.usedBy.length == 0){
-					console.log("code used 1st time")
 					await trasanctionCreate(foundPromo.value, foundPromo.title+" promo used",true,true,Math.floor((Math.random() * 10000000000) + 1),req.user.username,"grademy")
 					foundPromo.usedBy.push({
 						id : req.user._id,
@@ -255,9 +289,7 @@ router.post("/payment/promo/use",(req,res)=>{
 					res.redirect("/user/plan")
 				}else{
 					for(i=0 ; foundPromo.usedBy.length >= i; i++ ) {
-						console.log(foundPromo.usedBy[i])
 						if(i == foundPromo.usedBy.length ){
-							console.log("code appllied")
 							await trasanctionCreate(foundPromo.value, foundPromo.title+" promo used",true,true,Math.floor((Math.random() * 10000000000) + 1),req.user.username,"grademy")
 							foundPromo.usedBy.push({
 								id : req.user._id,
@@ -269,7 +301,6 @@ router.post("/payment/promo/use",(req,res)=>{
 							return
 						}else{
 							if(foundPromo.usedBy[i].username == req.user.username){
-								console.log("code already used")
 								req.flash("error" , "You have already used this promo")
 								res.redirect("/user/plan")
 								return
@@ -299,9 +330,7 @@ router.get("/payment/transactions",(req,res)=>{
 		}
 	})
 })
-
 // functions for this route
-
 async function trasanctionCreate(amount,statement,varified,isPromo,TID,to,from) {
 	return new Promise(async(resolve, reject)=>{
 		await User.findOne({username : from},async(err,foundFrom)=>{
@@ -337,7 +366,7 @@ async function trasanctionCreate(amount,statement,varified,isPromo,TID,to,from) 
 								foundTo.transactions.push(transactionCreated)
 								foundFrom.save()
 								foundTo.save()
-								resolve()
+								resolve(transactionCreated)
 							}
 						})
 					}
@@ -351,17 +380,76 @@ async function trasanctionCreate(amount,statement,varified,isPromo,TID,to,from) 
 		
 	})
 }
-
 function activitylog(page,obj) {
-	// Useractivity.findById('61b357ffc86d5b7160714228', (err , foundLogs)=>{
-	// 	if(err || !foundLogs){
-	// 		console.log(err)
-	// 	}else{
-	// 		foundLogs[page].push(obj)
-	// 		foundLogs.save()
-	// 	}
-	// })
+	Useractivity.findById('61b357ffc86d5b7160714228', (err , foundLogs)=>{
+		if(err || !foundLogs){
+			console.log(err)
+		}else{
+			foundLogs[page].push(obj)
+			foundLogs.save()
+		}
+	})
 }
+// checking balance
+async function balanceCheck(totalBill,payment,user,res) {
+	return new Promise(async(resolve, reject)=>{
+		var amountIn = 0
+		var amountOut = 0
+		User.findById(user._id).populate({
+			path : 'transactions',
+			model : "Transaction"
+		}).exec(async(err, foundUser)=>{
+		if(err || !foundUser){
+			console.log(err)
+		}else{
+			for(var i =0 ;foundUser.transactions.length >= i ; i++){
+				if(foundUser.transactions.length == i){
+					// terminate
+					if(totalBill <= amountIn - amountOut){
+						resolve({
+							payable : true,
+							amountIn : amountIn,
+							amountOut : amountOut,
+							net : amountIn - amountOut
+						})
+					}else{
+						resolve({
+							payable : false,
+							amountIn : amountIn,
+							amountOut : amountOut,
+							net : amountIn - amountOut
+						})
+					}
+				}else{
+					// finding valid promos
+					if(foundUser.transactions[i].isPromo && foundUser.transactions[i].varified){
+						await Transaction.findById(foundUser.transactions[i] , (err,foundTransaction)=>{
+							if(err || !foundTransaction){
+								res.send(err)
+							}else{
+								amountIn += foundTransaction.amount
+								if(payment){
+									foundTransaction.isPromo = false
+									foundTransaction.save()
+								}
+							}
+						})
+					}
+					// non promo amount to user
+					if(!foundUser.transactions[i].isPromo && foundUser.transactions[i].varified && foundUser.transactions[i].to.username == user.username){
+						amountIn += foundUser.transactions[i].amount
+					}
+					// non promo amount from user
+					if(!foundUser.transactions[i].isPromo && foundUser.transactions[i].varified && foundUser.transactions[i].from.username == user.username){
+						amountOut += foundUser.transactions[i].amount
+					}
+				}
+			}
+		}
+		})
+	})
+}
+
 
 
 module.exports = router ;

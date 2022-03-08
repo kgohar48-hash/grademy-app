@@ -19,10 +19,9 @@ var client = new HttpClient();
 const startButton = document.querySelector('.start_button');
 const infoBox = document.querySelector('.info_box');
 const quizBox = document.querySelector('.quiz_box');
-const quizSub = infoBox.querySelector('.sub');
-const quizChap = infoBox.querySelector('.chap');
+const descriptionText = infoBox.querySelector('.description');
 const num = infoBox.querySelector('.num');
-const exitButton = infoBox.querySelector('.quit');
+const exitButton = document.getElementById('exit')
 const continueButton = infoBox.querySelector('.start');
 const quizTitle = quizBox.querySelector('.title');
 const tMin = quizBox.querySelector('.timer_min');
@@ -44,7 +43,8 @@ const cNum = resultBox.querySelector('.correct_text b');
 const iNum = resultBox.querySelector('.incorrect_text b');
 const sNum = resultBox.querySelector('.skip_text b');
 const reviewButton = resultBox.querySelector('.review');
-const quitButton = resultBox.querySelector('.quit');
+const quitButton = document.getElementById('quit')
+const endMessage = document.getElementById('end-message')
 
 var timeElement = document.getElementById("timefortest")
 skipped = 0
@@ -76,15 +76,19 @@ startButton.addEventListener('click', () => {
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 };
-quizSub.textContent = capitalizeFirstLetter(data.mcqs[0].subject);
-quizChap.textContent = data.mcqs[0].chapter;
+descriptionText.textContent = capitalizeFirstLetter(data.description);
 num.textContent = data.mcqs.length;
 timeElement.innerText = data.mcqs.length
-
+if(data.shareWith == "competitive"){
+    endMessage.innerText = "This is a competitive test, you can't review your test until the competition ends"
+    reviewButton.classList.toggle('hide')
+}
 
 exitButton.addEventListener('click', () => {
-    infoBox.classList.toggle('hide');
-    startButton.classList.toggle('hide')
+    window.location = "https://www.grademy.org/dashboard/quiz/redirect/"+data._id;
+})
+quitButton.addEventListener('click', () => {
+    window.location = "https://www.grademy.org/dashboard/quiz/redirect/"+data._id;
 })
 
 continueButton.addEventListener('click', () => {

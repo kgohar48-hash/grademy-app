@@ -16,6 +16,7 @@ client.get('https://www.grademy.org/academy/api/'+document.getElementById("acade
     init()
 });
 
+var sectionId = document.getElementById("section-id")
 var user       = document.getElementById("username").value
 var customQuiz = document.getElementById("customquizContainer")
 var postQuiz = document.getElementById("post-quiz")
@@ -27,7 +28,7 @@ var videoElement = document.getElementById('video')
 var data ;
 
 function init(){
-    selectCategory(titles[0].innerText)
+    selectCategory(findTitle(sectionId.value))
     titles.forEach(title => {
         title.addEventListener("click",e=>{
             selectCategory(e.target.innerText)
@@ -127,6 +128,14 @@ async function showCards(quizzes){
         });
     } catch (err) {
         console.log(err);
+    }
+}
+
+function findTitle(id){
+    for(var i = 0 ; data.academy.quizcategories.length > i ; i++){
+        if(data.academy.quizcategories[i]._id.toString() == id.toString()){
+            return data.academy.quizcategories[i].title
+        }
     }
 }
 

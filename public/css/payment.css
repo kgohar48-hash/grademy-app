@@ -50,7 +50,7 @@
   letter-spacing: 2.5px;
 }
 
-.invoice-title span {
+.invoice-title .light {
   color: rgba(0, 0, 0, 0.4);
 }
 
@@ -93,7 +93,7 @@
   text-align: center;
 }
 
-.invoice-table .row-data span {
+.invoice-table .row-data .light {
   font-size: 14px;
   color: rgba(0, 0, 0, 0.6);
 }

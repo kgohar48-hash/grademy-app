@@ -117,7 +117,26 @@ var UserSchema = new mongoose.Schema({
                 type : mongoose.Schema.Types.ObjectId ,
                 ref : "Mcq"
             } ,
-            attempted : []
+            attempted : [],
+            date : {type: Date, default: Date.now}
+        }
+    ],
+    correctMCQs : [
+        {
+            id : {
+                type : mongoose.Schema.Types.ObjectId ,
+                ref : "Mcq"
+            } ,
+            date : {type: Date, default: Date.now}
+        }
+    ],
+    skippedMCQs : [
+        {
+            id : {
+                type : mongoose.Schema.Types.ObjectId ,
+                ref : "Mcq"
+            } ,
+            date : {type: Date, default: Date.now}
         }
     ],
     skipped : [

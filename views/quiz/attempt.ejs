@@ -16,9 +16,9 @@
     <script src="https://kit.fontawesome.com/05c9781d40.js" crossorigin="anonymous"></script>
 </head>
 
-<body>	
+<body>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <a class="navbar-brand" href="/">Grademy <sub> Beta</sub></a>
+        <a class="navbar-brand" href="/">Grademy</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
@@ -87,16 +87,16 @@
         <div class="info_box">
             <div class="info-title"><span>About this Test</span></div>
             <div class="info-list">
-                <div class="info"><span>1</span>. This Test is from. <span class="sub">subject</span>, Chapter: <span class="chap">chapter</span>.</div>
+                <div class="info"><span>1</span>. <span class="description">Test loading ...</span>.</div>
                 <div class="info"><span>2</span>. The Test will contain <span class="num">x</span> MCQs.</div>
-                <div class="info"><span>3</span>. You will be allowed <span id="timefortest">34</span> mins to complete the quiz.</div>
+                <div class="info"><span>3</span>. You will be allowed <span id="timefortest">34</span> mins to complete the test.</div>
                 <div class="info"><span>4</span>. You can't exit from the Test while you are attempting.</div>
                 <div class="info"><span>5</span>. You'll get <span>+4</span> points on each correct MCQ, <span>-1</span> point on each incorrect MCQ & <span>0</span> point on skipped MCQ.</div>
                 <div class="info"><span>6</span>. You will be able to view your test along with the solution key after you finish your test..</div>
     
             </div>
             <div class="buttons">
-                <button  class="quit"><a href="javascript:history.back()">Exit Test</a></button>
+                <button  id="exit">Exit Test</button>
                 <button class="start">Continue</button>
             </div>
         </div>
@@ -139,10 +139,10 @@
             <div class="correct_text">Correct MCQs <b>x</b></div>
             <div class="incorrect_text">Incorrect MCQs <b>x</b></div>
             <div class="skip_text">Skipped MCQs <b>x</b> </div>
-            <p>To review your result click the Review Now button, or to Exit click the Quit button</p>
+            <p id="end-message">To review your result click the Review Now button, or to Exit click the Quit button</p>
             <div class="buttons">
                 <button class="review">Review Now!</button>
-                <button class="quit">Quit</button>
+                <button id="quit">Quit</button>
             </div>
         </div>
     </div>

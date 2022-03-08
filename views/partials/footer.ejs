@@ -5,17 +5,33 @@
     <footer class="site-footer mt-4" id="footer">
         <div class="container">
           <div class="collapse switch" >
-            <div class="card card-body mt-3" style="width: auto; height: auto; background: #414345  ;">
-                <h6 class="card-subtitle mb-2 ">Are you sure you want to change this account to teaching account.</h6>
-                <ul>
-                  <li>You will no longer have access to dashboard & mcqs database</li>
-                  <li>You will be able to make your own academy gig onto the "academies" page</li>
-                  <li>You will be able to add images in Posts you make onto the "communitity" secton</li>
-                </ul>
-                <a href="/academy/switch/toteacher" class="btn btn-lg btn-primary btn-block" style="color: aliceblue;">
-                  Switch
-                </a>
+            <%if(currentUser){%>
+              <%if(currentUser.isAcademy){%>
+                <div class="card card-body mt-3" style="width: auto; height: auto; background: #414345  ;">
+                  <h6 class="card-subtitle mb-2 ">Are you sure you want to change this account back to student account.</h6>
+                  <ul>
+                    <li>You will not be able to manage your academy</li>
+                    <li>Contact at +92 313 0157543 for more details</li>
+                  </ul>
+                  <a href="/academy/switch/toteacher" class="btn btn-lg btn-primary btn-block" style="color: aliceblue;">
+                    Switch
+                  </a>
+              </div>              <%}else{%>
+                <div class="card card-body mt-3" style="width: auto; height: auto; background: #414345  ;">
+                  <h6 class="card-subtitle mb-2 ">Are you sure you want to change this account to teaching account.</h6>
+                  <ul>
+                    <li>You will no longer have access to dashboard & mcqs database</li>
+                    <li>You will be able to make your own academy gig onto the "academies" page</li>
+                    <li>You will have your own private community to interact with students</li>
+                    <li>Contact at +92 313 0157543 for more details</li>
+                  </ul>
+                  <a href="/academy/switch/toteacher" class="btn btn-lg btn-primary btn-block" style="color: aliceblue;">
+                    Switch
+                  </a>
               </div>
+              <%}%>
+            <%}%>
+            
         </div>
         <div class="row">
             <div class="col-sm-12 col-md-6">
@@ -31,7 +47,11 @@
                 <li><a >FUNG</a></li>
                 <li><a >Counselling</a></li>
                 <%if(currentUser){%>
-                  <li data-toggle="collapse" style="color: cornsilk;" href=".switch" role="button" aria-expanded="false" aria-controls="switch">Switch to teaching account</li>
+                  <%if(currentUser.isAcademy){%>
+                    <li data-toggle="collapse" style="color: cornsilk;" href=".switch" role="button" aria-expanded="false" aria-controls="switch">Switch to student account</li>
+                  <%}else{%>
+                    <li data-toggle="collapse" style="color: cornsilk;" href=".switch" role="button" aria-expanded="false" aria-controls="switch">Switch to teaching account</li>
+                  <%}%>
                 <%}%>
             </ul>
             </div>

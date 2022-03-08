@@ -1,6 +1,8 @@
 <%- include("../partials/header") %>
 <link rel="stylesheet" href="/css/newsfeed.css">
-<input type="hidden" id="id" value="<%=id%>">
+<% if(typeof id != "undefined"){ %>
+	<input type="hidden" id="id" value="<%=id%>">
+<%}%>
 <div class="container">
 	<header class=" jumbotron">
 		<div class="container">
