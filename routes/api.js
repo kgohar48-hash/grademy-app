@@ -60,19 +60,18 @@ router.get('/mcqsinfoapi',(req,res)=>{
 // ===============================
 
 // function calls
-var time = 0
 
 // askingForInfo();
 checkTransactions()
-positionSorting();
+// positionSorting();
 // setInterval(()=>{time++}, 100)
-setInterval(positionSorting, 1000 * 60*60);
+// setInterval(positionSorting, 1000 * 60*60);
 setInterval(checkTransactions, 1000 * 60*60*24);
 
 // function defination ====================================
 
 async function positionSorting(){ 
-	console.log("position sorting started : ", time)
+	console.log("position sorting started : ")
 	await User.find({},function(err,allUsers){
 		if(err){
 			console.log(err)
@@ -87,7 +86,7 @@ async function positionSorting(){
 			for(var s=0;allUsers.length >= s;s++){
 				if(allUsers.length == s){
 					// terminate
-					console.log("positions updated :",time)
+					console.log("positions updated :")
 					console.log(position)
 					Position.findByIdAndUpdate("62272e9d9418e888e48f3a79",{
 						position ,
