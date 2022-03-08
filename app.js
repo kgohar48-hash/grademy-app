@@ -55,6 +55,10 @@ app.use(flash())
 // ===============================
 
 app.use(require("express-session")({
+	cookie:{
+		secure: true,
+		maxAge:60000
+	},
 	secret : "this could be anything!....." ,
 	resave : false ,
 	saveUninitialized : false 
@@ -71,7 +75,12 @@ app.use(function(req, res, next){
 	res.locals.success = req.flash("success")
 	next() ;
 }) ;
-
+app.use(function(req,res,next){
+	if(!req.session){
+		return next(new Error('Oh no')) //handle error
+	}
+	next() //otherwise continue
+});
 
 // starting functions
 function connectingToDB(){

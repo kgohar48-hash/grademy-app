@@ -54,7 +54,7 @@ router.get('/mcqsinfoapi',(req,res)=>{
 var time = 0
 
 askingForInfo();
-checkTransactions()
+// checkTransactions()
 positionSorting();
 // setInterval(()=>{time++}, 100)
 setInterval(positionSorting, 1000 * 60*60);
