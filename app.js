@@ -54,7 +54,7 @@ app.use(flash())
 // Passport config
 // ===============================
 
-app.use(require("express-session")({
+app.use(require("cookie-session")({
 	cookie:{
 		secure: true,
 		maxAge:60000

@@ -17,6 +17,7 @@
     "clone": "^2.1.2",
     "cloudinary": "^1.23.0",
     "connect-flash": "^0.1.1",
+    "cookie-session": "^2.0.0",
     "crypto": "^1.0.1",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
