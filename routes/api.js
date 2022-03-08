@@ -3,8 +3,9 @@ const express			= require("express"),
 	  User				= require("../models/user"),
 	  Mcq			 	= require("../models/mcq"),
 	  NewCustomQuiz		= require("../models/newCustomQuiz"),
-	  Transaction		= require("../models/transaction")
-	  middelware 		 = require("../middelware");
+	  Transaction		= require("../models/transaction"),
+	  middelware 		 = require("../middelware"),
+	  Position			= require("../models/position")
 
 // galobal variables
 
@@ -15,17 +16,23 @@ var mcqsInfo = {}
 // ===============================
 
 // current user api
-router.get("/currentuser",middelware.isLoggedIn , function(req,res){
-	var positionsData = {
-		user : req.user,
-		position : position,
-		biologyPosition : biologyPosition,
-		mathPosition : mathPosition,
-		physicsPosition : physicsPosition,
-		chemistryPosition : chemistryPosition,
-		englishPosition : englishPosition
-	}
-	res.json(positionsData)
+router.get("/currentuser",middelware.isLoggedIn ,async function(req,res){
+	Position.findById("62272e9d9418e888e48f3a79",(err , foundPosition)=>{
+		if(err || !foundPosition){
+			console.log(err)
+		}else{
+			var positionsData = {
+				user : req.user,
+				position : foundPosition.position,
+				biologyPosition : foundPosition.biologyPosition,
+				mathPosition : foundPosition.mathPosition,
+				physicsPosition : foundPosition.physicsPosition,
+				chemistryPosition : foundPosition.chemistryPosition,
+				englishPosition : foundPosition.englishPosition
+			}
+			res.json(positionsData)
+		}
+	})
 })
 //API to pass data to template's javascript file
 router.get("/data" , function(req,res){
@@ -47,6 +54,7 @@ router.get('/mcqsinfoapi',(req,res)=>{
 	}
 })
 
+
 // ===============================
 // api functions
 // ===============================
@@ -55,8 +63,8 @@ router.get('/mcqsinfoapi',(req,res)=>{
 var time = 0
 
 // askingForInfo();
-// checkTransactions()
-// positionSorting();
+checkTransactions()
+positionSorting();
 // setInterval(()=>{time++}, 100)
 setInterval(positionSorting, 1000 * 60*60);
 setInterval(checkTransactions, 1000 * 60*60*24);
@@ -70,16 +78,31 @@ async function positionSorting(){
 			console.log(err)
 		}
 		else{
-			position = []
-			biologyPosition = []
-			mathPosition = []
-			physicsPosition = []
-			chemistryPosition = []
-			englishPosition =[]
-			for(s=0;allUsers.length >= s;s++){
+			var position = []
+			var biologyPosition = []
+			var mathPosition = []
+			var physicsPosition = []
+			var chemistryPosition = []
+			var englishPosition =[]
+			for(var s=0;allUsers.length >= s;s++){
 				if(allUsers.length == s){
 					// terminate
 					console.log("positions updated :",time)
+					console.log(position)
+					Position.findByIdAndUpdate("62272e9d9418e888e48f3a79",{
+						position ,
+						biologyPosition ,
+						mathPosition ,
+						physicsPosition ,
+						chemistryPosition ,
+						englishPosition 
+					},(err , updatePosition)=>{
+						if(err || !updatePosition){
+							console.log(err)
+						}else{
+							console.log("position saved")
+						}
+					})
 				}else{
 					var index = 0 ;
 					var dataOfUser ={
@@ -102,24 +125,25 @@ async function positionSorting(){
 					getSubjectPosition(englishPosition ,allUsers[s] ,"english")
 				}				
 			}
+			function getSubjectPosition(positionArray , user, subject){
+				var subjectIndex = 0 ;
+				var subjectDataOfUser ={
+					username : user.username,
+					userScore : user.score[subject].score
+				}
+				positionArray.forEach(spot =>{
+					if(spot.userScore < user.score[subject].score){
+						return subjectIndex
+					}else{
+						subjectIndex++
+					}
+				})
+				eval(subject+"Position.splice(subjectIndex, 0, subjectDataOfUser)")
+			}
 		}
 	})	
 }
-function getSubjectPosition(positionArray , user, subject){
-	var subjectIndex = 0 ;
-	var subjectDataOfUser ={
-		username : user.username,
-		userScore : user.score[subject].score
-	}
-	positionArray.forEach(spot =>{
-		if(spot.userScore < user.score[subject].score){
-			return subjectIndex
-		}else{
-			subjectIndex++
-		}
-	})
-	eval(subject+"Position.splice(subjectIndex, 0, subjectDataOfUser)")
-}
+
 function mcqsInfoData(category) {
 	return new Promise((resolve,reject)=>{
 		var info = {}
