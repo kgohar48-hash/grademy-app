@@ -40,18 +40,28 @@ router.get("/academy",(req,res)=>{
             console.log(err)
         }else{
             var joinedStatus = new Array(foundAcademies.length).fill(false)
+            var academies = []
             for(var i =0 ; foundAcademies.length >= i ; i++){
                 if(foundAcademies.length == i){
                     // terminate
-                    res.render("academy/index" , {academies : foundAcademies , joinedStatus : joinedStatus})
+                    res.render("academy/index" , {academies : academies , joinedStatus : joinedStatus})
                 }else{
                     if(req.user){
-                          // checking if he has joined any academy
-                          req.user.myAcademies.forEach(academy =>{
-                            if(String(academy)  == String(foundAcademies[i]._id)){
-                                joinedStatus[i] = true
-                            }
-                        })
+                        if(foundAcademies[i].level > 1 || foundAcademies[i].owner.username == req.user.username){
+                            academies.push(foundAcademies[i])
+                            // checking if he has joined any academy
+                            req.user.myAcademies.forEach(academy =>{
+                                if(String(academy)  == String(foundAcademies[i]._id)){
+                                    joinedStatus[i] = true
+                                }
+                            })
+                        }
+                        
+                    }
+                    else{
+                        if(foundAcademies[i].level > 1){
+                            academies.push(foundAcademies[i])
+                        }
                     }
                 }
             }
