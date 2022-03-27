@@ -8,10 +8,12 @@ var Quizcategory	= require("../models/quizcategory");
 var quizcategory = require("../models/quizcategory");
 var Useractivity = require("../models/useractivity")
 
+var attemptLimit = 1733
+var solveLimit = 1733
 
 router.get("/customquiz/newquiz",middelware.isLoggedIn ,function(req,res){
 	if(!req.user.isAcademy){
-		if(req.user.isPaid || req.user.isPaidPlus || req.user.score.attempted < 100){
+		if(req.user.isPaid || req.user.isPaidPlus || req.user.score.attempted < attemptLimit){
 			// form to add a new quiz from the DB FOR STUDENTS (will add auth later)
 			res.render("dashboard/customquiz/newfromdb")
 		}else{
@@ -172,7 +174,7 @@ router.post("/newmcqs/test",middelware.isLoggedIn ,async function(req,res){
 })
 // post route to add a new quiz from the mcqs DB FOR STUDENTS 
 router.post("/dashboard/newcustomquiz" ,middelware.isLoggedIn ,async function(req,res){
-	if(req.user.isPaid || req.user.isPaidPlus || req.user.score.attempted < 100 || req.user.isAcademy ){
+	if(req.user.isPaid || req.user.isPaidPlus || req.user.score.attempted < attemptLimit || req.user.isAcademy ){
 		var mcqsToBeAdded = []
 		console.log("body : ",req.body)
 		if(Array.isArray(req.body.subjects)){
@@ -464,7 +466,7 @@ router.get("/dashboard/newcustomquiz/view/start/:id",middelware.isLoggedIn , fun
 			req.flash("error" , "Some unkown error happened, please report this bug !!!")
 			res.redirect("/dashboard")
 		}else{
-			if(req.user.isPaid || req.user.isPaidPlus || foundQuiz.shareWith != "public" || req.user.score.attempted < 200 ){
+			if(req.user.isPaid || req.user.isPaidPlus || foundQuiz.shareWith != "public" || req.user.score.attempted < solveLimit ){
 				res.render("quiz/attempt",{id : req.params.id})
 			}else{
 				req.flash("error" , "This feature is only for paid users !!!")
@@ -506,7 +508,7 @@ router.get("/dashboard/newcustomquiz/view/view/:id",middelware.isLoggedIn , func
 				req.flash("error" , "This is a competitive test, you can review it when the competition in over !!!")
 				res.redirect("/dashboard/quiz/redirect/"+foundQuiz._id)
 			}else{
-				if(req.user.isPaid || req.user.isPaidPlus || foundQuiz.shareWith == "free" || req.user.score.attempted < 100){
+				if(req.user.isPaid || req.user.isPaidPlus || foundQuiz.shareWith == "free" || req.user.score.attempted < attemptLimit){
 					activitylog ("quizView", {
 						id : req.user._id,
 						username : req.user.username,
