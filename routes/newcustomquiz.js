@@ -8,8 +8,8 @@ var Quizcategory	= require("../models/quizcategory");
 var quizcategory = require("../models/quizcategory");
 var Useractivity = require("../models/useractivity")
 
-var attemptLimit = 1733
-var solveLimit = 1733
+var attemptLimit = 100
+var solveLimit = 200
 
 router.get("/customquiz/newquiz",middelware.isLoggedIn ,function(req,res){
 	if(!req.user.isAcademy){
