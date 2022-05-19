@@ -13,12 +13,12 @@ const date = new Date();
 expireElement.innerText = months[date.getMonth()+duration]+"/"+date.getUTCDate()+"/"+date.getFullYear()
 var save = 0.2
 if(plan != "premium"){
-    base = 3500
+    base = 1500
     planName.forEach(plan=>{
         plan.innerHTML = "Premium Plus"
     })
 }else{
-    base = 2000
+    base = 500
     planName.forEach(plan=>{
         plan.innerHTML = "Premium"
     })

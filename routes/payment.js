@@ -43,10 +43,10 @@ router.get("/payment/plan/:plan/:duration" ,middelware.isLoggedIn ,async functio
 	}else{
 		if(duration == 1 || duration == 3 || duration == 6){
 			if(plan == "premium" || plan == "premiumplus"){
-				var base = 2000
+				var base = 500
 				var save = 0.2
 				if(req.params.plan != "premium"){
-					base = 3500
+					base = 1500
 				}
 				if(duration == 1){
 					totalPrice = base
@@ -100,6 +100,7 @@ router.get("/payment/plan/:plan/:duration" ,middelware.isLoggedIn ,async functio
 				for(var i =0 ;foundUser.transactions.length >= i ; i++){
 					if(foundUser.transactions.length == i){
 						// terminate
+						console.log(totalBill+" : "+amountIn - amountOut)
 						if(totalBill <= amountIn - amountOut){
 							resolve({
 								payable : true,
@@ -155,10 +156,10 @@ router.get("/payment/paid/:plan/:duration",middelware.isLoggedIn ,async(req,res)
 	}else{
 		if(duration == 1 || duration == 3 || duration == 6){
 			if(plan == "premium" || plan == "premiumplus"){
-				var base = 2000
+				var base = 500
 				var save = 0.2
 				if(req.params.plan != "premium"){
-					base = 3500
+					base = 1500
 				}
 				if(duration == 1){
 					totalPrice = base

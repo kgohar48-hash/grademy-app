@@ -103,11 +103,11 @@ pricingBtns.forEach(btn => {
         plan = e.target.dataset["number"]
         console.log(plan)
         if(plan == "premium"){
-            base = 2000
+            base = 500
             pricingBtns[1].classList.remove("btn-success")
             pricingBtns[0].classList.add("btn-success")
         }else{
-            base = 3500
+            base = 1500
             pricingBtns[0].classList.remove("btn-success")
             pricingBtns[1].classList.add("btn-success")
             plan = "premiumplus"
