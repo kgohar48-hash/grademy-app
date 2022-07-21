@@ -110,7 +110,7 @@ router.get("/academy/:id",(req,res)=>{
         if (err || !foundAcademy) {
             console.log(err);
         } else {
-            console.log("academy found : ",foundAcademy.academyName)
+            // console.log("academy found : ",foundAcademy.academyName)
             res.render("academy/academyPortfolio", { academy: foundAcademy });
         }
     })
