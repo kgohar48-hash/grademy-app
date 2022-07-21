@@ -101,15 +101,16 @@ router.post("/academy/new",middelware.isLoggedIn, upload.single('image'),functio
 router.get("/academy/:id",(req,res)=>{
     Academy.findById(req.params.id).populate("reviews").populate({
         path : 'quizcategories',
-        model : 'Quizcategory',
-        populate : {
-            path : 'quizzes',
-            model : 'Newcustomquiz'
-        }
+        model : 'Quizcategory'
+        // populate : {
+        //     path : 'quizzes',
+        //     model : 'Newcustomquiz'
+        // }
     }).exec((err, foundAcademy) => {
         if (err || !foundAcademy) {
             console.log(err);
         } else {
+            console.log("academy found : ",foundAcademy.academyName)
             res.render("academy/academyPortfolio", { academy: foundAcademy });
         }
     })
