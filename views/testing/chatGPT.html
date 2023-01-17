@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#earth {
+  width: 100px;
+  height: 100px;
+  background: #2c2c2c url("https://www.transparenttextures.com/patterns/dark-leather.png");
+  border-radius: 50%;
+  position: absolute;
+  animation: orbit 5s linear infinite;
+}
+
+#moon {
+  width: 50px;
+  height: 50px;
+  background: #929292 url("https://www.transparenttextures.com/patterns/dark-moon.png");
+  border-radius: 50%;
+  position: absolute;
+  animation: orbit-moon 5s linear infinite;
+}
+
+@keyframes orbit {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(300px, 300px);
+  }
+}
+
+@keyframes orbit-moon {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(200px, 200px);
+  }
+}
+
+#collision {
+  animation: collision 1s linear;
+}
+
+@keyframes collision {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(150px, 150px);
+  }
+}
+</style>
+</head>
+<body>
+
+<div id="earth">Earth</div>
+<div id="moon">Moon</div>
+
+<button onclick="collide()">Collide</button>
+
+<script>
+function collide() {
+  document.getElementById("earth").id = "collision";
+  document.getElementById("moon").id = "collision";
+}
+</script>
+
+</body>
+</html>
