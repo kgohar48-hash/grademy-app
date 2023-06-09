@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification"
+    content="<meta name="google-site-verification" content="0Og-65CaFjqk-j2KIq9m5GtCIuWKcm41zshBlA8wW8Q" />
+    <title>Grademy - Homepage</title>
+    <link href="/css/landing.css" type="text/css" rel="stylesheet" >
+    <link rel="icon" type="image/png" sizes="32x32" href="https://res.cloudinary.com/grademy/image/upload/v1592985715/favicon-32x32_gb7rei.png">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" >
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" >
+</head>
+<body> 
+    <section id="nav-bar">
+        <%if(!currentUser){%>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#"><img class="logo" src='https://res.cloudinary.com/grademy/image/upload/v1592388510/fuehwqgkf3g4qg86tyeg.png'></a>
+                <li class="nav-item">
+                    <a class="nav-link" href="/academy">Academies</a>
+                </li>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="line"></span> 
+                    <span class="line"></span> 
+                    <span class="line" style="margin-bottom: 0;"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                  <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                      <a class="nav-link" href="/login">Sign in</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link " href="/signup">Sign up</a>
+                    </li>
+                  </ul>
+                </div>
+              </nav>
+        <%}else{%>   
+            <nav class="navbar navbar-expand-md navbar-dark  bg-dark">
+                <a class="navbar-brand" href="/"><img class="logo" src='https://res.cloudinary.com/grademy/image/upload/v1592388510/fuehwqgkf3g4qg86tyeg.png'></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav mr-auto">
+                        <% if(!currentUser){ %>
+                            
+                        <%} else { %>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/dashboard">Dashboard</a>
+                                </li>
+                                <!-- <li class="nav-item">
+                                    <a class="nav-link" href="/newsfeed">Newsfeed</a>
+                                </li> -->
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/academy">Academies</a>
+                                </li>
+                                <%if(currentUser.isAdmin || currentUser.isModerator){%>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin">Admin</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/user/counselling">Counselling</a>
+                                </li>
+                                <%}%>
+                                <%if(!currentUser.isPaid){%>
+                                    <li class="nav-item">
+                                        <a class="nav-link active" href="/user/plan">Free trial version <%=currentUser.isPiad%></a>
+                                    </li>
+                                <%}%>
+                                <%if(currentUser.isAdmin){%>
+                                    <li class="nav-item">
+                                        <a class="nav-link " href="/user/controls">Controls </a>
+                                    </li>
+                                <%}%>
+                                
+                        <% } %>
+                    </ul>
+                    
+                    <div >
+                        <div class="collapse navbar-collapse" id="navbarCollapse">
+                            <ul class=" navbar-nav ">
+                                <% if(!currentUser){ %>
+                                    <li class="nav-item"> <a href="/login" class="nav-link">Login</a></li>
+                                    <li class="nav-item"><a href="/signup" class="nav-link">Sign Up</a></li>
+                                <%} else { %>
+                                    <li class="nav-item"><a href="#" class="nav-link"> <%=currentUser.username%> </a></li>
+                                    <li class="nav-item"><a href="/logout" class="nav-link">Logout</a></li>
+                                <% } %>
+                            </ul>
+                        </div>
+                </div>
+                </div>
+            </nav>
+        <%}%>   
+    </section>
+
+    <!-- banner section -->
+    <section id="banner">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="promo-title">Join our community</p>
+					<p class="promo-text">
+                        At Grademy, we prioritize seamless and effective communication with our clients. We understand the importance of clear and timely communication in delivering successful IT solutions. Our team ensures that we are readily available to listen, understand, and address your concerns, providing you with a smooth and transparent collaboration experience. We value your input and keep you informed throughout the project, fostering a strong and collaborative partnership. With Grademy, you can expect easy and open lines of communication that contribute to a successful project delivery.
+                        <!-- Join a Community of Thousands of ECAT, MDCAT & NET Aspirants Among Others. Under the Supervision of Previously Successful Applicants JUST LIKE YOU.  -->
+                    </p>
+					<a href="/signup"><button class="gradient-button gradient-button-4">Join now</button></a>
+                </div>
+                <div class="col-md-6 text-center">
+                    <img class="img-fluid" src="https://res.cloudinary.com/grademy/image/upload/v1592388804/qypvaelbzejpvsatmjuw.svg">
+                </div>
+            </div>
+        </div>   
+    </section>
+    <div style="height: 250px;" >
+        <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;">
+            <defs>
+                <linearGradient id="gradient">
+                  <stop offset="0%" stop-color="#232526" />
+                  <stop offset="100%" stop-color="#414345" />
+                </linearGradient>
+              </defs>
+            <path fill="url(#gradient)"  d="M0.00,49.98 C149.99,150.00 271.49,-49.98 500.00,49.98 L500.00,0.00 L0.00,0.00 Z" >
+            </path>
+        </svg>
+    </div>
+
+    <!-- services section -->
+    <section >
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 from-home" >
+                    <h1 class="promo-title">Easy accessibility </h1>
+                    <p class="promo-text">
+                        Welcome to Grademy, where convenience is our priority. We understand the importance of accessibility in today's fast-paced digital world. That's why we have designed our website with user-friendly navigation and intuitive interfaces, ensuring a seamless browsing experience for our visitors. Whether you are exploring our services, learning about our expertise, or contacting our team, you'll find that accessing the information you need is just a click away. Experience the ease of navigating our website and discover how Grademy can transform your IT solutions.
+                        <!-- Now get your Preparation for your Entrance Exams done from the Comfort of your Homes, with no Time Constraints. Prepare at your own Pace, in your own time. (Fun fact studies have shown later night studies with a full belly are more beneficial for information retaining which of cource a 24/7 online service can entertain). -->
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <img class="img-fluid" src="https://res.cloudinary.com/grademy/image/upload/v1592389233/udrmcucw0ny1h5gw8ar6.svg">
+                </div>
+            </div>
+        </div>
+        <div style="height: 250px;" >
+            <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;">
+                <defs>
+                    <linearGradient id="gradient">
+                      <stop offset="0%" stop-color="#232526" />
+                      <stop offset="100%" stop-color="#414345" />
+                    </linearGradient>
+                  </defs>
+                <path fill="url(#gradient)"  d="M0.00,49.98 C149.99,150.00 349.20,-49.98 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" >
+                </path>
+            </svg>
+        </div>
+    </section>
+    <!-- section custom quiz -->
+
+    <section id="banner" >
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <img class="img-fluid" src="https://res.cloudinary.com/grademy/image/upload/v1592389207/bdn0lkwqaavlpryvco0t.svg">
+                </div>
+                <div class="col-md-6 custom-quiz" >
+                    <h1 class="promo-title">
+                        Life Time tech support
+                        <!-- Custom quizzes -->
+                    </h1>
+                    <p class="promo-text">
+                        We believe in providing exceptional customer service even after the project is complete. That's why we offer lifetime tech support to all our clients. We understand that technology is constantly evolving, and you may encounter questions or need assistance along the way. Our dedicated support team is always ready to lend a helping hand, ensuring that you receive prompt and reliable support whenever you need it. With Grademy, you can trust that we are committed to your long-term success and will be there to support you throughout your journey.
+                        <!-- Want to Examine Yourself on Certain Segments of the Curriculum? Well you can! With the Ability to Create and Share Custom Quizzes from Question Pool of 20,000 Questions Targeted Studies will be more Effective and Efficient Than ever Available. -->
+                    </p>
+                </div>
+            </div>
+        </div>
+      
+    </section>
+    <div style="height: 250px;" >
+        <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;">
+            <defs>
+                <linearGradient id="gradient">
+                  <stop offset="0%" stop-color="#232526" />
+                  <stop offset="100%" stop-color="#414345" />
+                </linearGradient>
+              </defs>
+            <path fill="url(#gradient)"  d="M0.00,49.98 C149.99,150.00 271.49,-49.98 500.00,49.98 L500.00,0.00 L0.00,0.00 Z" >
+            </path>
+        </svg>
+    </div>
+
+    <!-- analyze section -->
+
+    <section >
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 from-home" >
+                    <h1 class="promo-title">Analyse your data</h1>
+                    <p class="promo-text">
+                        Unlock the power of your data with Grademy. Our expert data analysis services help you gain valuable insights and make informed business decisions. We employ advanced analytics techniques and state-of-the-art tools to examine your data, uncover patterns, identify trends, and extract meaningful information. Whether you need to understand customer behavior, optimize operations, or drive strategic planning, our data analysis services provide you with the knowledge and understanding to drive your business forward. Let Grademy analyze your data and empower your decision-making process.
+                        <!-- With Grademy’s Data Collection, Analysis and Graphical Representation you can Track your Progress, Weak Spots, Strong Points and Work on them Accordingly. The Trick is to Work Smart not Hard! -->
+                    </p>
+                    <a href="/aboutdashboard"><button class="gradient-button gradient-button-4">Learn more</button></a>
+                </div>
+                <div class="col-md-6">
+                    <img class="img-fluid" src="https://res.cloudinary.com/grademy/image/upload/v1592388882/elvvmo7ahwoxugtqgm99.svg">
+                </div>
+            </div>
+        </div>
+        <div style="height: 250px;" >
+            <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;">
+                <defs>
+                    <linearGradient id="gradient">
+                      <stop offset="0%" stop-color="#232526" />
+                      <stop offset="100%" stop-color="#414345" />
+                    </linearGradient>
+                  </defs>
+                <path fill="url(#gradient)"  d="M0.00,49.98 C149.99,150.00 349.20,-49.98 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" >
+                </path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- teaching -->
+    <section id="banner" >
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <img class="img-fluid" src="https://res.cloudinary.com/grademy/image/upload/v1592389258/kzq7kkhrff5a14o74qe5.svg">
+                </div>
+                <div class="col-md-6 custom-quiz" >
+                    <h1 class="promo-title">Mentor's support</h1>
+                    <p class="promo-text">
+                        At Grademy, we believe in the power of mentorship. That's why we offer dedicated mentor support to our clients. Our experienced mentors provide guidance, expertise, and industry insights to help you navigate your IT journey with confidence. Whether you need advice on project strategy, technology selection, or career development, our mentors are here to support you every step of the way. With Grademy's mentor support, you can tap into a wealth of knowledge and experience, accelerating your growth and achieving your goals. Experience the benefits of having a trusted mentor by your side and unlock your full potential with Grademy.
+                        <!-- With a Team of Graduates From Pakistan’s top Institutes like NUST,GIKI & LUMS as your Guiding Hands and Mentors, Grademy offers the Help of People that have Gone Through the Entrance Exams (and the associated fatigue) and have Cleared Them. Backed by Years of Research for this Very Purpose.  -->
+                    </p>
+                </div>
+            </div>
+        </div>
+      
+    </section>
+    <div style="height: 250px;" >
+        <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;">
+            <defs>
+                <linearGradient id="gradient">
+                  <stop offset="0%" stop-color="#232526" />
+                  <stop offset="100%" stop-color="#414345" />
+                </linearGradient>
+              </defs>
+            <path fill="url(#gradient)"  d="M0.00,49.98 C149.99,150.00 271.49,-49.98 500.00,49.98 L500.00,0.00 L0.00,0.00 Z" >
+            </path>
+        </svg>
+    </div>
+<%- include("../partials/footer")  %>

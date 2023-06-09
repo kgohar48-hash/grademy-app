@@ -12,7 +12,7 @@ const express			 = require("express"),
 //LANDING PAGE
 router.get("/" , function(req,res){
 	// res.redirect("https://www.grademy.org/home")
-	res.render("index/landing")
+	res.render("index/landingleagal")
 });
 router.get("/home" , function(req,res){
 	res.render("index/landing")
