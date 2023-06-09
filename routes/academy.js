@@ -34,7 +34,8 @@ cloudinary.config({
   api_secret: 'f0BHt4UDpJExkZUNkHwnBUAHfLY'
 });
 // all academies index route
-router.get("/academy",(req,res)=>{
+router.get("/academy", middelware.isLoggedIn,(req,res)=>{
+
     Academy.find({}).populate("reviews").exec((err , foundAcademies)=>{
         if(err){
             console.log(err)
@@ -397,6 +398,7 @@ router.get("/academies/api",(req,res)=>{
 })
 // specific academy data api
 router.get("/academy/api/:id",(req,res)=>{
+    console.log("academy api hit")
     Academy.findById(req.params.id).populate("reviews").populate({
         path : 'quizcategories',
         model : 'Quizcategory',
@@ -408,6 +410,7 @@ router.get("/academy/api/:id",(req,res)=>{
         if (err || !foundAcademy) {
             console.log(err);
         } else {
+            console.log("academy found")
             if(req.user != null){
                 res.json({
                     academy : foundAcademy,
